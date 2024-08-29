@@ -1,0 +1,43 @@
+{
+  "root": "apps/dashboard",
+  "sourceRoot": "apps/dashboard/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "options": {
+        "outputPath": "dist/apps/dashboard",
+        "root": "apps/dashboard",
+        "fileReplacements": []
+      },
+      "configurations": {
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "dashboard:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "dashboard:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/dashboard/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["coverage/apps/dashboard"],
+      "options": {
+        "jestConfig": "apps/dashboard/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
