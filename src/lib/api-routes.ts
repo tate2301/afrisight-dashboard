@@ -17,6 +17,8 @@ export const VOUCHER_ROUTES = {
 
 export const GAMIFICATION_ROUTES = {
   GET_REWARDS: "/gamification/rewards",
+  ADD_STORE_ITEM: "/gamification/store/item",
+  GET_STORE_ITEMS: "/gamification/store",
 };
 
 export const SURVEY_ROUTES = {

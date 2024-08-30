@@ -4,6 +4,7 @@ import Search from '../../components/search/Search';
 import { ArrowPathIcon, LinkIcon, PlusIcon } from '@heroicons/react/24/outline';
 import FormItem from '../../components/form-item/FormItem';
 import useForms from '../../hooks/useForms';
+import { ArrowUpRight, SearchIcon } from 'lucide-react';
 
 function Forms() {
   const { forms, loading, error } = useForms();
@@ -14,46 +15,32 @@ function Forms() {
     window.open(url, '_blank');
   };
 
+
   return (
     <GeneralLayout>
-      <div className="max-w-7xl px-4 py-16 w-full mx-auto space-y-8 ">
-        <div className="flex flex-row items-start justify-between">
-          <div className="flex flex-col space-y-1">
-            <p className="text-start font-bold heading-text text-3xl ">
-              Manage Forms
-            </p>
-            <p className="text-start main-text text-sm text-zinc-500 max-w-2xl">
-              Create forms or create forms link
-            </p>
-          </div>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-row items-center bg-zinc-950 p-2 rounded-full capitalize font-medium text-white">
-              <PlusIcon height={24} width={24} />
-            </div>
-            <button
-              onClick={generateFormsLink}
-              className="bg-zinc-950 rounded-full p-2 text-white"
-            >
-              <LinkIcon height={24} width={24} />
-            </button>
-            <div className="flex flex-row items-center bg-zinc-950 p-2 rounded-full capitalize font-medium text-white">
-              <ArrowPathIcon height={24} width={24} />
-            </div>
-          </div>
+      <div className='flex flex-row items-start justify-between mb-6'>
+        <p className='text-start font-bold text-zinc-900 text-3xl '>
+          Forms
+        </p>
+        <div className='flex flex-row items-center space-x-4'>
+          <button className='h-[32px] px-3 rounded-lg font-semibold flex items-center text-zinc-900 bg-white pressable-shadow'>
+            Create form <ArrowUpRight size={16} className='ml-2' />
+          </button>
+          <button className='size-[32px] rounded-lg font-semibold flex items-center justify-center text-zinc-900 bg-white pressable-shadow'>
+            <SearchIcon size={16} />
+          </button>
         </div>
-        {/* search and filter */}
-        <Search />
-        <div className="max-w-7xl w-full mx-auto">
-          {loading && <div>loading</div>}
-          {error && <div>errrrrr</div>}
-          <div className=" flex-row flex-wrap grid md:grid-cols-3 grid-cols-1 gap-8 py-8">
-            {forms.map((item) => (
-              <FormItem
-                key={item.id}
-                item={item} // Spread the properties to match the FormItem props
-              />
-            ))}
-          </div>
+      </div>
+      <div className="max-w-7xl w-full mx-auto">
+        {loading && <div>loading</div>}
+        {error && <div>errrrrr</div>}
+        <div className="grid grid-cols-3 gap-8">
+          {forms.map((item) => (
+            <FormItem
+              key={item.id}
+              item={item} // Spread the properties to match the FormItem props
+            />
+          ))}
         </div>
       </div>
     </GeneralLayout>

@@ -203,7 +203,7 @@ const CreateUser = (props: { callback: () => Promise<void> }) => {
         if (!open) onClose();
       }}>
       <DialogTrigger asChild>
-        <button className='bg-white text-zinc-900 border border-zinc-400 rounded-md shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[40px]'>
+        <button className='bg-white text-zinc-900 border border-zinc-300/10 pressable-shadow rounded-md shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[32px]'>
           <PlusCircleIcon
             height={24}
             width={24}

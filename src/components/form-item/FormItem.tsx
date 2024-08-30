@@ -20,31 +20,27 @@ const getRandomImage = () => {
 function FormItem({ item }: Props) {
   const randomImage = getRandomImage();
   return (
-    <div className="col-span-1 max-w-xs border border-zinc-200/50 dark:border-zinc-500/50 flex flex-col rounded-xl overflow-hidden">
-      <div className="bg-white  h-40 w-full p-4  border-b border-zinc-200/50">
-        <div
-          className={`bg-zinc-100 h-36 relative w-full overflow-hidden rounded-t-lg`}
-        >
-          <Image
-            src={randomImage}
-            className={'object-cover  rounded-t-lg '}
-            alt="expense tracker"
-            fill
-            loading="lazy"
-            quality={75}
-          />
-        </div>
-      </div>
-      <div className="flex flex-col space-y-2 p-4">
-        <p className="text-sm font-bold text-zinc-700 dark:text-zinc-100">
+    <div className="col-span-1 border border-zinc-200/50 dark:border-zinc-500/50 flex rounded-xl overflow-hidden">
+
+      <div className="flex flex-col p-4">
+        <p className="font-bold text-zinc-700 dark:text-zinc-100">
           {item.form.name}
         </p>
-        <p className="text-zinc-500 dark:text-zinc-300 text-xs">
-          {5} (est) to complete
-        </p>
-        <p className="text-xs font-medium text-zinc-500 dark:text-zinc-300 line-clamp-3">
+        <p className="text-zinc-500 dark:text-zinc-300 line-clamp-3 mb-2 max-w-md">
           {item.form.description}
         </p>
+        <div className='flex items-center gap-2 mb-4 font-medium text-zinc-500 dark:text-zinc-300 '>
+          <p className="text-sm">
+            {5} min (est) to complete
+          </p>
+          <p>
+            &bull;
+          </p>
+          <p className="text-sm">
+            {item.form.sections.length} questions
+          </p>
+        </div>
+
         <div className="flex-1"></div>
         <div className="flex flex-row flex-wrap">
           {item.form.sections.map((item: SectionType) => (

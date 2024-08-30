@@ -69,3 +69,31 @@ export type TReward = {
         amount: number;
     };
 }
+
+type TVoucherDetails = {
+  currency: string;
+  validOutlets: string[];
+  maxRedemptions: number;
+};
+
+export type TStoreItem = {
+  voucherDetails: TVoucherDetails;
+  _id: string;
+  name: string;
+  description: string;
+  type: string;
+  pointsCost: number;
+  stock: number;
+  maxRedemptionsPerUser: number;
+  expiresAt: string;
+  imageUrl: string;
+  isActive: boolean;
+  basePricePoints: number;
+  currentPricePoints: number;
+  demandMultiplier: number;
+  isDeleted: boolean;
+  lastPriceUpdate: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
