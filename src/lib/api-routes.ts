@@ -24,4 +24,5 @@ export const GAMIFICATION_ROUTES = {
 export const SURVEY_ROUTES = {
   CREATE_SURVEY: "/survey",
   GET_SURVEYS: "/survey",
+  GET_SURVEY_BY_ID: (id: string) => `/survey/${id}`,
 };

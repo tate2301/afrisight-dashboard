@@ -19,7 +19,7 @@ import {
 } from "../../components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
-import axiosInstance, { useApiFetcher } from "@/hooks/useApiFetcher";
+import axiosInstance from "@/hooks/useApiFetcher";
 import { USER_ROUTES } from "@/lib/api-routes";
 import { cn } from "@/lib/utils";
 import {
@@ -48,6 +48,7 @@ import {
   useFormik,
 } from "formik";
 import * as Yup from "yup";
+import Search from "@/components/search/Search";
 
 type Profile = {
   user: {
@@ -86,6 +87,7 @@ function Users() {
         </p>
         <CreateUser callback={fetchUsers} />
       </div>
+      <Search />
       <Table>
         <TableHeader className='text-start text-sm py-2 border-b'>
           <TableRow>
@@ -203,7 +205,7 @@ const CreateUser = (props: { callback: () => Promise<void> }) => {
         if (!open) onClose();
       }}>
       <DialogTrigger asChild>
-        <button className='bg-white text-zinc-900 border border-zinc-300/10 pressable-shadow rounded-md shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[32px]'>
+        <button className='bg-white text-zinc-900 border border-zinc-300/10 pressable-shadow rounded-md shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[28px]'>
           <PlusCircleIcon
             height={24}
             width={24}

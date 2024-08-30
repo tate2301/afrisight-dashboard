@@ -82,7 +82,7 @@ const CreateStoreListing = (props: { callback: () => Promise<void> }) => {
                 if (!open) onClose();
             }}>
             <DialogTrigger asChild>
-                <button className='bg-white text-zinc-900 border border-zinc-300/10 pressable-shadow rounded-md shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[32px]'>
+                <button className='bg-white text-zinc-900 border border-zinc-300/10 pressable-shadow rounded-md shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[28px]'>
                     <Plus
                         height={16}
                         width={16}
@@ -312,13 +312,13 @@ const CreateStoreListing = (props: { callback: () => Promise<void> }) => {
                                     </div>
 
                                     <div className="px-4 py-2 bg-white border-t border-zinc-400/30 sticky bottom-0 z-10 justify-end flex items-center gap-4">
-                                        <button onClick={onClose} className='bg-white pressable-shadow rounded-md font-medium px-4 h-[32px]'>
+                                        <button onClick={onClose} className='bg-white pressable-shadow rounded-md font-medium px-4 h-[28px]'>
                                             Cancel
                                         </button>
                                         <button
                                             type='submit'
                                             disabled={isSubmitting}
-                                            className='bg-indigo-600 text-white rounded-md font-medium px-4 h-[32px]'>
+                                            className='bg-indigo-600 text-white rounded-md font-medium px-4 h-[28px]'>
                                             {isLoading ? <Spinner /> : "Add"}
                                         </button>
                                     </div>

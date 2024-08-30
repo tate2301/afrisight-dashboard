@@ -70,7 +70,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
                 if (!open) onClose();
             }}>
             <DialogTrigger asChild>
-                <button className='bg-white text-zinc-900 pressable-shadow rounded-lg shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[32px]'>
+                <button className='bg-white text-zinc-900 pressable-shadow rounded-lg shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[28px]'>
                     <PlusIcon
                         height={20}
                         width={20}
@@ -321,12 +321,12 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
                                     </div>
 
                                     <div className="sticky bottom-0 bg-white z-10 py-2 border-t gap-2 flex items-center justify-end px-4">
-                                        <button className={cn("bg-white flex items-center h-[32px] pressable-shadow px-3 rounded-md font-medium border-zinc-400/30 shadow text-zinc-900",)}>
+                                        <button className={cn("bg-white flex items-center h-[28px] pressable-shadow px-3 rounded-md font-medium border-zinc-400/30 shadow text-zinc-900",)}>
                                             Cancel</button>
                                         <button
                                             type='submit'
                                             disabled={isSubmitting || !isValid}
-                                            className='h-[32px] px-2 rounded-md flex disabled:opacity-50 items-center font-medium text-white bg-blue-600'
+                                            className='h-[28px] px-2 rounded-md flex disabled:opacity-50 items-center font-medium text-white bg-blue-600'
                                         >
                                             {isSubmitting ? <Spinner /> : 'Add'}
                                         </button>

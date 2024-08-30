@@ -8,6 +8,7 @@ import { formatDistanceToNow, format } from 'date-fns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { EnvelopeIcon, PhoneIcon, CalendarIcon, MapPinIcon, CreditCardIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import GeneralLayout from '@/layout/GeneralLayout'
 
 interface UserData {
   id: string
@@ -191,8 +192,10 @@ export default function UserPage() {
   }, [id])
 
   return (
-    <Suspense fallback={<UserSkeleton />}>
+    <GeneralLayout>
+        <Suspense fallback={<UserSkeleton />}>
       {user && <UserDetails user={user!} />}
     </Suspense>
+    </GeneralLayout>
   )
 }

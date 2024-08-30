@@ -5,7 +5,7 @@ export interface UserInfoTypes {
   otp: string | null;
   profilePic: string | null;
   name: string | null;
-  role: 'ADMIN' | 'USER';
+  role: "ADMIN" | "USER";
   createdAt: string;
   updatedAt: string;
   iat: number | null;
@@ -41,34 +41,36 @@ export interface FormType {
   };
 }
 
-
 export type TSurvey = {
-    _id: string;
-    name: string;
-    description: string;
-    reward: TReward;
-    dollarRewardValue: number;
-    targetParticipants: number;
-    completedParticipants: number;
-    difficulty: string;
-    category: string;
-    formId: string;
-    duration: string;
-    status: string;
-    views: number;
-    startDate: string;
-    endDate: string;
-    createdAt: string;
-    updatedAt: string;
+  _id: string;
+  name: string;
+  description: string;
+  reward: TReward;
+  dollarRewardValue: number;
+  targetParticipants: number;
+  completedParticipants: number;
+  difficulty: string;
+  category: string;
+  formId: string;
+  duration: string;
+  status: string;
+  views: number;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type TReward = {
-    _id: string;
-    type: string;
-    value: {
-        amount: number;
-    };
-}
+  _id: string;
+  type: string;
+  value: {
+    amount: number;
+    code?: string;
+    maxRedemptions?: number;
+    expiresAt?: string;
+  };
+};
 
 type TVoucherDetails = {
   currency: string;

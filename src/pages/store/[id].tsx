@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
+import GeneralLayout from '@/layout/GeneralLayout'
 
 interface StoreData {
   id: string
@@ -58,8 +59,10 @@ export default function StorePage() {
   const { id } = router.query
 
   return (
-    <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
+    <GeneralLayout>
+        <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
       {id && <StoreDetails store={fetchStoreData(id as string)} />}
     </Suspense>
+    </GeneralLayout>
   )
 }

@@ -23,10 +23,10 @@ function Forms() {
           Forms
         </p>
         <div className='flex flex-row items-center space-x-4'>
-          <button className='h-[32px] px-3 rounded-lg font-semibold flex items-center text-zinc-900 bg-white pressable-shadow'>
+          <button className='h-[28px] px-3 rounded-lg font-semibold flex items-center text-zinc-900 bg-white pressable-shadow'>
             Create form <ArrowUpRight size={16} className='ml-2' />
           </button>
-          <button className='size-[32px] rounded-lg font-semibold flex items-center justify-center text-zinc-900 bg-white pressable-shadow'>
+          <button className='size-[28px] rounded-lg font-semibold flex items-center justify-center text-zinc-900 bg-white pressable-shadow'>
             <SearchIcon size={16} />
           </button>
         </div>

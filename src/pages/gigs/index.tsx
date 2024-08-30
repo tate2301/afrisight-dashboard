@@ -16,6 +16,7 @@ import {
 import { formatDate } from "date-fns";
 import { CreateSurvey } from "@/components/add/survey";
 import { TSurvey } from "@/utils/types";
+import Link from "next/link";
 
 
 function Vouchers() {
@@ -59,10 +60,11 @@ function Vouchers() {
           {surveys.map((survey) => (
             <TableRow>
               <TableCell>
-                <p className="font-semibold text-zinc-900">{survey.name}</p>
-                <p className="line-clamp-1 max-w-64">
-                  {survey.description}
-                </p>
+                <Link href={`/gigs/${survey._id}`}>
+                  <p className="font-semibold text-zinc-900">{survey.name}</p>
+                  <p className="line-clamp-1 max-w-64">
+                    {survey.description}
+                  </p></Link>
               </TableCell>
               <TableCell className='capitalize'>
                 {survey.dollarRewardValue}
