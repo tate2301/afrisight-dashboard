@@ -14,7 +14,9 @@ import { Label } from "@/components/ui/label";
 import useWithStatus from "@/hooks/useWithStatus";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { SURVEY_ROUTES } from "@/lib/api-routes";
+import { AUTH_ROUTES, FORM_ROUTES, SURVEY_ROUTES, USER_ROUTES } from "@/lib/api-routes";
+import ClientsAutocompleteSelect from "./select/clients-autocomplete-select";
+import ClientFormsAutocomplete from "../ui/client-forms-autocomplete";
 
 type SurveyFormSchema = {
     name: string
@@ -22,6 +24,7 @@ type SurveyFormSchema = {
     difficulty: string
     category: string
     form: string
+    client: string
     duration: number
     coverImage: string
     additionalReward: string
@@ -53,6 +56,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
         difficulty: Yup.string().required("Difficulty is required"),
         category: Yup.string().required("Category is required"),
         form: Yup.string().required("Form ID is required"),
+        client: Yup.string().required("Client is required"),
         duration: Yup.number().required("Duration is required"),
         coverImage: Yup.mixed().required("Cover image is required"),
         additionalReward: Yup.string().required("Additional reward required"),
@@ -91,6 +95,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
                             difficulty: "",
                             category: "",
                             form: "",
+                            client: '',
                             coverImage: "",
                             duration: 7,
                             additionalReward: "points",
@@ -126,7 +131,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
                                                 />
                                             </div>
 
-                                            <div className='flex flex-col space-y-2 mb-6'>
+                                            <div className='flex flex-col space-y-2 mb-12'>
                                                 <label htmlFor='description' className='text-sm font-semibold'>
                                                     Description
                                                 </label>
@@ -143,24 +148,29 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
                                                 />
                                             </div>
 
-                                            <div className='flex flex-col space-y-2 mb-6'>
-                                                <label htmlFor='form' className='text-sm font-semibold'>
-                                                    Form ID
-                                                </label>
-                                                <Field
-                                                    as={Input}
-                                                    name='form'
-                                                    type='text'
-                                                    className='input-class'
-                                                />
-                                                <p className="text-sm">
-                                                    You need to provide a valid form ID.
-                                                </p>
-                                                <ErrorMessage
-                                                    name='form'
-                                                    component='div'
-                                                    className='text-red-500 text-sm'
-                                                />
+                                            <div className="grid grid-cols-2 gap-4 mb-12">
+                                                <div className="flex flex-col space-y-2">
+                                                    <label htmlFor='client' className='text-sm font-semibold'>
+                                                        Client
+                                                    </label>
+                                                    <ClientsAutocompleteSelect name="client" placeholder="Select a client" fetchUrl={USER_ROUTES.GET_CLIENTS} />
+                                                    <ErrorMessage
+                                                        name='client'
+                                                        component='div'
+                                                        className='text-red-500 text-sm'
+                                                    />
+                                                </div>
+                                                <div className="flex flex-col space-y-2">
+                                                    <label htmlFor='form' className='text-sm font-semibold'>
+                                                        Form
+                                                    </label>
+                                                    <ClientFormsAutocomplete name="form" placeholder="Select a form" fetchUrl={FORM_ROUTES.GET_FORMS_FOR_USER_BY_ID(values.client)} />
+                                                    <ErrorMessage
+                                                        name='form'
+                                                        component='div'
+                                                        className='text-red-500 text-sm'
+                                                    />
+                                                </div>
                                             </div>
 
                                             <div className='flex flex-col space-y-2 mb-6'>

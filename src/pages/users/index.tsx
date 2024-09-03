@@ -53,6 +53,7 @@ import { useRouter } from "next/router";
 
 type Profile = {
   user: {
+    _id: string
     email: string;
     isEmailVerified: boolean;
   };
@@ -63,7 +64,7 @@ type Profile = {
 };
 
 function Users() {
-  const [users, setUsers] = useState<Profile[]>([]);
+  const [profiles, setUsers] = useState<Profile[]>([]);
   const router = useRouter()
   const { error, isLoading, executor } = useWithStatus();
 
@@ -107,35 +108,35 @@ function Users() {
           </TableRow>
         </TableHeader>
         <TableBody className='divide-y'>
-          {users.map((user) => (
-            <TableRow key={user._id} onClick={() => handleRowClick(user.user._id)} className="cursor-pointer">
+          {profiles.map((profile) => (
+            <TableRow key={profile._id} onClick={() => handleRowClick(profile.user._id)} className="cursor-pointer">
               <TableCell>
                 <p className='p-1.5 rounded-full bg-zinc-100 w-fit'>
                   <User2Icon className='w-5 h-5' />
                 </p>
               </TableCell>
-              <TableCell>{user.user?.email}</TableCell>
+              <TableCell>{profile.user?.email}</TableCell>
               <TableCell className='capitalize'>
                 <p className='inline-flex items-center gap-2'>
-                  {user.profileType === "ADMIN" && (
+                  {profile.profileType === "ADMIN" && (
                     <>
                       <Building2 className='w-5 h-5' />
                       Admin Dashboard
                     </>
                   )}
-                  {user.profileType === "PARTICIPANT" && (
+                  {profile.profileType === "PARTICIPANT" && (
                     <>
                       <DevicePhoneMobileIcon className='w-5 h-5' />
                       Mobile Platform
                     </>
                   )}
-                  {user.profileType === "CLIENT" && (
+                  {profile.profileType === "CLIENT" && (
                     <>
                       <Square3Stack3DIcon className='w-5 h-5' />
                       Form Builder
                     </>
                   )}
-                  {user.profileType === "SUPPORT" && "Support"}
+                  {profile.profileType === "SUPPORT" && "Support"}
                 </p>
               </TableCell>
 
@@ -143,28 +144,28 @@ function Users() {
                 <p
                   className={cn(
                     "gap-2 items-center inline-flex",
-                    user.user?.isEmailVerified && "text-green-600",
+                    profile.user?.isEmailVerified && "text-green-600",
                   )}>
-                  {user.user?.isEmailVerified ? (
+                  {profile.user?.isEmailVerified ? (
                     <CheckIcon className='w-5 h-5' />
                   ) : (
                     <LoaderIcon className='w-5 h-5' />
                   )}
-                  {user.user?.isEmailVerified ? "Verified" : "Not verified"}
+                  {profile.user?.isEmailVerified ? "Verified" : "Not verified"}
                 </p>
               </TableCell>
               <TableCell>
                 <span
                   className={cn(
                     "h-[20px] w-fit rounded-full px-2 font-semibold text-sm flex items-center",
-                    user.isDeleted && "bg-red-600 text-white",
-                    !user.isDeleted && "bg-green-100 text-green-700",
+                    profile.isDeleted && "bg-red-600 text-white",
+                    !profile.isDeleted && "bg-green-100 text-green-700",
                   )}>
-                  {user.isDeleted ? "Inactive" : "Active"}
+                  {profile.isDeleted ? "Inactive" : "Active"}
                 </span>
               </TableCell>
               <TableCell>
-                {formatDistanceToNow(user.createdAt, { addSuffix: true })}
+                {formatDistanceToNow(profile.createdAt, { addSuffix: true })}
               </TableCell>
             </TableRow>
           ))}

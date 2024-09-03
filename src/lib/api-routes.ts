@@ -9,6 +9,8 @@ export const AUTH_ROUTES = {
 export const USER_ROUTES = {
   GET_ALL_USERS: "/profile",
   GET_USER_BY_ID: (id: string) => `/profile/${id}`,
+  GET_CLIENTS: "/profile/type/CLIENT",
+
 };
 
 export const VOUCHER_ROUTES = {
