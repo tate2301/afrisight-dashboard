@@ -109,3 +109,11 @@ body {
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(64, 68, 82, 0.08) 0px 2px 5px 0px;
 }
+
+.tag {
+  @apply font-semibold h-[20px] rounded-md flex items-center px-2 pressable-shadow text-sm;
+}
+
+.button {
+  @apply flex items-center gap-2 px-4 rounded-md pressable-shadow h-[28px] font-semibold text-zinc-900;
+}

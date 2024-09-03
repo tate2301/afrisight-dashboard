@@ -12,8 +12,8 @@ const Navbar = () => {
 
   return (
     <div className="w-full border-b border-zinc-300/30 bg-zinc-50">
-      <div className="w-full max-w-7xl mx-auto p-4 px-4 flex flex-row items-center space-x-8">
-        <Link href={'/home'} className="font-semibold p-2 rounded-md bg-white shadow">
+      <div className="w-full max-w-7xl mx-auto p-2 px-4 flex flex-row items-center space-x-8">
+        <Link href={'/home'} className="font-semibold p-1 rounded-md bg-white shadow">
           <Building2 className='w-5 h-5' />
         </Link>
         <div className="md:flex hidden flex-row items-center">

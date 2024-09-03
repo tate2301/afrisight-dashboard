@@ -8,6 +8,7 @@ export const AUTH_ROUTES = {
 
 export const USER_ROUTES = {
   GET_ALL_USERS: "/profile",
+  GET_USER_BY_ID: (id: string) => `/profile/${id}`,
 };
 
 export const VOUCHER_ROUTES = {
@@ -25,4 +26,11 @@ export const SURVEY_ROUTES = {
   CREATE_SURVEY: "/survey",
   GET_SURVEYS: "/survey",
   GET_SURVEY_BY_ID: (id: string) => `/survey/${id}`,
+};
+
+export const FORM_ROUTES = {
+  CREATE: "/form",
+  UPDATE: (id: string) => `/form/${id}`,
+  GET_FORM_BY_ID: (id: string) => `/form/${id}`,
+  GET_FORMS_FOR_USER_BY_ID: (id: string) => `/form/user/${id}/forms`,
 };

@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ClipboardIcon,
   ClockIcon,
+  CloudDownload,
   Copy,
   DollarSign,
   Download,
@@ -243,10 +244,10 @@ export default function GigPage() {
                 <div>
                   <div className="flex justify-between items-baseline py-2 border-b">
 
-                    <h2 className="font-bold text-lg text-zinc-900">Submissions</h2>
+                    <h2 className="font-bold text-lg text-zinc-900">Responses</h2>
                     <div className="flex gap-4">
                       <button className="px-2.5 h-[28px] rounded-md pressable-shadow font-semibold flex items-center gap-2">
-                        <Download className="w-4 h-4" /> Export as CSV
+                        <CloudDownload className="w-4 h-4" /> Export as CSV
                       </button>
                     </div>
                   </div>

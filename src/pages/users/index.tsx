@@ -49,6 +49,7 @@ import {
 } from "formik";
 import * as Yup from "yup";
 import Search from "@/components/search/Search";
+import { useRouter } from "next/router";
 
 type Profile = {
   user: {
@@ -58,10 +59,12 @@ type Profile = {
   isDeleted?: boolean;
   profileType: "ADMIN" | "CLIENT" | "SUPPORT" | "PARTICIPANT";
   createdAt: string;
+  _id: string
 };
 
 function Users() {
   const [users, setUsers] = useState<Profile[]>([]);
+  const router = useRouter()
   const { error, isLoading, executor } = useWithStatus();
 
   const fetchUsers = async () => {
@@ -78,6 +81,10 @@ function Users() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const handleRowClick = (id: string) => {
+    router.push(`/users/${id}`);
+  };
 
   return (
     <GeneralLayout>
@@ -101,13 +108,13 @@ function Users() {
         </TableHeader>
         <TableBody className='divide-y'>
           {users.map((user) => (
-            <TableRow>
+            <TableRow key={user._id} onClick={() => handleRowClick(user.user._id)} className="cursor-pointer">
               <TableCell>
                 <p className='p-1.5 rounded-full bg-zinc-100 w-fit'>
                   <User2Icon className='w-5 h-5' />
                 </p>
               </TableCell>
-              <TableCell>{user.user.email}</TableCell>
+              <TableCell>{user.user?.email}</TableCell>
               <TableCell className='capitalize'>
                 <p className='inline-flex items-center gap-2'>
                   {user.profileType === "ADMIN" && (
@@ -136,14 +143,14 @@ function Users() {
                 <p
                   className={cn(
                     "gap-2 items-center inline-flex",
-                    user.user.isEmailVerified && "text-green-600",
+                    user.user?.isEmailVerified && "text-green-600",
                   )}>
-                  {user.user.isEmailVerified ? (
+                  {user.user?.isEmailVerified ? (
                     <CheckIcon className='w-5 h-5' />
                   ) : (
                     <LoaderIcon className='w-5 h-5' />
                   )}
-                  {user.user.isEmailVerified ? "Verified" : "Not verified"}
+                  {user.user?.isEmailVerified ? "Verified" : "Not verified"}
                 </p>
               </TableCell>
               <TableCell>

@@ -21,7 +21,7 @@ type SurveyFormSchema = {
     description: string
     difficulty: string
     category: string
-    formId: string
+    form: string
     duration: number
     coverImage: string
     additionalReward: string
@@ -52,7 +52,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
         description: Yup.string().required("Description is required"),
         difficulty: Yup.string().required("Difficulty is required"),
         category: Yup.string().required("Category is required"),
-        formId: Yup.string().required("Form ID is required"),
+        form: Yup.string().required("Form ID is required"),
         duration: Yup.number().required("Duration is required"),
         coverImage: Yup.mixed().required("Cover image is required"),
         additionalReward: Yup.string().required("Additional reward required"),
@@ -90,7 +90,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
                             description: "",
                             difficulty: "",
                             category: "",
-                            formId: "",
+                            form: "",
                             coverImage: "",
                             duration: 7,
                             additionalReward: "points",
@@ -144,17 +144,20 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
                                             </div>
 
                                             <div className='flex flex-col space-y-2 mb-6'>
-                                                <label htmlFor='formId' className='text-sm font-semibold'>
+                                                <label htmlFor='form' className='text-sm font-semibold'>
                                                     Form ID
                                                 </label>
                                                 <Field
                                                     as={Input}
-                                                    name='formId'
+                                                    name='form'
                                                     type='text'
                                                     className='input-class'
                                                 />
+                                                <p className="text-sm">
+                                                    You need to provide a valid form ID.
+                                                </p>
                                                 <ErrorMessage
-                                                    name='formId'
+                                                    name='form'
                                                     component='div'
                                                     className='text-red-500 text-sm'
                                                 />

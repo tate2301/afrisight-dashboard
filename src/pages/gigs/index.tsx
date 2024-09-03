@@ -17,6 +17,7 @@ import { formatDate } from "date-fns";
 import { CreateSurvey } from "@/components/add/survey";
 import { TSurvey } from "@/utils/types";
 import Link from "next/link";
+import { CubeIcon } from "@heroicons/react/24/outline";
 
 
 function Vouchers() {
@@ -49,6 +50,7 @@ function Vouchers() {
       <Table>
         <TableHeader className='text-start text-sm py-2 border-b'>
           <TableRow>
+            <TableHead className="w-6" />
             <TableHead>Name</TableHead>
             <TableHead>Default reward (USD)</TableHead>
             <TableHead>Additional reward type</TableHead>
@@ -59,6 +61,11 @@ function Vouchers() {
         <TableBody className='divide-y'>
           {surveys.map((survey) => (
             <TableRow>
+              <TableCell>
+                <div className="p-1 rounded-lg border border-zinc-400/10 bg-zinc-400/10 flex items-center justify-center">
+                  <CubeIcon className="size-5" />
+                </div>
+              </TableCell>
               <TableCell>
                 <Link href={`/gigs/${survey._id}`}>
                   <p className="font-semibold text-zinc-900">{survey.name}</p>

@@ -99,3 +99,102 @@ export type TStoreItem = {
   updatedAt: string;
   __v: number;
 };
+
+export type ProfileType = "ADMIN" | "SUPPORT" | "CLIENT" | "PARTICIPANT";
+export type UserRole = ProfileType;
+
+export interface TProfile {
+  id: string;
+  userId: string;
+  profileType: ProfileType;
+  name?: string;
+  firstname?: string;
+  surname?: string;
+  profilePic?: string;
+  isHasChildren?: boolean;
+  ifDrinksAlcohol?: boolean;
+  ifSmokes?: boolean;
+  ifExercises?: boolean;
+  weight?: number;
+  occupation?: string;
+  companyName?: string;
+  monthlyIncome?: number;
+  education?: string;
+  ethnicity?: string;
+  hobbies: string[];
+  userInventoryId?: string;
+  isDeleted: boolean;
+  deletedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
+}
+
+export interface TProfileUpdateInput {
+  name?: string;
+  firstname?: string;
+  surname?: string;
+  profilePic?: string;
+  isHasChildren?: boolean;
+  ifDrinksAlcohol?: boolean;
+  ifSmokes?: boolean;
+  ifExercises?: boolean;
+  weight?: number;
+  occupation?: string;
+  companyName?: string;
+  monthlyIncome?: number;
+  education?: string;
+  ethnicity?: string;
+  hobbies?: string[];
+}
+
+export interface User {
+  _id: string;
+  id: string;
+  username: string;
+  email: string;
+  role: UserRole;
+  isEmailVerified: boolean;
+  phoneNumber?: string;
+  isPhoneVerified: boolean;
+  isSocialConnectedUser: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserUpdateInput {
+  username?: string;
+  email?: string;
+  phoneNumber?: string;
+  role?: UserRole;
+}
+
+export interface UserRegistrationInput {
+  username: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  phoneNumber?: string;
+}
+
+export interface UserLoginInput {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+  refreshToken: string;
+}
+
+export interface Form {
+  _id: string;
+  id: string;
+  description: string;
+  name: string;
+  sections: any[];
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}

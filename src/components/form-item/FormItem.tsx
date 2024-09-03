@@ -20,7 +20,7 @@ const getRandomImage = () => {
 function FormItem({ item }: Props) {
   const randomImage = getRandomImage();
   return (
-    <div className="col-span-1 border border-zinc-200/50 dark:border-zinc-500/50 flex rounded-xl overflow-hidden">
+    <div className="col-span-1 flex rounded-xl overflow-hidden bg-white pressable-shadow">
 
       <div className="flex flex-col p-4">
         <p className="font-bold text-zinc-700 dark:text-zinc-100">

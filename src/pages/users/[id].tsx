@@ -1,201 +1,355 @@
-import { useRouter } from 'next/router'
-import { Suspense, useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Badge } from '@/components/ui/badge'
-import { formatDistanceToNow, format } from 'date-fns'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { EnvelopeIcon, PhoneIcon, CalendarIcon, MapPinIcon, CreditCardIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import GeneralLayout from '@/layout/GeneralLayout'
+import { ReactNode, useEffect, useState } from "react";
+import { ChevronRight, Pencil, DownloadCloud } from "lucide-react";
+import GeneralLayout from "@/layout/GeneralLayout";
+import useWithStatus from "@/hooks/useWithStatus";
+import { FORM_ROUTES, USER_ROUTES } from "@/lib/api-routes";
+import { useRouter } from "next/router";
+import axiosInstance from "@/hooks/useApiFetcher";
+import { formatDate } from "date-fns";
+import { Form, TProfile } from "@/utils/types";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import Link from "next/link";
 
-interface UserData {
-  id: string
-  name: string
-  email: string
-  avatar: string
-  phone: string
-  location: string
-  joinedAt: string
-  role: string
-  status: 'active' | 'inactive'
-  lastLogin: string
-  totalSpent: number
-  recentTransactions: Array<{
-    id: string
-    date: string
-    amount: number
-    description: string
-  }>
-}
+const UserManagementInterface = () => {
+  const router = useRouter();
+  const { id } = router.query;
 
-async function fetchUserData(id: string): Promise<UserData> {
-  // Implement your data fetching logic here
-  // This is a placeholder
-  return {
-    id,
-    name: 'John Doe',
-    email: 'john@example.com',
-    avatar: 'https://example.com/avatar.jpg',
-    phone: '+1 (555) 123-4567',
-    location: 'New York, USA',
-    joinedAt: '2023-01-15T00:00:00Z',
-    role: 'User',
-    status: 'active',
-    lastLogin: '2023-05-20T14:30:00Z',
-    totalSpent: 1250.75,
-    recentTransactions: [
-      { id: 't1', date: '2023-05-18T10:00:00Z', amount: 50.00, description: 'Product purchase' },
-      { id: 't2', date: '2023-05-15T14:30:00Z', amount: 75.50, description: 'Service subscription' },
-      { id: 't3', date: '2023-05-10T09:15:00Z', amount: 120.25, description: 'Premium upgrade' },
-    ],
-  }
-}
-
-function UserSkeleton() {
-  return (
-    <Card className="max-w-4xl mx-auto mt-8">
-      <CardHeader className="flex flex-row items-center space-x-4">
-        <Skeleton className="h-16 w-16 rounded-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-6 w-48" />
-          <Skeleton className="h-4 w-32" />
-        </div>
-      </CardHeader>
-      <CardContent>
-        <Skeleton className="h-4 w-full mb-2" count={5} />
-      </CardContent>
-    </Card>
-  )
-}
-
-function UserDetails({ user }: { user: UserData }) {
-  const [activeTab, setActiveTab] = useState('overview')
-
-  return (
-    <Card className="max-w-4xl mx-auto mt-8">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Avatar className="h-16 w-16">
-            <AvatarImage src={user.avatar} alt={user.name} />
-            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div>
-            <CardTitle className="text-2xl">{user.name}</CardTitle>
-            <Badge variant={user.status === 'active' ? 'secondary' : 'destructive'}>
-              {user.status}
-            </Badge>
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Badge variant="outline">{user.role}</Badge>
-          <Badge variant="secondary">
-            <ClockIcon className="h-4 w-4 mr-1" />
-            {formatDistanceToNow(new Date(user.joinedAt), { addSuffix: true })}
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="mb-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-            <TabsTrigger value="transactions">Transactions</TabsTrigger>
-          </TabsList>
-          <TabsContent value="overview">
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="flex items-center space-x-2">
-                <EnvelopeIcon className="h-5 w-5 text-gray-400" />
-                <span>{user.email}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <PhoneIcon className="h-5 w-5 text-gray-400" />
-                <span>{user.phone}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPinIcon className="h-5 w-5 text-gray-400" />
-                <span>{user.location}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <UserIcon className="h-5 w-5 text-gray-400" />
-                <span>Last login: {format(new Date(user.lastLogin), 'PPpp')}</span>
-              </div>
-            </div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Account Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-sm text-gray-500">Total Spent</p>
-                    <p className="text-2xl font-bold">${user.totalSpent.toFixed(2)}</p>
-                  </div>
-                  <CreditCardIcon className="h-8 w-8 text-gray-400" />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="activity">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>User activity will be displayed here.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="transactions">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Recent Transactions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {user.recentTransactions.map((transaction) => (
-                      <TableRow key={transaction.id}>
-                        <TableCell>{format(new Date(transaction.date), 'PP')}</TableCell>
-                        <TableCell>{transaction.description}</TableCell>
-                        <TableCell className="text-right">${transaction.amount.toFixed(2)}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
-  )
-}
-
-export default function UserPage() {
-  const router = useRouter()
-  const { id } = router.query
-  const [user, setUser] = useState<UserData | null>(null)
+  const { error, isLoading, executor } = useWithStatus();
+  const [profile, setUser] = useState<TProfile | null>(null);
+  const fetchUserData = async (id: string) => {
+    const userDataResponse = await executor(() =>
+      axiosInstance.get(USER_ROUTES.GET_USER_BY_ID(id))
+    );
+    setUser(userDataResponse.data);
+  };
 
   useEffect(() => {
     if (id) {
-      fetchUserData(id as string).then(setUser)
+      fetchUserData(id as string);
     }
-  }, [id])
+  }, [id]);
 
   return (
     <GeneralLayout>
-        <Suspense fallback={<UserSkeleton />}>
-      {user && <UserDetails user={user!} />}
-    </Suspense>
+      {/* Main content */}
+      {profile && (
+        <div className="flex">
+          {/* Main panel */}
+          <main className="flex-1 p-8">
+            <Link href={"/users"} className="mb-4">
+              <span className="text-indigo-500 font-semibold flex items-center gap-1">
+                Users <ChevronRight size={16} />
+              </span>
+            </Link>
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-3xl font-bold text-zinc-900">
+                  {profile.firstname &&
+                    profile.firstname + " " + profile.surname}{" "}
+                  {!profile.firstname && profile.user.username}{" "}
+                </h1>
+                <p>{profile.user.email}</p>
+              </div>
+              <div className="flex gap-2">
+                <button className="bg-white px-4 rounded pressable-shadow font-semibold h-[28px] flex items-center mr-2">
+                  Reset password
+                </button>
+                <button className="bg-white px-4 rounded pressable-shadow font-semibold h-[28px] flex items-center">
+                  Disable user
+                </button>
+              </div>
+            </div>
+
+            {/* User details sections */}
+            <div className="space-y-8">
+              {profile.profileType === "CLIENT" && (
+                <>
+                  <GigsCreated {...profile} />
+                  <FormsCreated {...profile} />
+                </>
+              )}
+              {profile.profileType === "PARTICIPANT" && (
+                <>
+                  <GigsParticipated {...profile} />
+                  <StorePurchases {...profile} />
+                  <Vouchers {...profile} />
+                  <PointsBalanceSection {...profile} />
+                </>
+              )}
+              <SectionTitle
+                title="Events"
+                subtitle="Events are updated as the user interacts with the platform"
+              />
+            </div>
+          </main>
+
+          {/* Details sidebar */}
+          <aside className="w-80 p-4">
+            <div className="flex justify-between pb-2 border-b  mb-4 ">
+              <h2 className="font-bold text-lg text-zinc-900">Details</h2>
+              <button className="flex items-center justify-center size-[28px] rounded-md pressable-shadow">
+                <Pencil size={16} />
+              </button>
+            </div>
+            <UserDetails profile={profile} />
+          </aside>
+        </div>
+      )}
     </GeneralLayout>
-  )
-}
+  );
+};
+
+const SectionTitle = ({
+  title,
+  subtitle,
+  actions,
+}: {
+  title: string;
+  subtitle?: string;
+  actions?: ReactNode;
+}) => (
+  <div>
+    <div className="flex justify-between items-center mb-2 border-b pb-2">
+      <h3 className="font-bold text-zinc-900 text-lg">{title}</h3>
+      <div className="flex items-center gap-4">{actions}</div>
+    </div>
+    {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
+  </div>
+);
+
+const FormsCreated = (props: TProfile) => {
+  const [forms, setForms] = useState([]);
+
+  const getFormsForThisUser = async () => {
+    const response = await axiosInstance.get(
+      FORM_ROUTES.GET_FORMS_FOR_USER_BY_ID(props.user._id)
+    );
+    setForms(response.data);
+  };
+
+  useEffect(() => {
+    if (props) {
+      getFormsForThisUser();
+    }
+  }, [props]);
+
+
+  return (
+    <div className="py-4">
+      <SectionTitle
+        title="Forms created"
+        actions={
+          <>
+            <button className="button">
+              <DownloadCloud size={16} />
+              Export
+            </button>
+          </>
+        }
+      />
+      <TablePreview
+        columns={["ID", "Name", "Questions", "Created"]}
+        data={forms.map((data: Form) => ({
+          ...data,
+          sections: JSON.stringify(data.sections).length,
+          createdAt: formatDate(data.createdAt, "dd MMM, yyyy"),
+        }))}
+        fields={["_id", "name", "sections", "createdAt"]}
+      />
+    </div>
+  );
+};
+
+const GigsCreated = (props: TProfile) => {
+  return (
+    <div className="py-4">
+      <SectionTitle
+        title="Gigs"
+        actions={
+          <>
+            <button className="button">
+              <DownloadCloud size={16} />
+              Export
+            </button>
+          </>
+        }
+      />
+      <TablePreview
+        columns={[
+          "ID",
+          "Name",
+          "Form",
+          "Responses",
+          "Reward amount",
+          "Additional reward type",
+          "Created",
+        ]}
+      />
+    </div>
+  );
+};
+
+const GigsParticipated = (props: TProfile) => {
+  return (
+    <div className="py-4">
+      <SectionTitle
+        title="Gigs participated"
+        actions={
+          <>
+            <button className="button">
+              <DownloadCloud size={16} />
+              Export
+            </button>
+          </>
+        }
+      />
+      <TablePreview
+        columns={["Name", "Reward amount", "Points Awarded", "Date"]}
+      />
+    </div>
+  );
+};
+
+const Vouchers = (props: TProfile) => {
+  return (
+    <div className="py-4">
+      <SectionTitle
+        title="Vouchers"
+        actions={
+          <>
+            <button className="button">
+              <DownloadCloud size={16} />
+              Export
+            </button>
+          </>
+        }
+      />
+      <TablePreview columns={["Code", "Expiry date", "Status", "Date"]} />
+    </div>
+  );
+};
+
+const StorePurchases = (props: TProfile) => {
+  return (
+    <div className="py-4">
+      <SectionTitle
+        title="Store purchases"
+        actions={
+          <>
+            <button className="button">
+              <DownloadCloud size={16} />
+              Export
+            </button>
+          </>
+        }
+      />
+      <TablePreview columns={["Item", "Expiry date", "Points paid", "Date"]} />
+    </div>
+  );
+};
+
+const PointsBalanceSection = (props: TProfile) => {
+  return (
+    <div className="py-4">
+      <SectionTitle
+        title="Points balance"
+        actions={
+          <>
+            <button className="button">Adjust balance</button>
+          </>
+        }
+      />
+      <div className="mt-2">
+        <div className="flex gap-1 mb-1">
+          <p className="font-semibold text-zinc-900">24</p>
+          <p>points</p>
+        </div>
+        <p className="text-sm">User can earn points by participating in gigs</p>
+      </div>
+    </div>
+  );
+};
+
+const TablePreview = (props: {
+  columns: string[];
+  data?: Array<any>;
+  fields?: Array<string>;
+}) => {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          {props.columns.map((item) => (
+            <TableHead className="h-[28px] text-sm" key={item}>
+              {item}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {props.data?.map((item) => (
+          <TableRow key={item._id}>
+            {props.fields?.map((field) => (
+              <TableCell key={field} className=" text-sm">
+                {item[field]}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+      <TableCaption>0 results</TableCaption>
+    </Table>
+  );
+};
+
+const UserDetails = (props: { profile: any }) => (
+  <div className="space-y-4">
+    <DetailItem label="Profile ID" value={props.profile._id} />
+    <DetailItem
+      label="Created"
+      value={formatDate(props.profile.createdAt, "dd MMM, yyyy")}
+    />
+    <DetailItem
+      label="Role"
+      value={<p className="tag w-fit mt-1">{props.profile.profileType}</p>}
+    />
+    <DetailItem
+      label="Email"
+      value={
+        <div className="flex gap-2">
+          <p>{props.profile.user.email}</p>
+          <div className="tag">
+            {props.profile.user.isEmailVerified ? (
+              <p>Verified</p>
+            ) : (
+              <p>Not verified</p>
+            )}
+          </div>
+        </div>
+      }
+    />
+  </div>
+);
+
+const DetailItem = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | ReactNode;
+}) => (
+  <div>
+    <div className="text-zinc-900 font-semibold">{label}</div>
+    <div className="">{value}</div>
+  </div>
+);
+
+export default UserManagementInterface;
