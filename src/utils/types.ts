@@ -52,6 +52,7 @@ export type TSurvey = {
   difficulty: string;
   category: string;
   formId: string;
+  form: string;
   duration: string;
   status: string;
   views: number;

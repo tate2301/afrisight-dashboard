@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,9 +28,10 @@ import {
 } from "lucide-react";
 import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
-import { CubeIcon } from "@heroicons/react/24/outline";
+import { CubeIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
+import { useDebounce } from "@/hooks/use-debounce";
 
 interface GigData {
   id: string;
@@ -239,43 +240,8 @@ export default function GigPage() {
                       </TableRow>
                     </TableBody>
                   </Table>
-
                 </div>
-                <div>
-                  <div className="flex justify-between items-baseline py-2 border-b">
-
-                    <h2 className="font-bold text-lg text-zinc-900">Responses</h2>
-                    <div className="flex gap-4">
-                      <button className="px-2.5 h-[28px] rounded-md pressable-shadow font-semibold flex items-center gap-2">
-                        <CloudDownload className="w-4 h-4" /> Export as CSV
-                      </button>
-                    </div>
-                  </div>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-xs h-[28px]">
-                          Email address
-                        </TableHead>
-                        <TableHead className="text-xs h-[28px]">
-                          Amount paid
-                        </TableHead>
-                        <TableHead className="text-xs h-[28px]">
-                          Points paid
-                        </TableHead>
-                        <TableHead className="text-xs h-[28px]">
-                          Date
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-
-                    </TableBody>
-                    <TableCaption>
-                      No submissions found
-                    </TableCaption>
-                  </Table>
-                </div>
+                <ResponsesTable id={survey._id} form={survey.form} />
               </div>
               <div className="col-span-1">
                 <div className="space-y-4 mb-8">
@@ -321,4 +287,100 @@ export default function GigPage() {
       </Suspense>
     </GeneralLayout>
   );
+}
+
+const ResponsesTable = (props: {
+  id: string
+  form: any
+}) => {
+  const [responses, setResponses] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const fetchResponses = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.get(SURVEY_ROUTES.GET_RESPONSES_BY_SURVEY_ID(props.id));
+      setResponses(response.data);
+    } catch (error) {
+      console.error('Error fetching responses:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchResponses();
+  }, [debouncedSearchTerm]);
+
+
+  const headers = useMemo(() => JSON.parse(props.form.sections ?? "[]").map((response: { value: string, type: { _id: string } }) => ({ value: response.value, type: response.type._id })), [responses])
+
+
+  return (
+    <div>
+      <div className="flex justify-between items-baseline py-2 border-b">
+
+        <h2 className="font-bold text-lg text-zinc-900">Responses</h2>
+        <div className="flex gap-4">
+          <button className="px-2.5 h-[28px] rounded-md pressable-shadow font-semibold flex items-center gap-2">
+            <CloudDownload className="w-4 h-4" /> Export as CSV
+          </button>
+        </div>
+      </div>
+      <Table className="table-fixed">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-xs h-[28px] w-64">
+              Email address
+            </TableHead>
+            <TableHead className="text-xs h-[28px] w-64">
+              Date
+            </TableHead>
+            {
+              headers.map((header: {
+                value: string,
+                _id: string
+              }) => (
+                <TableHead key={header._id} className="text-xs h-[28px] w-64">
+                  <p className="flex gap-2"><DocumentIcon className="w-4 h-4" />
+                    {header.value}</p>
+                </TableHead>
+              ))
+            }
+
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {
+            responses.map((response) => {
+              const { user, amountPaid, pointsPaid, createdAt, responses: actualResponses } = response as any;
+              const objActualResponses = JSON.parse(actualResponses);
+              return (
+                <TableRow>
+                  <TableCell>
+                    {user.email}
+                  </TableCell>
+                  <TableCell>
+                    {formatDate(createdAt, "dd MMM, yyyy")}
+                  </TableCell>
+                  {
+                    Array.from(Object.keys(objActualResponses)).map(key => (
+                      <TableCell className="w-64" key={`response-${key}`}>
+                        {objActualResponses[key]}
+                      </TableCell>
+                    ))
+                  }
+                </TableRow>
+              )
+            })
+          }
+        </TableBody>
+        <TableCaption>
+          {responses.length === 0 && "No submissions found"}
+        </TableCaption>
+      </Table>
+    </div>
+  )
 }

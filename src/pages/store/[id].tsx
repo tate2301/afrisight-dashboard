@@ -60,9 +60,9 @@ export default function StorePage() {
 
   return (
     <GeneralLayout>
-        <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
-      {id && <StoreDetails store={fetchStoreData(id as string)} />}
-    </Suspense>
+      <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
+        {id && <></>}
+      </Suspense>
     </GeneralLayout>
   )
 }
