@@ -29,6 +29,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
+    "@sentry/nextjs": "8",
     "argon2": "^0.40.3",
     "axios": "^1.7.2",
     "class-transformer": "^0.5.1",

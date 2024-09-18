@@ -1,5 +1,5 @@
-import React from 'react';
-import AutocompleteSelect from './autocomplete-select';
+import React from "react";
+import AutocompleteSelect from "./autocomplete-select";
 
 interface Client {
   _id: string;
@@ -15,7 +15,7 @@ interface ClientsAutocompleteSelectProps {
 
 const ClientsAutocompleteSelect: React.FC<ClientsAutocompleteSelectProps> = ({
   name,
-  placeholder = 'Select a client',
+  placeholder = "Select a client",
   fetchUrl,
 }) => {
   const renderOption = (client: Client) => (

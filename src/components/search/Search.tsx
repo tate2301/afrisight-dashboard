@@ -1,9 +1,9 @@
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import React, { useState } from "react";
 
 function Search() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
   // Custom debounce function
   const debounce = (func: any, delay: number) => {

@@ -29,7 +29,15 @@ import {
 import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CubeIcon, DocumentIcon } from "@heroicons/react/24/outline";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import Link from "next/link";
 import { useDebounce } from "@/hooks/use-debounce";
 
@@ -91,7 +99,7 @@ export default function GigPage() {
 
   const fetchGigData = async (id: string) => {
     const gigResponse = await axiosInstance.get(
-      SURVEY_ROUTES.GET_SURVEY_BY_ID(id)
+      SURVEY_ROUTES.GET_SURVEY_BY_ID(id),
     );
     setSurvey(gigResponse.data);
     console.log(gigResponse.data);
@@ -110,7 +118,12 @@ export default function GigPage() {
           <>
             <div className="flex justify-between items-center mb-10 pb-6">
               <div>
-                <Link href={"/gigs"} className="font-semibold text-indigo-600 mb-2 flex items-center gap-1">Surveys <ChevronRight className="size-5" /></Link>
+                <Link
+                  href={"/gigs"}
+                  className="font-semibold text-indigo-600 mb-2 flex items-center gap-1"
+                >
+                  Surveys <ChevronRight className="size-5" />
+                </Link>
                 <div className="max-w-xl flex gap-4">
                   <div className="size-16 rounded-lg border border-zinc-400/10 bg-zinc-400/10 flex items-center justify-center">
                     <CubeIcon className="size-5" />
@@ -124,9 +137,7 @@ export default function GigPage() {
                         {survey.status}
                       </p>
                     </div>
-                    <p>
-                      ${survey.dollarRewardValue} per submission
-                    </p>
+                    <p>${survey.dollarRewardValue} per submission</p>
                   </div>
                 </div>
               </div>
@@ -159,24 +170,24 @@ export default function GigPage() {
                         <TableHead className="text-xs h-[28px]">
                           Reward type
                         </TableHead>
-                        {survey.reward.type === "points" && <TableHead className="text-xs h-[28px]">
-                          Reward points
-                        </TableHead>}
-                        {
-                          survey.reward.type === "voucher" && (
-                            <>
-                              <TableHead className="text-xs h-[28px]">
-                                Code
-                              </TableHead>
-                              <TableHead className="text-xs h-[28px]">
-                                Max redemptions
-                              </TableHead>
-                              <TableHead className="text-xs h-[28px]">
-                                Expires
-                              </TableHead>
-                            </>
-                          )
-                        }
+                        {survey.reward.type === "points" && (
+                          <TableHead className="text-xs h-[28px]">
+                            Reward points
+                          </TableHead>
+                        )}
+                        {survey.reward.type === "voucher" && (
+                          <>
+                            <TableHead className="text-xs h-[28px]">
+                              Code
+                            </TableHead>
+                            <TableHead className="text-xs h-[28px]">
+                              Max redemptions
+                            </TableHead>
+                            <TableHead className="text-xs h-[28px]">
+                              Expires
+                            </TableHead>
+                          </>
+                        )}
                       </TableRow>
                     </TableHeader>
                     <TableBody className="border-b">
@@ -187,7 +198,7 @@ export default function GigPage() {
                               "flex gap-2 font-semibold items-center",
                               survey.reward.type === "points"
                                 ? "text-purple-600"
-                                : "text-orange-600"
+                                : "text-orange-600",
                             )}
                           >
                             {survey.reward.type === "points" && (
@@ -204,15 +215,13 @@ export default function GigPage() {
                             )}
                           </p>
                         </TableCell>
-                        {
-                          survey.reward.type === 'points' && (
-                            <TableCell>
-                              <p className="px-2 py-0.5 w-fit rounded-md bg-zinc-400/10 font-semibold text-sm text-zinc-900">
-                                {survey.reward.value.amount} XP
-                              </p>
-                            </TableCell>
-                          )
-                        }
+                        {survey.reward.type === "points" && (
+                          <TableCell>
+                            <p className="px-2 py-0.5 w-fit rounded-md bg-zinc-400/10 font-semibold text-sm text-zinc-900">
+                              {survey.reward.value.amount} XP
+                            </p>
+                          </TableCell>
+                        )}
                         {survey.reward.type === "voucher" && (
                           <>
                             <TableCell>
@@ -230,11 +239,10 @@ export default function GigPage() {
                               <p className="px-2 py-0.5 w-fit rounded-md bg-zinc-400/10 font-semibold text-sm text-zinc-900">
                                 {formatDate(
                                   survey.reward.value.expiresAt!,
-                                  "dd MMM, yyyy"
+                                  "dd MMM, yyyy",
                                 )}
                               </p>
                             </TableCell>
-
                           </>
                         )}
                       </TableRow>
@@ -249,9 +257,7 @@ export default function GigPage() {
                     Summary
                   </h3>
                   <div>
-                    <Label className="text-zinc-900">
-                      Created
-                    </Label>
+                    <Label className="text-zinc-900">Created</Label>
                     <p className="flex items-center gap-2">
                       <ClockIcon className="w-4 h-4" />
                       {formatDate(survey.createdAt, "dd MMM, yyyy")}
@@ -263,21 +269,15 @@ export default function GigPage() {
                     Details
                   </h3>
                   <div>
-                    <Label className="text-zinc-900">
-                      Reference ID
-                    </Label>
+                    <Label className="text-zinc-900">Reference ID</Label>
                     <p className="font-semibold text-zinc-900 flex items-center gap-2">
                       <Terminal className="w-4 h-4" />
                       {survey._id}
                     </p>
                   </div>
                   <div>
-                    <Label className="text-zinc-900">
-                      Description
-                    </Label>
-                    <p>
-                      {survey.description}
-                    </p>
+                    <Label className="text-zinc-900">Description</Label>
+                    <p>{survey.description}</p>
                   </div>
                 </div>
               </div>
@@ -289,39 +289,44 @@ export default function GigPage() {
   );
 }
 
-const ResponsesTable = (props: {
-  id: string
-  form: any
-}) => {
+const ResponsesTable = (props: { id: string; form: any }) => {
   const [responses, setResponses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const fetchResponses = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get(SURVEY_ROUTES.GET_RESPONSES_BY_SURVEY_ID(props.id));
+      const response = await axiosInstance.get(
+        SURVEY_ROUTES.GET_RESPONSES_BY_SURVEY_ID(props.id),
+      );
       setResponses(response.data);
     } catch (error) {
-      console.error('Error fetching responses:', error);
+      console.error("Error fetching responses:", error);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchResponses();
   }, [debouncedSearchTerm]);
 
-
-  const headers = useMemo(() => JSON.parse(props.form.sections ?? "[]").map((response: { value: string, type: { _id: string } }) => ({ value: response.value, type: response.type._id })), [responses])
-
+  const headers = useMemo(
+    () =>
+      JSON.parse(props.form.sections ?? "[]").map(
+        (response: { value: string; type: { _id: string } }) => ({
+          value: response.value,
+          type: response.type._id,
+        }),
+      ),
+    [responses],
+  );
 
   return (
     <div>
       <div className="flex justify-between items-baseline py-2 border-b">
-
         <h2 className="font-bold text-lg text-zinc-900">Responses</h2>
         <div className="flex gap-4">
           <button className="px-2.5 h-[28px] rounded-md pressable-shadow font-semibold flex items-center gap-2">
@@ -335,52 +340,44 @@ const ResponsesTable = (props: {
             <TableHead className="text-xs h-[28px] w-64">
               Email address
             </TableHead>
-            <TableHead className="text-xs h-[28px] w-64">
-              Date
-            </TableHead>
-            {
-              headers.map((header: {
-                value: string,
-                _id: string
-              }) => (
-                <TableHead key={header._id} className="text-xs h-[28px] w-64">
-                  <p className="flex gap-2"><DocumentIcon className="w-4 h-4" />
-                    {header.value}</p>
-                </TableHead>
-              ))
-            }
-
+            <TableHead className="text-xs h-[28px] w-64">Date</TableHead>
+            {headers.map((header: { value: string; _id: string }) => (
+              <TableHead key={header._id} className="text-xs h-[28px] w-64">
+                <p className="flex gap-2">
+                  <DocumentIcon className="w-4 h-4" />
+                  {header.value}
+                </p>
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {
-            responses.map((response) => {
-              const { user, amountPaid, pointsPaid, createdAt, responses: actualResponses } = response as any;
-              const objActualResponses = JSON.parse(actualResponses);
-              return (
-                <TableRow>
-                  <TableCell>
-                    {user.email}
+          {responses.map((response) => {
+            const {
+              user,
+              amountPaid,
+              pointsPaid,
+              createdAt,
+              responses: actualResponses,
+            } = response as any;
+            const objActualResponses = JSON.parse(actualResponses);
+            return (
+              <TableRow>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{formatDate(createdAt, "dd MMM, yyyy")}</TableCell>
+                {Array.from(Object.keys(objActualResponses)).map((key) => (
+                  <TableCell className="w-64" key={`response-${key}`}>
+                    {objActualResponses[key]}
                   </TableCell>
-                  <TableCell>
-                    {formatDate(createdAt, "dd MMM, yyyy")}
-                  </TableCell>
-                  {
-                    Array.from(Object.keys(objActualResponses)).map(key => (
-                      <TableCell className="w-64" key={`response-${key}`}>
-                        {objActualResponses[key]}
-                      </TableCell>
-                    ))
-                  }
-                </TableRow>
-              )
-            })
-          }
+                ))}
+              </TableRow>
+            );
+          })}
         </TableBody>
         <TableCaption>
           {responses.length === 0 && "No submissions found"}
         </TableCaption>
       </Table>
     </div>
-  )
-}
+  );
+};

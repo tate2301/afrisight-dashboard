@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
   onClick: () => void;
@@ -9,10 +9,10 @@ type Props = {
 const CustomButton = (props: Props) => {
   return (
     <button
-      onClick={props.loading ? () => console.log('loadiing...') : props.onClick}
+      onClick={props.loading ? () => console.log("loadiing...") : props.onClick}
       className={`bg-zinc-950 text-white font-semibold rounded-full p-2`}
     >
-      {props.loading ? 'Loading...' : props.text}
+      {props.loading ? "Loading..." : props.text}
     </button>
   );
 };

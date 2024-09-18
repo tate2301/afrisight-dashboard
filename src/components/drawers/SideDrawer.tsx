@@ -6,24 +6,24 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../ui/sheet';
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
-import CustomButton from '../buttons/CustomButton';
-import { useState } from 'react';
-import axios from 'axios';
-import { apiUrl } from '../../utils/apiUrl';
-import { getMessage } from '../../helpers/getMessage';
-import AlertMessage from '../alerts/AlertMessage';
+} from "../ui/sheet";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import CustomButton from "../buttons/CustomButton";
+import { useState } from "react";
+import axios from "axios";
+import { apiUrl } from "../../utils/apiUrl";
+import { getMessage } from "../../helpers/getMessage";
+import AlertMessage from "../alerts/AlertMessage";
 
 function SideDrawer() {
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [price, setPrice] = useState<number>(0);
-  const [desc, setDesc] = useState('');
-  const [category, setCategory] = useState('');
-  const [difficult, setDifficult] = useState('');
-  const [err, setErr] = useState('');
-  const [msg, setMsg] = useState('');
+  const [desc, setDesc] = useState("");
+  const [category, setCategory] = useState("");
+  const [difficult, setDifficult] = useState("");
+  const [err, setErr] = useState("");
+  const [msg, setMsg] = useState("");
 
   const createNewGig = async () => {
     try {
@@ -36,13 +36,13 @@ function SideDrawer() {
         difficult,
       });
       setMsg(getMessage(data));
-      setErr('');
+      setErr("");
       console.log(data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
       setErr(getMessage(error));
-      setMsg('');
+      setMsg("");
     }
   };
   return (

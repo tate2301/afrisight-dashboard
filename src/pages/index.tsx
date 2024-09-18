@@ -1,18 +1,18 @@
-import React, { useContext, useState } from 'react';
-import CustomButton from '../components/buttons/CustomButton';
-import axios from 'axios';
-import { apiUrl } from '../utils/apiUrl';
-import AlertMessage from '../components/alerts/AlertMessage';
-import { getMessage } from '../helpers/getMessage';
-import { Store } from '../context/Store';
-import { useRouter } from 'next/router';
+import React, { useContext, useState } from "react";
+import CustomButton from "../components/buttons/CustomButton";
+import axios from "axios";
+import { apiUrl } from "../utils/apiUrl";
+import AlertMessage from "../components/alerts/AlertMessage";
+import { getMessage } from "../helpers/getMessage";
+import { Store } from "../context/Store";
+import { useRouter } from "next/router";
 
 function Home() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState('');
-  const [msg, setMsg] = useState('');
+  const [err, setErr] = useState("");
+  const [msg, setMsg] = useState("");
   const { dispatch } = useContext<any>(Store);
   const router = useRouter();
 
@@ -25,29 +25,29 @@ function Home() {
       });
       const { accessToken, refreshToken, ...userInfo } = data;
 
-      if (userInfo.role === 'ADMIN') {
+      if (userInfo.role === "ADMIN") {
         setMsg(getMessage(data));
         dispatch({
-          type: 'USER_LOGIN',
+          type: "USER_LOGIN",
           payload: {
             access_token: accessToken,
             refresh_token: refreshToken,
             userInfo,
           },
         });
-        setErr('');
+        setErr("");
         setLoading(false);
         setTimeout(() => {
-          router.push('/home');
+          router.push("/home");
         }, 1500);
       }
-      setErr('Not allowed');
-      setMsg('');
+      setErr("Not allowed");
+      setMsg("");
       setLoading(false);
     } catch (error) {
       console.error(error);
       setErr(getMessage(error));
-      setMsg('');
+      setMsg("");
       setLoading(false);
     }
   };

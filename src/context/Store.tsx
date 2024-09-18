@@ -1,9 +1,9 @@
-import { createContext, useReducer, ReactNode, Dispatch } from 'react';
+import { createContext, useReducer, ReactNode, Dispatch } from "react";
 import {
   getFromLocalStorage,
   setLocalStorageItem,
-} from '../helpers/locaStorageMethods';
-import { UserInfoTypes } from '../utils/types';
+} from "../helpers/locaStorageMethods";
+import { UserInfoTypes } from "../utils/types";
 
 interface State {
   darkMode: boolean;
@@ -16,11 +16,11 @@ interface State {
 
 // Define the types for actions
 type Action =
-  | { type: 'DARK_MODE_ON' }
-  | { type: 'DARK_MODE_OFF' }
-  | { type: 'USER_LOGIN'; payload: any }
-  | { type: 'USER_LOGOUT' }
-  | { type: 'SET_SEARCH_QUERY'; payload: string };
+  | { type: "DARK_MODE_ON" }
+  | { type: "DARK_MODE_OFF" }
+  | { type: "USER_LOGIN"; payload: any }
+  | { type: "USER_LOGOUT" }
+  | { type: "SET_SEARCH_QUERY"; payload: string };
 
 // Define the type for the context value
 interface ContextProps {
@@ -31,9 +31,9 @@ interface ContextProps {
 // Initial state
 const initialState: State = {
   darkMode: false,
-  access_token: getFromLocalStorage('access_token'),
-  refresh_token: getFromLocalStorage('refresh_token'),
-  search_query: '',
+  access_token: getFromLocalStorage("access_token"),
+  refresh_token: getFromLocalStorage("refresh_token"),
+  search_query: "",
 
   userInfo: null,
 };
@@ -44,22 +44,22 @@ export const Store = createContext<ContextProps | undefined>(undefined);
 // Reducer function
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'DARK_MODE_ON':
+    case "DARK_MODE_ON":
       return { ...state, darkMode: true };
-    case 'DARK_MODE_OFF':
+    case "DARK_MODE_OFF":
       return { ...state, darkMode: false };
 
-    case 'USER_LOGIN':
-      setLocalStorageItem('access_token', action.payload.access_token);
-      setLocalStorageItem('refresh_token', action.payload.refresh_token);
-      setLocalStorageItem('userInfo', action.payload.userInfo);
+    case "USER_LOGIN":
+      setLocalStorageItem("access_token", action.payload.access_token);
+      setLocalStorageItem("refresh_token", action.payload.refresh_token);
+      setLocalStorageItem("userInfo", action.payload.userInfo);
       return { ...state, userInfo: action.payload };
-    case 'USER_LOGOUT':
-      setLocalStorageItem('access_token', null);
-      setLocalStorageItem('userInfo', null);
-      setLocalStorageItem('refresh_token', null);
+    case "USER_LOGOUT":
+      setLocalStorageItem("access_token", null);
+      setLocalStorageItem("userInfo", null);
+      setLocalStorageItem("refresh_token", null);
       return { ...state, userInfo: null };
-    case 'SET_SEARCH_QUERY':
+    case "SET_SEARCH_QUERY":
       return { ...state, search_query: action.payload };
     default:
       return state;

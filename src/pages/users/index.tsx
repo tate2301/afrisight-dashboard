@@ -53,19 +53,19 @@ import { useRouter } from "next/router";
 
 type Profile = {
   user: {
-    _id: string
+    _id: string;
     email: string;
     isEmailVerified: boolean;
   };
   isDeleted?: boolean;
   profileType: "ADMIN" | "CLIENT" | "SUPPORT" | "PARTICIPANT";
   createdAt: string;
-  _id: string
+  _id: string;
 };
 
 function Users() {
   const [profiles, setUsers] = useState<Profile[]>([]);
-  const router = useRouter()
+  const router = useRouter();
   const { error, isLoading, executor } = useWithStatus();
 
   const fetchUsers = async () => {
@@ -89,17 +89,17 @@ function Users() {
 
   return (
     <GeneralLayout>
-      <div className='flex flex-row items-start justify-between mb-6'>
-        <p className='text-start font-bold text-zinc-900 text-3xl '>
+      <div className="flex flex-row items-start justify-between mb-6">
+        <p className="text-start font-bold text-zinc-900 text-3xl ">
           User profiles
         </p>
         <CreateUser callback={fetchUsers} />
       </div>
       <Search />
       <Table>
-        <TableHeader className='text-start text-sm py-2 border-b'>
+        <TableHeader className="text-start text-sm py-2 border-b">
           <TableRow>
-            <TableHead className='w-[48px]' />
+            <TableHead className="w-[48px]" />
             <TableHead>Email address</TableHead>
             <TableHead>Platform</TableHead>
             <TableHead>Email verified</TableHead>
@@ -107,32 +107,36 @@ function Users() {
             <TableHead>Date created</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className='divide-y'>
+        <TableBody className="divide-y">
           {profiles.map((profile) => (
-            <TableRow key={profile._id} onClick={() => handleRowClick(profile.user._id)} className="cursor-pointer">
+            <TableRow
+              key={profile._id}
+              onClick={() => handleRowClick(profile.user._id)}
+              className="cursor-pointer"
+            >
               <TableCell>
-                <p className='p-1.5 rounded-full bg-zinc-100 w-fit'>
-                  <User2Icon className='w-5 h-5' />
+                <p className="p-1.5 rounded-full bg-zinc-100 w-fit">
+                  <User2Icon className="w-5 h-5" />
                 </p>
               </TableCell>
               <TableCell>{profile.user?.email}</TableCell>
-              <TableCell className='capitalize'>
-                <p className='inline-flex items-center gap-2'>
+              <TableCell className="capitalize">
+                <p className="inline-flex items-center gap-2">
                   {profile.profileType === "ADMIN" && (
                     <>
-                      <Building2 className='w-5 h-5' />
+                      <Building2 className="w-5 h-5" />
                       Admin Dashboard
                     </>
                   )}
                   {profile.profileType === "PARTICIPANT" && (
                     <>
-                      <DevicePhoneMobileIcon className='w-5 h-5' />
+                      <DevicePhoneMobileIcon className="w-5 h-5" />
                       Mobile Platform
                     </>
                   )}
                   {profile.profileType === "CLIENT" && (
                     <>
-                      <Square3Stack3DIcon className='w-5 h-5' />
+                      <Square3Stack3DIcon className="w-5 h-5" />
                       Form Builder
                     </>
                   )}
@@ -145,11 +149,12 @@ function Users() {
                   className={cn(
                     "gap-2 items-center inline-flex",
                     profile.user?.isEmailVerified && "text-green-600",
-                  )}>
+                  )}
+                >
                   {profile.user?.isEmailVerified ? (
-                    <CheckIcon className='w-5 h-5' />
+                    <CheckIcon className="w-5 h-5" />
                   ) : (
-                    <LoaderIcon className='w-5 h-5' />
+                    <LoaderIcon className="w-5 h-5" />
                   )}
                   {profile.user?.isEmailVerified ? "Verified" : "Not verified"}
                 </p>
@@ -160,7 +165,8 @@ function Users() {
                     "h-[20px] w-fit rounded-full px-2 font-semibold text-sm flex items-center",
                     profile.isDeleted && "bg-red-600 text-white",
                     !profile.isDeleted && "bg-green-100 text-green-700",
-                  )}>
+                  )}
+                >
                   {profile.isDeleted ? "Inactive" : "Active"}
                 </span>
               </TableCell>
@@ -211,13 +217,11 @@ const CreateUser = (props: { callback: () => Promise<void> }) => {
       onOpenChange={(open) => {
         if (open) onOpen();
         if (!open) onClose();
-      }}>
+      }}
+    >
       <DialogTrigger asChild>
-        <button className='bg-white text-zinc-900 border border-zinc-300/10 pressable-shadow rounded-md shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[28px]'>
-          <PlusCircleIcon
-            height={24}
-            width={24}
-          />
+        <button className="bg-white text-zinc-900 border border-zinc-300/10 pressable-shadow rounded-md shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[28px]">
+          <PlusCircleIcon height={24} width={24} />
           <p>Create User</p>
         </button>
       </DialogTrigger>
@@ -231,88 +235,72 @@ const CreateUser = (props: { callback: () => Promise<void> }) => {
         <Formik
           initialValues={{ email: "", password: "", role: "" }}
           validationSchema={validationSchema}
-          onSubmit={onSubmit}>
+          onSubmit={onSubmit}
+        >
           {({ isSubmitting }) => (
             <Form>
-              <div className='flex flex-col space-y-2 mb-6'>
-                <label
-                  htmlFor='email'
-                  className='text-sm font-semibold'>
+              <div className="flex flex-col space-y-2 mb-6">
+                <label htmlFor="email" className="text-sm font-semibold">
                   Email address
                 </label>
                 <Field
                   as={Input}
-                  name='email'
-                  type='email'
-                  className='input-class'
+                  name="email"
+                  type="email"
+                  className="input-class"
                 />
                 <ErrorMessage
-                  name='email'
-                  component='div'
-                  className='text-red-500 text-sm'
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm"
                 />
               </div>
 
-              <div className='flex flex-col space-y-2 mb-6'>
-                <label
-                  htmlFor='password'
-                  className='text-sm font-semibold'>
+              <div className="flex flex-col space-y-2 mb-6">
+                <label htmlFor="password" className="text-sm font-semibold">
                   Password
                 </label>
                 <Field
                   as={Input}
-                  name='password'
-                  type='password'
-                  className='input-class'
+                  name="password"
+                  type="password"
+                  className="input-class"
                 />
                 <ErrorMessage
-                  name='password'
-                  component='div'
-                  className='text-red-500 text-sm'
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm"
                 />
               </div>
 
-              <div className='flex flex-col space-y-2 mb-6'>
-                <label
-                  htmlFor='role'
-                  className='text-sm font-semibold'>
+              <div className="flex flex-col space-y-2 mb-6">
+                <label htmlFor="role" className="text-sm font-semibold">
                   Platform
                 </label>
-                <div className='gap-4 inline-flex text-zinc-900'>
-                  <Field
-                    type='radio'
-                    name='role'
-                    value='PARTICIPANT'
-                  />
+                <div className="gap-4 inline-flex text-zinc-900">
+                  <Field type="radio" name="role" value="PARTICIPANT" />
                   Mobile platform
                 </div>
-                <div className='gap-4 inline-flex text-zinc-900'>
-                  <Field
-                    type='radio'
-                    name='role'
-                    value='CLIENT'
-                  />
+                <div className="gap-4 inline-flex text-zinc-900">
+                  <Field type="radio" name="role" value="CLIENT" />
                   Forms builder
                 </div>
-                <div className='gap-4 inline-flex text-zinc-900'>
-                  <Field
-                    type='radio'
-                    name='role'
-                    value='ADMIN'
-                  />
+                <div className="gap-4 inline-flex text-zinc-900">
+                  <Field type="radio" name="role" value="ADMIN" />
                   Admin dashboard
                 </div>
                 <ErrorMessage
-                  name='role'
-                  component='div'
-                  className='text-red-500 text-sm'
+                  name="role"
+                  component="div"
+                  className="text-red-500 text-sm"
                 />
               </div>
 
               <button
-                type='submit'
+                type="submit"
                 disabled={isSubmitting}
-                className='h-[40px] min-w-24 rounded-md px-6 font-semibold text-white bg-blue-600'>
+                className="h-[40px] min-w-24 rounded-md px-6 font-semibold text-white bg-blue-600"
+              >
                 {isSubmitting ? <Spinner /> : "Submit"}
               </button>
             </Form>

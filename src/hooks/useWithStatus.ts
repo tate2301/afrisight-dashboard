@@ -15,14 +15,14 @@ const useWithStatus = () => {
         return result;
       } catch (error) {
         setError(
-          error instanceof Error ? error : new Error("An error occurred")
+          error instanceof Error ? error : new Error("An error occurred"),
         );
         throw error;
       } finally {
         setLoading(false);
       }
     },
-    []
+    [],
   );
 
   return {

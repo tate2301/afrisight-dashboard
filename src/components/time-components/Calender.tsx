@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
-import { useState } from 'react';
+import { format } from "date-fns";
+import { useState } from "react";
 
 const Calendar = () => {
   const [today, setToday] = useState(new Date());
@@ -26,7 +26,7 @@ const Calendar = () => {
     ) {
       return `bg-zinc-100 font-bold`;
     } else {
-      return '';
+      return "";
     }
   };
 
@@ -48,7 +48,7 @@ const Calendar = () => {
       <div className={`flex items-center mb-4 space-x-4`}>
         {/* <h1>Calendar</h1> */}
         <span className="text-xl font-bold text-white flex-1">
-          {format(today, ' yyyy')}
+          {format(today, " yyyy")}
         </span>
         {/* <div className="flex flex-row items-center space-x-4">
           <span className="bg-slate-900 dark:bg-white cursor-pointer text-white dark:text-zinc-900 rounded-full p-[2px]">

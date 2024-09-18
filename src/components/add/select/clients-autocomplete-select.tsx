@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useField, useFormikContext } from 'formik';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Loader2 } from 'lucide-react';
-import { useDebounce } from '@/hooks/use-debounce';
-import axiosInstance from '@/hooks/useApiFetcher';
+import React, { useState, useEffect } from "react";
+import { useField, useFormikContext } from "formik";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
+import { useDebounce } from "@/hooks/use-debounce";
+import axiosInstance from "@/hooks/useApiFetcher";
 
 interface Client {
   _id: string;
@@ -13,7 +19,7 @@ interface Client {
   user: {
     email: string;
     _id: string;
-  }
+  };
 }
 
 interface ClientsAutocompleteSelectProps {
@@ -24,13 +30,13 @@ interface ClientsAutocompleteSelectProps {
 
 const ClientsAutocompleteSelect: React.FC<ClientsAutocompleteSelectProps> = ({
   name,
-  placeholder = 'Select a client',
+  placeholder = "Select a client",
   fetchUrl,
 }) => {
   const [field, , helpers] = useField(name);
   const { setFieldValue } = useFormikContext();
   const [clients, setClients] = useState<Client[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
@@ -38,11 +44,13 @@ const ClientsAutocompleteSelect: React.FC<ClientsAutocompleteSelectProps> = ({
     const fetchClients = async () => {
       setIsLoading(true);
       try {
-        const response = await axiosInstance.get(`${fetchUrl}?search=${debouncedSearchTerm}`);
+        const response = await axiosInstance.get(
+          `${fetchUrl}?search=${debouncedSearchTerm}`,
+        );
         const data = await response.data.profiles;
         setClients(data);
       } catch (error) {
-        console.error('Error fetching clients:', error);
+        console.error("Error fetching clients:", error);
       } finally {
         setIsLoading(false);
       }
@@ -58,7 +66,6 @@ const ClientsAutocompleteSelect: React.FC<ClientsAutocompleteSelectProps> = ({
   const handleSelect = (value: string) => {
     setFieldValue(name, value);
   };
-
 
   return (
     <Select name={name} value={field.value} onValueChange={handleSelect}>
@@ -82,11 +89,13 @@ const ClientsAutocompleteSelect: React.FC<ClientsAutocompleteSelectProps> = ({
         ) : (
           clients.map((client) => (
             <SelectItem key={client.user._id} value={client.user._id}>
-              <div className='flex flex-row items-center'>
-                <div className='size-8 rounded-full mr-4 bg-zinc-400/10' />
+              <div className="flex flex-row items-center">
+                <div className="size-8 rounded-full mr-4 bg-zinc-400/10" />
                 <div className="flex gap-2">
                   <span className="font-medium">{client.user.email}</span>
-                  <span className="text-sm text-gray-500 truncate text-ellipsis">{client.user.email}</span>
+                  <span className="text-sm text-gray-500 truncate text-ellipsis">
+                    {client.user.email}
+                  </span>
                 </div>
               </div>
             </SelectItem>

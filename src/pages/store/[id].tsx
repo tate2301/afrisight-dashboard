@@ -1,15 +1,15 @@
-import { useRouter } from 'next/router'
-import { Suspense } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Skeleton } from '@/components/ui/skeleton'
-import GeneralLayout from '@/layout/GeneralLayout'
+import { useRouter } from "next/router";
+import { Suspense } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
+import GeneralLayout from "@/layout/GeneralLayout";
 
 interface StoreData {
-  id: string
-  name: string
-  description: string
-  products: string[]
+  id: string;
+  name: string;
+  description: string;
+  products: string[];
   // Add more fields as needed
 }
 
@@ -18,10 +18,10 @@ async function fetchStoreData(id: string): Promise<StoreData> {
   // This is a placeholder
   return {
     id,
-    name: 'Sample Store',
-    description: 'This is a sample store description',
-    products: ['Product 1', 'Product 2', 'Product 3'],
-  }
+    name: "Sample Store",
+    description: "This is a sample store description",
+    products: ["Product 1", "Product 2", "Product 3"],
+  };
 }
 
 function StoreDetails({ store }: { store: StoreData }) {
@@ -51,12 +51,12 @@ function StoreDetails({ store }: { store: StoreData }) {
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export default function StorePage() {
-  const router = useRouter()
-  const { id } = router.query
+  const router = useRouter();
+  const { id } = router.query;
 
   return (
     <GeneralLayout>
@@ -64,5 +64,5 @@ export default function StorePage() {
         {id && <></>}
       </Suspense>
     </GeneralLayout>
-  )
+  );
 }

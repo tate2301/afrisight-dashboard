@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string
-  count?: number
+  className?: string;
+  count?: number;
 }
 
 function SkeletonItem({ className, ...props }: SkeletonProps) {
@@ -11,7 +11,7 @@ function SkeletonItem({ className, ...props }: SkeletonProps) {
       className={cn("animate-pulse rounded-md bg-muted", className)}
       {...props}
     />
-  )
+  );
 }
 
 export function Skeleton({ className, count = 1, ...props }: SkeletonProps) {
@@ -21,5 +21,5 @@ export function Skeleton({ className, count = 1, ...props }: SkeletonProps) {
         <SkeletonItem key={index} className={className} {...props} />
       ))}
     </>
-  )
+  );
 }

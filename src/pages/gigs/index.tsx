@@ -19,7 +19,6 @@ import { TSurvey } from "@/utils/types";
 import Link from "next/link";
 import { CubeIcon } from "@heroicons/react/24/outline";
 
-
 function Vouchers() {
   const [surveys, setSurveys] = useState<TSurvey[]>([]);
   const { error, isLoading, executor } = useWithStatus();
@@ -41,14 +40,12 @@ function Vouchers() {
 
   return (
     <GeneralLayout>
-      <div className='flex flex-row items-start justify-between mb-6'>
-        <p className='text-start font-bold text-zinc-900 text-3xl '>
-          Surveys
-        </p>
+      <div className="flex flex-row items-start justify-between mb-6">
+        <p className="text-start font-bold text-zinc-900 text-3xl ">Surveys</p>
         <CreateSurvey callback={fetchSurveys} />
       </div>
       <Table>
-        <TableHeader className='text-start text-sm py-2 border-b'>
+        <TableHeader className="text-start text-sm py-2 border-b">
           <TableRow>
             <TableHead className="w-6" />
             <TableHead>Name</TableHead>
@@ -58,7 +55,7 @@ function Vouchers() {
             <TableHead>Created</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className='divide-y'>
+        <TableBody className="divide-y">
           {surveys.map((survey) => (
             <TableRow>
               <TableCell>
@@ -69,24 +66,34 @@ function Vouchers() {
               <TableCell>
                 <Link href={`/gigs/${survey._id}`}>
                   <p className="font-semibold text-zinc-900">{survey.name}</p>
-                  <p className="line-clamp-1 max-w-64">
-                    {survey.description}
-                  </p></Link>
+                  <p className="line-clamp-1 max-w-64">{survey.description}</p>
+                </Link>
               </TableCell>
-              <TableCell className='capitalize'>
+              <TableCell className="capitalize">
                 {survey.dollarRewardValue}
               </TableCell>
 
-              <TableCell >
-                <p className={cn("inline-flex gap-2 font-semibold", survey.reward.type === "points" ? "text-purple-600" : "text-orange-600")}>
-                  {survey.reward.type === "points" && <>
-                    <BadgeCent className="w-5 h-5" />
-                    <span>Points</span>
-                  </>}
-                  {survey.reward.type === "voucher" && <>
-                    <Ticket className="w-5 h-5" />
-                    <span>Voucher</span>
-                  </>}
+              <TableCell>
+                <p
+                  className={cn(
+                    "inline-flex gap-2 font-semibold",
+                    survey.reward.type === "points"
+                      ? "text-purple-600"
+                      : "text-orange-600",
+                  )}
+                >
+                  {survey.reward.type === "points" && (
+                    <>
+                      <BadgeCent className="w-5 h-5" />
+                      <span>Points</span>
+                    </>
+                  )}
+                  {survey.reward.type === "voucher" && (
+                    <>
+                      <Ticket className="w-5 h-5" />
+                      <span>Voucher</span>
+                    </>
+                  )}
                 </p>
               </TableCell>
               <TableCell className="font-semibold">
@@ -95,9 +102,7 @@ function Vouchers() {
                 </p>
               </TableCell>
               <TableCell>
-                {
-                  formatDate(new Date(survey.createdAt), "dd MMM, yyyy")
-                }
+                {formatDate(new Date(survey.createdAt), "dd MMM, yyyy")}
               </TableCell>
             </TableRow>
           ))}

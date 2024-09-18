@@ -1,7 +1,7 @@
 // lib/firebase.js
 
-import { FirebaseApp, initializeApp, getApps } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { FirebaseApp, initializeApp, getApps } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,8 +15,8 @@ const firebaseConfig = {
 
 let app: FirebaseApp;
 
-if(getApps().length === 0) {
-    app = initializeApp(firebaseConfig);
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
 }
 
 // Initialize Firestore

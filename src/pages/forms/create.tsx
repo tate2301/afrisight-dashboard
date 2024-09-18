@@ -1,7 +1,7 @@
-import React from 'react';
-import GeneralLayout from '../../layout/GeneralLayout';
-import { LinkIcon, PlusIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
+import React from "react";
+import GeneralLayout from "../../layout/GeneralLayout";
+import { LinkIcon, PlusIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 function CreateForm() {
   return (

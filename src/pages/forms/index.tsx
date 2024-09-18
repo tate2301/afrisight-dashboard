@@ -1,10 +1,10 @@
-import React from 'react';
-import GeneralLayout from '../../layout/GeneralLayout';
-import Search from '../../components/search/Search';
-import { ArrowPathIcon, LinkIcon, PlusIcon } from '@heroicons/react/24/outline';
-import FormItem from '../../components/form-item/FormItem';
-import useForms from '../../hooks/useForms';
-import { ArrowUpRight, SearchIcon } from 'lucide-react';
+import React from "react";
+import GeneralLayout from "../../layout/GeneralLayout";
+import Search from "../../components/search/Search";
+import { ArrowPathIcon, LinkIcon, PlusIcon } from "@heroicons/react/24/outline";
+import FormItem from "../../components/form-item/FormItem";
+import useForms from "../../hooks/useForms";
+import { ArrowUpRight, SearchIcon } from "lucide-react";
 
 function Forms() {
   const { forms, loading, error } = useForms();
@@ -12,21 +12,18 @@ function Forms() {
   const generateFormsLink = () => {
     const url = `${process.env.NEXT_PUBLIC_FORMS_URL}/?type=shared&id=190911`;
     console.log(url);
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
-
 
   return (
     <GeneralLayout>
-      <div className='flex flex-row items-start justify-between mb-6'>
-        <p className='text-start font-bold text-zinc-900 text-3xl '>
-          Forms
-        </p>
-        <div className='flex flex-row items-center space-x-4'>
-          <button className='h-[28px] px-3 rounded-lg font-semibold flex items-center text-zinc-900 bg-white pressable-shadow'>
-            Create form <ArrowUpRight size={16} className='ml-2' />
+      <div className="flex flex-row items-start justify-between mb-6">
+        <p className="text-start font-bold text-zinc-900 text-3xl ">Forms</p>
+        <div className="flex flex-row items-center space-x-4">
+          <button className="h-[28px] px-3 rounded-lg font-semibold flex items-center text-zinc-900 bg-white pressable-shadow">
+            Create form <ArrowUpRight size={16} className="ml-2" />
           </button>
-          <button className='size-[28px] rounded-lg font-semibold flex items-center justify-center text-zinc-900 bg-white pressable-shadow'>
+          <button className="size-[28px] rounded-lg font-semibold flex items-center justify-center text-zinc-900 bg-white pressable-shadow">
             <SearchIcon size={16} />
           </button>
         </div>

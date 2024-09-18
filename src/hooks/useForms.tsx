@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { getDocs, collection } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { FormType } from '../utils/types';
-import { getMessage } from '../helpers/getMessage';
+import { useState, useEffect } from "react";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "../lib/firebase";
+import { FormType } from "../utils/types";
+import { getMessage } from "../helpers/getMessage";
 
 const useForms = () => {
   const [forms, setForms] = useState<FormType[]>([]);
@@ -11,11 +11,11 @@ const useForms = () => {
 
   const getAllForms = async () => {
     try {
-      const snapshot = await getDocs(collection(db, 'forms'));
+      const snapshot = await getDocs(collection(db, "forms"));
       const fetchedForms = snapshot.docs.map((doc) => ({
         id: doc.id,
         form: {
-          ...(doc.data() as Omit<FormType['form'], 'id'>),
+          ...(doc.data() as Omit<FormType["form"], "id">),
         },
       }));
       setForms(fetchedForms);

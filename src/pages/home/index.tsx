@@ -1,30 +1,30 @@
-import { BanknotesIcon, UserGroupIcon } from '@heroicons/react/24/outline';
-import React from 'react';
-import GeneralLayout from '../../layout/GeneralLayout';
-import DashboarItem from '../../components/dashboard-item/DashboardItem';
-import Clock from '../../components/time-components/Clock';
-import Calendar from '../../components/time-components/Calender';
-import Search from '../../components/search/Search';
-import Link from 'next/link';
+import { BanknotesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import React from "react";
+import GeneralLayout from "../../layout/GeneralLayout";
+import DashboarItem from "../../components/dashboard-item/DashboardItem";
+import Clock from "../../components/time-components/Clock";
+import Calendar from "../../components/time-components/Calender";
+import Search from "../../components/search/Search";
+import Link from "next/link";
 
 const Overview = () => {
   const projects = [
     {
-      name: 'Users',
-      _id: 'users',
-      link: 'https://example.digiforge.app',
-      createdAt: '3',
-      branch: 'available',
-      status: 'success',
+      name: "Users",
+      _id: "users",
+      link: "https://example.digiforge.app",
+      createdAt: "3",
+      branch: "available",
+      status: "success",
       Icon: UserGroupIcon,
     },
     {
-      name: 'Gigs',
-      _id: 'gigs',
-      link: 'https://daypitch.com',
-      createdAt: '3',
-      branch: 'available',
-      status: 'success',
+      name: "Gigs",
+      _id: "gigs",
+      link: "https://daypitch.com",
+      createdAt: "3",
+      branch: "available",
+      status: "success",
       Icon: BanknotesIcon,
     },
   ];
@@ -43,7 +43,7 @@ const Overview = () => {
             </p>
           </div>
           <Link
-            href={'/forms'}
+            href={"/forms"}
             className="flex flex-row items-center bg-zinc-950 px-4 py-2 rounded-xl capitalize font-medium text-white"
           >
             forms
@@ -72,7 +72,7 @@ const Overview = () => {
             {/* producgts table */}
           </div>
           <div className="col-span-1">
-            <Calendar />{' '}
+            <Calendar />{" "}
           </div>
         </div>
       </div>

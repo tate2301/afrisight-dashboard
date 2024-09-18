@@ -1,5 +1,5 @@
-import React from 'react';
-import GeneralLayout from '../../layout/GeneralLayout';
+import React from "react";
+import GeneralLayout from "../../layout/GeneralLayout";
 
 function Settings() {
   return (

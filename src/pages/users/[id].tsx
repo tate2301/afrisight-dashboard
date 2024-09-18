@@ -26,7 +26,7 @@ const UserManagementInterface = () => {
   const [profile, setUser] = useState<TProfile | null>(null);
   const fetchUserData = async (id: string) => {
     const userDataResponse = await executor(() =>
-      axiosInstance.get(USER_ROUTES.GET_USER_BY_ID(id))
+      axiosInstance.get(USER_ROUTES.GET_USER_BY_ID(id)),
     );
     setUser(userDataResponse.data);
   };
@@ -130,7 +130,7 @@ const FormsCreated = (props: TProfile) => {
 
   const getFormsForThisUser = async () => {
     const response = await axiosInstance.get(
-      FORM_ROUTES.GET_FORMS_FOR_USER_BY_ID(props.user._id)
+      FORM_ROUTES.GET_FORMS_FOR_USER_BY_ID(props.user._id),
     );
     setForms(response.data);
   };
@@ -140,7 +140,6 @@ const FormsCreated = (props: TProfile) => {
       getFormsForThisUser();
     }
   }, [props]);
-
 
   return (
     <div className="py-4">
