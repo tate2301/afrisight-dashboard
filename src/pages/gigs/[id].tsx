@@ -360,7 +360,7 @@ const ResponsesTable = (props: { id: string; form: any }) => {
               createdAt,
               responses: actualResponses,
             } = response as any;
-            const objActualResponses = JSON.parse(actualResponses);
+            const objActualResponses = JSON.parse(actualResponses ?? JSON.stringify({}));
             return (
               <TableRow>
                 <TableCell>{user.email}</TableCell>
