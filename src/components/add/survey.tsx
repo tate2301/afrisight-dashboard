@@ -35,6 +35,7 @@ import {
 } from "@/lib/api-routes";
 import ClientsAutocompleteSelect from "./select/clients-autocomplete-select";
 import ClientFormsAutocomplete from "../ui/client-forms-autocomplete";
+import { Button } from "@radix-ui/themes";
 
 type SurveyFormSchema = {
   name: string;
@@ -111,10 +112,10 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
       }}
     >
       <DialogTrigger asChild>
-        <button className="bg-white text-zinc-900 pressable-shadow rounded-lg shadow-sm flex flex-row items-center space-x-2 font-medium px-4 pl-2 h-[28px]">
+        <Button>
           <PlusIcon height={20} width={20} />
           <p>Create survey</p>
-        </button>
+        </Button>
       </DialogTrigger>
       <DialogContent className="h-[80vh] bg-white gap-0 max-w-screen-md overflow-hidden p-0">
         <DialogHeader className="bg-white p-4 border-b-[0.5px] border-zinc-400/30 sticky top-0 z-10">

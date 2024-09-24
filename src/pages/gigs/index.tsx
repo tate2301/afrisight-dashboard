@@ -18,8 +18,58 @@ import { CreateSurvey } from "@/components/add/survey";
 import { TSurvey } from "@/utils/types";
 import Link from "next/link";
 import { CubeIcon } from "@heroicons/react/24/outline";
+import Flex from "@/components/design-sytem/flex";
+import { H3 } from "@/components/design-sytem/typography";
+import { TabsContainer, TabsList, TabsTrigger, } from "@/components/tab";
+import Box from "@/components/design-sytem/box";
+import { Button, IconButton, Text } from "@radix-ui/themes";
+import GigCard from "@/components/gig/card";
+import Separator from "@/components/design-sytem/separator";
+import Search from "@/components/search/Search";
+import { ChevronRight } from "@/components/icons/chevron.right";
+import { ChevronLeft } from "@/components/icons/chevron.left";
 
-function Vouchers() {
+const gigs = [
+  {
+    id: 1,
+    title: "Gig title",
+    createdDate: "2024-02-01",
+    status: "pending",
+    questions: 4,
+    responses: 0,
+    views: 0,
+  },
+  {
+    id: 2,
+    title: "Gig title",
+    createdDate: "2024-02-01",
+    status: "pending",
+    questions: 4,
+    responses: 0,
+    views: 0,
+  },
+  {
+    id: 3,
+    title: "Gig title",
+    createdDate: "2024-02-01",
+    status: "approved",
+    questions: 4,
+    responses: 0,
+    views: 0,
+  },
+  {
+    id: 4,
+    title: "Gig title",
+    createdDate: "2024-02-01",
+    status: "archived",
+    questions: 4,
+    responses: 0,
+    views: 0,
+  }
+]
+
+
+function Gig() {
   const [surveys, setSurveys] = useState<TSurvey[]>([]);
   const { error, isLoading, executor } = useWithStatus();
 
@@ -40,76 +90,43 @@ function Vouchers() {
 
   return (
     <GeneralLayout>
-      <div className="flex flex-row items-start justify-between mb-6">
-        <p className="text-start font-bold text-zinc-900 text-3xl ">Surveys</p>
+      <Flex className="flex flex-row items-start justify-between mb-6 p-4">
+        <H3>Surveys</H3>
         <CreateSurvey callback={fetchSurveys} />
-      </div>
-      <Table>
-        <TableHeader className="text-start text-sm py-2 border-b">
-          <TableRow>
-            <TableHead className="w-6" />
-            <TableHead>Name</TableHead>
-            <TableHead>Default reward (USD)</TableHead>
-            <TableHead>Additional reward type</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="divide-y">
-          {surveys.map((survey) => (
-            <TableRow>
-              <TableCell>
-                <div className="p-1 rounded-lg border border-zinc-400/10 bg-zinc-400/10 flex items-center justify-center">
-                  <CubeIcon className="size-5" />
-                </div>
-              </TableCell>
-              <TableCell>
-                <Link href={`/gigs/${survey._id}`}>
-                  <p className="font-semibold text-zinc-900">{survey.name}</p>
-                  <p className="line-clamp-1 max-w-64">{survey.description}</p>
-                </Link>
-              </TableCell>
-              <TableCell className="capitalize">
-                {survey.dollarRewardValue}
-              </TableCell>
+      </Flex>
+      <TabsContainer>
+        <TabsList>
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="pending">Pending</TabsTrigger>
+          <TabsTrigger value="published">Published</TabsTrigger>
+          <TabsTrigger value="archived">Archived</TabsTrigger>
+        </TabsList>
+      </TabsContainer>
+      <Box>
 
-              <TableCell>
-                <p
-                  className={cn(
-                    "inline-flex gap-2 font-semibold",
-                    survey.reward.type === "points"
-                      ? "text-purple-600"
-                      : "text-orange-600",
-                  )}
-                >
-                  {survey.reward.type === "points" && (
-                    <>
-                      <BadgeCent className="w-5 h-5" />
-                      <span>Points</span>
-                    </>
-                  )}
-                  {survey.reward.type === "voucher" && (
-                    <>
-                      <Ticket className="w-5 h-5" />
-                      <span>Voucher</span>
-                    </>
-                  )}
-                </p>
-              </TableCell>
-              <TableCell className="font-semibold">
-                <p className="w-fit py-1 px-2.5 rounded-full text-sm bg-zinc-100">
-                  {survey.status}
-                </p>
-              </TableCell>
-              <TableCell>
-                {formatDate(new Date(survey.createdAt), "dd MMM, yyyy")}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+        <Flex css={{ padding: "8px 12px", }} justifyContent={"between"} alignItems={"center"}>
+          <Search />
+          <Flex css={{ gap: 8 }} alignItems={"center"}>
+            <Text className="mr-4">1 - 20 of 39</Text>
+            <IconButton variant="ghost">
+              <ChevronLeft />
+            </IconButton>
+            <IconButton variant="ghost">
+              <ChevronRight />
+            </IconButton>
+          </Flex>
+        </Flex>
+        <Separator css={{ backgroundColor: "$gray2" }} />
+        <Box css={{ padding: "20px 0", }} className="py-2 space-y-[20px]">
+          {
+            gigs.map((gig) => (
+              <GigCard key={gig.id} createdDate={gig.createdDate} status={gig.status as unknown as any} title={gig.title} questions={gig.questions} responses={gig.responses} views={gig.views} />
+            ))
+          }
+        </Box>
+      </Box>
     </GeneralLayout>
   );
 }
 
-export default Vouchers;
+export default Gig;

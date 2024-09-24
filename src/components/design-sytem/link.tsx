@@ -3,6 +3,7 @@ import styled from "./theme";
 
 const Link = styled(NextLink.default, {
     fontWeight: "500",
+    fontSize: 14,
     variants: {
         state: {
             default: {

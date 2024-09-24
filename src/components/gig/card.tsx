@@ -3,9 +3,11 @@ import icons from '../icons';
 import Flex from '../design-sytem/flex';
 import { Caption, Paragraph, } from '../design-sytem/typography';
 import Link from '../design-sytem/link';
-import Button from '../design-sytem/button';
 import Box from '../design-sytem/box';
 import { formatDate } from '@/utils/strings';
+import { Button, IconButton } from '@radix-ui/themes';
+import { ChevronRight } from '../icons/chevron.right';
+import { ArrowRight } from '../icons/arrow.right';
 
 type GigStatus = "pending" | "approved" | "archived";
 
@@ -48,9 +50,13 @@ const GigCard = ({ title, questions, responses, views, createdDate, status }: Gi
                         Created {formatDate(createdDate)}
                     </Caption>
                 </div>
-                <Flex className="ml-4 flex items-center">
-                    {isPending && <Button variant={"text"} colorScheme={"primary"}>Publish Gig</Button>}
-                    <Link href="#">View </Link>
+                <Flex className="ml-4 gap-4 flex items-center">
+                    {isPending && <Button variant={"ghost"}>Publish Gig</Button>}
+                    <Link css={{ alignItems: "center", display: "flex", gap: 8 }} href="#" className='ml-4'>View
+                        <IconButton variant="ghost">
+                            <ArrowRight />
+                        </IconButton>
+                    </Link>
                 </Flex>
             </Flex>
         </Flex>
