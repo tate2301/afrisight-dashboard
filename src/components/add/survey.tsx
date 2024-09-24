@@ -67,7 +67,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
       } else if (key === 'additionalRewardValue') {
         formData.append(key, JSON.stringify(values[key]));
       } else {
-        formData.append(key, values[key]);
+        formData.append(key, values[key as keyof SurveyFormSchema]);
       }
     });
 
