@@ -25,7 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import useWithStatus from "@/hooks/useWithStatus";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   AUTH_ROUTES,
@@ -44,7 +44,7 @@ type SurveyFormSchema = {
   form: string;
   client: string;
   duration: number;
-  coverImage: string;
+  coverImage: File | null;
   additionalReward: string;
   dollarRewardValue: number;
   additionalRewardValue: any;
@@ -58,11 +58,27 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
     values: SurveyFormSchema,
     helpers: FormikHelpers<SurveyFormSchema>,
   ) => {
-    console.log({ values });
+    const formData = new FormData();
+
+    // Append all form fields to FormData
+    Object.keys(values).forEach((key) => {
+      if (key === 'coverImage') {
+        formData.append('coverImage', values.coverImage as File);
+      } else if (key === 'additionalRewardValue') {
+        formData.append(key, JSON.stringify(values[key]));
+      } else {
+        formData.append(key, values[key]);
+      }
+    });
+
+    // Add endDate
+    formData.append('endDate', addDays(new Date(), 365).toISOString());
+
     await executor(() =>
-      axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY, {
-        ...values,
-        endDate: addDays(new Date(), 365),
+      axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       }),
     );
 
@@ -113,7 +129,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
               category: "",
               form: "",
               client: "",
-              coverImage: "",
+              coverImage: null as File | null,
               duration: 7,
               additionalReward: "points",
               dollarRewardValue: 0.25,
@@ -214,10 +230,13 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
                         >
                           Cover Image
                         </label>
-                        <Field
-                          as={Input}
+                        <input
+                          id="coverImage"
                           name="coverImage"
                           type="file"
+                          onChange={(event) => {
+                            setFieldValue("coverImage", event.currentTarget.files?.[0] || null);
+                          }}
                           className="input-class"
                         />
                         <ErrorMessage

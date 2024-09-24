@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import CustomButton from "../buttons/CustomButton";
+import Button from "../buttons/CustomButton";
 import { useState } from "react";
 import axios from "axios";
 import { apiUrl } from "../../utils/apiUrl";
@@ -131,7 +131,7 @@ function SideDrawer() {
             </div>
             {err && <AlertMessage type="error" text={err.toString()} />}
             {msg && <AlertMessage type="success" text={msg.toString()} />}
-            <CustomButton
+            <Button
               loading={loading}
               onClick={createNewGig}
               text="Add New Gig"

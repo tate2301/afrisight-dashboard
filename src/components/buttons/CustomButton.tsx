@@ -6,15 +6,15 @@ type Props = {
   loading?: boolean;
 };
 
-const CustomButton = (props: Props) => {
+const Button = (props: Props) => {
   return (
     <button
       onClick={props.loading ? () => console.log("loadiing...") : props.onClick}
-      className={`bg-zinc-950 text-white font-semibold rounded-full p-2`}
+      className={`bg-indigo-600 text-white font-semibold rounded-xl p-2`}
     >
       {props.loading ? "Loading..." : props.text}
     </button>
   );
 };
 
-export default CustomButton;
+export default Button;
