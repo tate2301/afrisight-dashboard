@@ -43,8 +43,13 @@ function Home() {
       }
     } catch (error) {
       console.error(error);
-      setErr(getMessage(error));
-      setMsg("");
+      if (axios.isAxiosError(error)) {
+        if (error.status === 400) {
+          setErr("Invalid email or password");
+        } else {
+          setErr(getMessage(error));
+        }
+      }
       setLoading(false);
     }
   };

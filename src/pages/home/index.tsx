@@ -1,83 +1,252 @@
-import { BanknotesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import GeneralLayout from "../../layout/GeneralLayout";
-import DashboarItem from "../../components/dashboard-item/DashboardItem";
-import Clock from "../../components/time-components/Clock";
-import Calendar from "../../components/time-components/Calender";
-import Search from "../../components/search/Search";
-import Link from "next/link";
+import { H1, H3, Paragraph } from "@/components/design-sytem/typography";
+import Button from "@/components/design-sytem/button";
+import Separator from "@/components/design-sytem/separator";
+import Flex from "@/components/design-sytem/flex";
+import Box from "@/components/design-sytem/box";
+import GigCard from "@/components/gig/card";
+import { ArrowRight } from "@/components/icons/arrow.right";
+import { ColumnDef } from "@tanstack/react-table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DataTable } from "@/components/ui/datatable";
+
+const gigs = [
+  {
+    id: 1,
+    title: "Gig title",
+    createdDate: "2024-02-01",
+    status: "pending",
+    questions: 4,
+    responses: 0,
+    views: 0,
+  },
+  {
+    id: 2,
+    title: "Gig title",
+    createdDate: "2024-02-01",
+    status: "pending",
+    questions: 4,
+    responses: 0,
+    views: 0,
+  },
+  {
+    id: 3,
+    title: "Gig title",
+    createdDate: "2024-02-01",
+    status: "approved",
+    questions: 4,
+    responses: 0,
+    views: 0,
+  },
+  {
+    id: 4,
+    title: "Gig title",
+    createdDate: "2024-02-01",
+    status: "archived",
+    questions: 4,
+    responses: 0,
+    views: 0,
+  }
+]
 
 const Overview = () => {
-  const projects = [
-    {
-      name: "Users",
-      _id: "users",
-      link: "https://example.digiforge.app",
-      createdAt: "3",
-      branch: "available",
-      status: "success",
-      Icon: UserGroupIcon,
-    },
-    {
-      name: "Gigs",
-      _id: "gigs",
-      link: "https://daypitch.com",
-      createdAt: "3",
-      branch: "available",
-      status: "success",
-      Icon: BanknotesIcon,
-    },
-  ];
+
 
   return (
     <GeneralLayout>
-      <div className="max-w-7xl px-4 py-16 w-full mx-auto space-y-8 ">
-        <div className="flex flex-row items-start justify-between">
-          <div className="flex flex-col space-y-1">
-            <p className="text-start font-bold heading-text text-3xl ">
-              Dashboard Overview
-            </p>
-            <p className="text-start main-text text-sm text-zinc-500 max-w-2xl">
-              Choose how you like to manage your inventory. Start by adding
-              items
-            </p>
-          </div>
-          <Link
-            href={"/forms"}
-            className="flex flex-row items-center bg-zinc-950 px-4 py-2 rounded-xl capitalize font-medium text-white"
-          >
-            forms
-          </Link>
+      <div className="w-full mx-auto py-4 space-y-8 ">
+        <H1 className="px-4">Dashboard</H1>
+        <div className="flex gap-8 px-4">
+          <QuickActionCard
+            title="Create a gig"
+            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Create gig</Button>}
+          />
+          <QuickActionCard
+            title="Add a client"
+            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Add client</Button>}
+          />
+          <QuickActionCard
+            title="Add a reward policy"
+            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Add reward policy</Button>}
+          />
+          <QuickActionCard
+            title="Add a store item"
+            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Add store item</Button>}
+          />
+          <QuickActionCard
+            title="Add an admin user"
+            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Add admin user</Button>}
+          />
         </div>
-        {/* search and filter */}
-        <Search />
-        {/* project items */}
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-8">
-          <div className="md:col-span-2 col-span-1 flex flex-col space-y-4 ">
-            <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
-              {projects.map((item) => (
-                <DashboarItem
-                  Icon={item.Icon}
-                  link={item.link}
-                  _id={item._id}
-                  key={item._id}
-                  name={item.name}
-                  createdAt={item.createdAt}
-                  branch={item.branch}
-                  status={item.status}
-                />
-              ))}
-              <Clock />
-            </div>
-            {/* producgts table */}
-          </div>
-          <div className="col-span-1">
-            <Calendar />{" "}
-          </div>
-        </div>
+        <Separator />
+        <Box>
+          <H3 className="mb-2 px-4">Pending gigs</H3>
+
+          <Box>
+            <Flex css={{ padding: "4px 12px", backgroundColor: "$gray1" }} justifyContent={"between"} alignItems={"center"}>
+              <Flex css={{ gap: 8 }}>
+                <input type="checkbox" />
+                <Paragraph weight={"medium"}>3 selected</Paragraph>
+              </Flex>
+              <Flex>
+                <Button colorScheme="primary" variant="text">Approve 2 gigs</Button>
+                <Button colorScheme="secondary" padding="small">Archive 2 gigs</Button>
+              </Flex>
+            </Flex>
+            <Box css={{ padding: "20px 0", }} className="py-2 space-y-[20px]">
+              {
+                gigs.map((gig) => (
+                  <GigCard key={gig.id} createdDate={gig.createdDate} status={gig.status as unknown as any} title={gig.title} questions={gig.questions} responses={gig.responses} views={gig.views} />
+                ))
+              }
+            </Box>
+          </Box>
+        </Box>
+        <Box>
+          <Flex justifyContent={"between"} alignItems={"end"} css={{ padding: "0 20px", marginBottom: 20 }}>
+            <H3 className="mb-2 px-4">Pending payout requests</H3>
+            <Button colorScheme="secondary" padding="small">
+              View all payout requests <ArrowRight />
+            </Button>
+          </Flex>
+
+          <Box>
+            <DataTable columns={payoutRequestColumns} data={payoutRequests} />
+          </Box>
+        </Box>
       </div>
     </GeneralLayout>
   );
 };
+
+type QuickActionCardProps = {
+  title: string;
+  caption?: string;
+  button: React.ReactNode;
+}
+
+const QuickActionCard = ({ title, caption, button }: QuickActionCardProps) => {
+  return (
+    <div className="bg-white rounded-xl p-4 bg-zinc-100 rounded-2xl w-64">
+      <Paragraph as="h3" weight={"semibold"} className="mb-4">{title}</Paragraph>
+      {button}
+    </div>
+  );
+};
+
+type PayoutRequests = {
+  id: number;
+  user: {
+    fullName: string;
+    email: string;
+    profilePic: string;
+    accountStatus: "active" | "inactive" | "suspended";
+  }
+  amount: number;
+  balance: number;
+  status: "pending" | "approved" | "rejected";
+  createdAt: string;
+}
+
+const payoutRequests: PayoutRequests[] = [
+  {
+    id: 1,
+    user: {
+      fullName: "John Doe",
+      email: "john.doe@example.com",
+      profilePic: "https://via.placeholder.com/150",
+      accountStatus: "active"
+    },
+    amount: 100,
+    balance: 100,
+    status: "pending",
+    createdAt: "2024-02-01"
+  },
+  {
+    id: 2,
+    user: {
+      fullName: "Jane Doe",
+      email: "jane.doe@example.com",
+      profilePic: "https://via.placeholder.com/150",
+      accountStatus: "inactive"
+    },
+    amount: 200,
+    balance: 200,
+    status: "approved",
+    createdAt: "2024-02-02"
+  }
+]
+
+const payoutRequestColumns: ColumnDef<PayoutRequests>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "user.profilePic",
+    header: "Avatar",
+    cell: ({ row }) => (
+      <div className="flex items-center ">
+        <img
+          src={row.original.user.profilePic}
+          alt={`${row.original.user.fullName}'s avatar`}
+          className="h-10 w-10 rounded-full bg-zinc-100"
+        />
+      </div>
+    ),
+    size: 48
+  },
+  {
+    accessorKey: "user.fullName",
+    header: "Full Name"
+  },
+  {
+    accessorKey: "amount",
+    header: "Amount",
+    cell: ({ row }) => (
+      <Paragraph weight={"medium"}>US${row.original.amount}</Paragraph>
+    )
+  },
+  {
+    accessorKey: "balance",
+    header: "Balance",
+    cell: ({ row }) => (
+      <Paragraph weight={"medium"}>US${row.original.balance}</Paragraph>
+    )
+  },
+  {
+    accessorKey: "user.accountStatus",
+    header: "Account Status"
+  },
+  {
+    accessorKey: "status",
+    header: "Status"
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created At"
+  }
+]
+
 
 export default Overview;
