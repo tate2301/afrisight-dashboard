@@ -5,6 +5,7 @@ import CXMappersHeader from "@/components/page-header/CXMappersHeader";
 import { apiUrl } from "@/utils/apiUrl";
 import AlertMessage from "@/components/alerts/AlertMessage";
 import Button from "@/components/buttons/CustomButton";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 function ChangePassword() {
     const [newPassword, setNewPassword] = useState("");
@@ -12,12 +13,24 @@ function ChangePassword() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [err, setErr] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const router = useRouter();
     const { token } = router.query;
 
+    const validatePassword = (password: string) => {
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+        return regex.test(password);
+    };
+
     const handleChangePassword = async () => {
         if (newPassword !== confirmPassword) {
-            setErr("Passwords do not match");
+            setConfirmPasswordError("Passwords do not match");
+            return;
+        }
+
+        if (!validatePassword(newPassword)) {
+            setErr("Password does not meet the requirements");
             return;
         }
 
@@ -31,19 +44,56 @@ function ChangePassword() {
                 newPassword,
             });
             setSuccess(true);
-            // Redirect to login page after successful password change
-            setTimeout(() => router.push("/login"), 3000);
         } catch (error: any) {
-            setErr(error.response?.data || "An error occurred");
+            setErr(error.response?.data.message || "An error . Please try again");
         } finally {
             setLoading(false);
         }
     };
 
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const password = e.target.value;
+        setNewPassword(password);
+        if (password && !validatePassword(password)) {
+            setPasswordError("Password must include at least one letter, one number, one symbol, and be at least 8 characters long.");
+        } else {
+            setPasswordError("");
+        }
+    };
+
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const confirmPwd = e.target.value;
+        setConfirmPassword(confirmPwd);
+        if (confirmPwd !== newPassword) {
+            setConfirmPasswordError("Passwords do not match");
+        } else {
+            setConfirmPasswordError("");
+        }
+    };
+
+    if (success) {
+        return (
+            <div className=" w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
+                <CXMappersHeader subtitle="Secure Portal" />
+                <div className="p-4 md:p-0 max-w-sm mx-auto w-full">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Password Changed Successfully</CardTitle>
+                            <CardDescription>Your password has been updated.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-sm text-zinc-500">You can now close this page and log in with your new password.</p>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
             <CXMappersHeader subtitle="Secure Portal" />
-            <div className="max-w-sm mx-auto w-full flex flex-col space-y-6">
+            <div className="p-4 md:p-0 max-w-sm mx-auto w-full flex flex-col space-y-6">
                 <div>
                     <h3 className="text-lg text-zinc-900 font-bold">
                         Change Password
@@ -63,11 +113,9 @@ function ChangePassword() {
                             placeholder="New password"
                             className="py-2 px-4 rounded-lg pressable-shadow"
                             value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
+                            onChange={handlePasswordChange}
                         />
-                        <p className="text-xs font-medium text-zinc-500">
-                            Should include a symbol, A-z and at least 8 characters.
-                        </p>
+                        {passwordError && <p className="text-xs font-medium text-red-500">{passwordError}</p>}
                     </div>
                     <div className="flex flex-col space-y-2">
                         <label htmlFor="confirmPassword" className="text-sm font-medium text-zinc-500">
@@ -79,12 +127,12 @@ function ChangePassword() {
                             placeholder="Confirm new password"
                             className="py-2 px-4 rounded-lg pressable-shadow"
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onChange={handleConfirmPasswordChange}
                         />
+                        {confirmPasswordError && <p className="text-xs font-medium text-red-500">{confirmPasswordError}</p>}
                     </div>
                 </div>
                 {err && <AlertMessage type="error" text={err} />}
-                {success && <AlertMessage type="success" text="Password changed successfully. Redirecting to login..." />}
                 <Button
                     text="Change password"
                     onClick={handleChangePassword}

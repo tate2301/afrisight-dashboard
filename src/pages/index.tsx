@@ -52,7 +52,7 @@ function Home() {
   return (
     <div className="w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
       <CXMappersHeader subtitle="Business Portal" />
-      <div className="max-w-sm mx-auto w-full flex flex-col space-y-6">
+      <div className="p-4 md:p-0 max-w-sm mx-auto w-full flex flex-col space-y-6">
         <h3 className="text-lg text-zinc-900 font-bold">
           Sign in
         </h3>

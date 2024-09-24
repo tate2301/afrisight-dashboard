@@ -20,10 +20,14 @@ function Home() {
         setErr("");
 
         try {
-            await axios.post(`${apiUrl}/auth/forgot-password`, {
+
+            const response = await axios.post(`${apiUrl}/auth/forgot-password`, {
                 email: email,
             });
-            setSuccess(true);
+
+            if (response.data) {
+                setSuccess(true);
+            }
         } catch (error: any) {
             setErr(error.response.data);
             setLoading(false);
@@ -33,9 +37,9 @@ function Home() {
     };
 
     return (
-        <div className="w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
+        <div className=" w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
             <CXMappersHeader subtitle="Secure Portal" />
-            <div className="max-w-sm mx-auto w-full flex flex-col space-y-6">
+            <div className="max-w-sm p-4 md:p-0 mx-auto w-full h-fit flex flex-col space-y-6">
                 <div>
                     <h3 className="text-lg text-zinc-900 font-bold">
                         Forgot password?
