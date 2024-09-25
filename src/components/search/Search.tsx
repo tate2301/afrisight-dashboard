@@ -41,7 +41,7 @@ function SearchBox({ value, onChange }: SearchProps) {
   }, [debouncedSearchQuery]);
 
   return (
-    <Box css={{ backgroundColor: "$gray1" }} className="flex flex-row items-center main-border text-sm rounded-lg space-x-2 h-[36px] w-96 relative">
+    <Box className="flex flex-row items-center select-shadow text-sm rounded-lg space-x-2 h-[36px] w-96 relative">
       <SearchIcon className="text-zinc-400 absolute left-0 left-2 size-5" style={{
         top: "50%",
         transform: "translateY(-50%)"

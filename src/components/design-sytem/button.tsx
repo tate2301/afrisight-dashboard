@@ -20,9 +20,7 @@ const Button = styled('button', {
             solid: {},
             outline: {
                 backgroundColor: 'transparent',
-                '&:hover': {
-                    backgroundColor: '$backgroundHover',
-                },
+                boxShadow: "var(--pressable-shadow)"
             },
             text: {
                 backgroundColor: 'transparent',
@@ -50,19 +48,25 @@ const Button = styled('button', {
         },
         size: {
             small: {
-                height: '32px',
+                height: '28px',
                 padding: '0 12px',
                 fontSize: '12px',
             },
             medium: {
-                height: '40px',
+                height: '32px',
                 padding: '0 14px',
             },
             large: {
-                height: '48px',
+                height: '40px',
                 padding: '0 20px',
                 fontSize: '16px',
             },
+            icon: {
+                height: "32px",
+                width: "32px",
+                padding: 0,
+                justifyContent: "center"
+            }
         },
     },
 
@@ -83,7 +87,6 @@ const Button = styled('button', {
             css: {
                 backgroundColor: '$secondary',
                 color: '$labelPrimary',
-                '&:hover': { backgroundColor: '$secondaryHover' },
             },
         },
         {
@@ -92,7 +95,6 @@ const Button = styled('button', {
             css: {
                 backgroundColor: '$accent',
                 color: '$white',
-                '&:hover': { backgroundColor: '$accentHover' },
             },
         },
         {
@@ -101,7 +103,6 @@ const Button = styled('button', {
             css: {
                 backgroundColor: '$gray2',
                 color: '$labelPrimary',
-                '&:hover': { backgroundColor: '$surfaceHover' },
             },
         },
         {
@@ -118,7 +119,6 @@ const Button = styled('button', {
             css: {
                 backgroundColor: '$warning',
                 color: '$onWarning',
-                '&:hover': { backgroundColor: '$warningHover' },
             },
         },
 
@@ -129,7 +129,6 @@ const Button = styled('button', {
             css: {
                 border: '1px solid $primary',
                 color: '$primary',
-                '&:hover': { backgroundColor: '$primaryLight' },
             },
         },
         {
@@ -138,7 +137,6 @@ const Button = styled('button', {
             css: {
                 border: '1px solid $secondary',
                 color: '$secondary',
-                '&:hover': { backgroundColor: '$secondaryLight' },
             },
         },
         {
@@ -147,16 +145,14 @@ const Button = styled('button', {
             css: {
                 border: '1px solid $accent',
                 color: '$accent',
-                '&:hover': { backgroundColor: '$accentLight' },
             },
         },
         {
             variant: 'outline',
             colorScheme: 'surface',
             css: {
-                border: '1px solid $surface',
-                color: '$surface',
-                '&:hover': { backgroundColor: '$surfaceLight' },
+                boxShadow: 'var(--pressable-shadow)',
+                color: '$labelPrimary',
             },
         },
         {
@@ -165,7 +161,6 @@ const Button = styled('button', {
             css: {
                 border: '1px solid $danger',
                 color: '$danger',
-                '&:hover': { backgroundColor: '$dangerLight' },
             },
         },
         {
@@ -174,7 +169,6 @@ const Button = styled('button', {
             css: {
                 border: '1px solid $warning',
                 color: '$warning',
-                '&:hover': { backgroundColor: '$warningLight' },
             },
         },
 
@@ -216,7 +210,6 @@ const Button = styled('button', {
             colorScheme: 'primary',
             css: {
                 color: '$primary',
-                '&:hover': { backgroundColor: '$primaryLight' },
             },
         },
         {
@@ -224,7 +217,6 @@ const Button = styled('button', {
             colorScheme: 'secondary',
             css: {
                 color: '$secondary',
-                '&:hover': { backgroundColor: '$secondaryLight' },
             },
         },
         {
@@ -232,15 +224,16 @@ const Button = styled('button', {
             colorScheme: 'accent',
             css: {
                 color: '$accent',
-                '&:hover': { backgroundColor: '$accentLight' },
             },
         },
         {
             variant: 'ghost',
             colorScheme: 'surface',
             css: {
-                color: '$surface',
-                '&:hover': { backgroundColor: '$surfaceLight' },
+                color: '$labelSecondary',
+                "&:hover": {
+                    backgroundColor: "$gray2"
+                }
             },
         },
         {
@@ -248,7 +241,6 @@ const Button = styled('button', {
             colorScheme: 'danger',
             css: {
                 color: '$danger',
-                '&:hover': { backgroundColor: '$dangerLight' },
             },
         },
         {
@@ -256,7 +248,6 @@ const Button = styled('button', {
             colorScheme: 'warning',
             css: {
                 color: '$warning',
-                '&:hover': { backgroundColor: '$warningLight' },
             },
         },
     ],

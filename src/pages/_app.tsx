@@ -15,7 +15,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Welcome to dashboard!</title>
       </Head>
-      <main className="subpixel-antialiased text-zinc-600">
+      <main className="subpixel-antialiased text-zinc-600 flex">
         <QueryClientProvider client={queryClient}>
           <StoreProvider>
             <Component {...pageProps} />

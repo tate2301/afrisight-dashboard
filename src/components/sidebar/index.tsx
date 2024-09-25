@@ -51,7 +51,9 @@ const sidebarNavItems: SidebarNavItemProps[] = [
 
 const Sidebar = () => {
     return (
-        <Box as="aside" className="w-72 bg-zinc-50 sticky top-0 h-screen">
+        <Box className="w-[320px] bg-zinc-50 sticky top-0 h-screen" css={{
+            borderRight: "1px solid $gray2"
+        }}>
             <div className="h-[48px] mb-4"></div>
             <ul className="flex flex-col gap-2 p-2">
                 {sidebarNavItems.map((item, index) => (
@@ -71,8 +73,8 @@ const SidebarNavItem = ({ Icon, text, href }: SidebarNavItemProps) => {
     const pathname = usePathname();
     const active = pathname.includes(href);
     return (
-        <li className={cn("p-2 rounded-md hover:bg-white/30", active && "bg-white hover:bg-white")}>
-            <Link color={active ? "primary" : "white"} state={active ? "active" : "default"} className="flex w-full items-center gap-2" href={href}>
+        <li className={cn("p-2 rounded-md hover:bg-zinc-400/20", active && "bg-zinc-400/20 hover:bg-zinc-100")}>
+            <Link color={active ? "primary" : "default"} className="flex w-full items-center gap-2" href={href}>
                 <Icon className="w-4 h-4" />
                 {text}
             </Link>

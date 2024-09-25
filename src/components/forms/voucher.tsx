@@ -11,7 +11,7 @@ import Button from "../design-sytem/button";
 
 
 export default function CreateVoucher(props: {
-    callback: () => void
+    callback: (voucher_id: string) => void
 }) {
     const [code, setCode] = useState("")
     const queryClient = useQueryClient()
@@ -19,7 +19,6 @@ export default function CreateVoucher(props: {
         queryKey: ['generate-voucher'],
         queryFn: async () => {
             const res = await axiosInstance.get("/gamification/voucher/generate")
-            console.log(res.data)
             return res.data.voucher
         }
     })
@@ -32,13 +31,14 @@ export default function CreateVoucher(props: {
 
     const onSubmit = async (values: { code: string, name: string, expiresAt: string }) => {
         try {
-            await axiosInstance.post("/gamification/voucher/create", {
+            const response = await axiosInstance.post("/gamification/voucher/create", {
                 code,
                 name: values.name,
                 expiresAt: values.expiresAt
             })
+            const voucher_id = response.data.voucher._id
             queryClient.invalidateQueries({ queryKey: ['vouchers'] })
-            props.callback()
+            props.callback(voucher_id)
         } catch (error) {
             console.log(error)
         }

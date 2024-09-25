@@ -18,7 +18,7 @@ const SelectWithOptions = ({ options, label, value, onChange }: FilterButtonProp
 
     return (
         <Select.Root defaultValue={options[0]} value={selectedValue} onValueChange={handleChange}>
-            <Select.Trigger>
+            <Select.Trigger className="pressable-shadow" style={{ borderRadius: 12 }}>
                 <Text>{label}</Text>: <Text weight={"medium"}>{selectedValue}</Text>
 
             </Select.Trigger>

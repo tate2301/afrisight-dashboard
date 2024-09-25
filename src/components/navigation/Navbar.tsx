@@ -12,8 +12,9 @@ const Navbar = () => {
   const { pathname } = router;
 
   return (
-    <nav className="w-full h-[48px] flex items-center border-b border-zinc-300/30 bg-white">
-      <div className="w-full px-4 flex items-center space-x-8">
+    <nav className="w-full h-[48px] flex items-center border-b border-zinc-300/30 bg-white relative" style={{ zIndex: 1000 }}>
+      <div
+        className="w-full px-4 flex items-center space-x-8">
         <div className="w-96">
           <SearchBox />
         </div>

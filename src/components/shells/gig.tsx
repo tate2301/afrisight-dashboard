@@ -1,4 +1,4 @@
-import { H3 } from "../design-sytem/typography";
+import { H3, Paragraph } from "../design-sytem/typography";
 import { CreateSurvey } from "../add/survey";
 import Separator from "../design-sytem/separator";
 import SearchBox from "../search/Search";
@@ -12,6 +12,7 @@ import { GigShellProps } from ".";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import Box from "../design-sytem/box";
+import Button from "../design-sytem/button";
 
 
 
@@ -52,13 +53,13 @@ export default function PageWithTableShell({ children, fetchSurveys, total, curr
                 <SearchBox />
                 <Flex css={{ gap: 8 }} alignItems={"center"}>
                     <SelectWithOptions options={["Date created", "Questions", "Responses"]} label="Sort by" />
-                    <Text className="mr-4">{currentPage} - {pageSize} of {total}</Text>
-                    <IconButton variant="ghost">
+                    <Paragraph className="mx-4">Showing {currentPage} to {pageSize} of {total}</Paragraph>
+                    <Button size={"icon"} colorScheme={"surface"} variant={"outline"}>
                         <ChevronLeft />
-                    </IconButton>
-                    <IconButton variant="ghost">
+                    </Button>
+                    <Button size={"icon"} colorScheme={"surface"} variant={"outline"}>
                         <ChevronRight />
-                    </IconButton>
+                    </Button>
                 </Flex>
             </Flex>
             <Separator css={{ backgroundColor: "$gray2" }} />

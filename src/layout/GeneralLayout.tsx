@@ -8,20 +8,15 @@ interface Props {
 
 function GeneralLayout({ children }: Props) {
   return (
-    <div className="bg-white w-full flex-1 flex" >
+    <>
       <Sidebar />
-      <div className="w-full overflow-y-auto h-screen">
+      <div className="w-full">
         <header className="flex sticky top-0 h-[48px]">
           <Navbar />
         </header>
-        <div style={{
-          minHeight: "calc(100vh - 48px)",
-          marginTop: "16px"
-        }}>
-          {children}
-        </div>
+        {children}
       </div>
-    </div>
+    </>
   );
 }
 

@@ -25,6 +25,10 @@ const Pill = styled("div", {
             danger: {
                 backgroundColor: "$danger",
                 color: "$white"
+            },
+            success: {
+                backgroundColor: "$secondary",
+                color: "$white"
             }
         }
     }

@@ -17,12 +17,12 @@ import { formatDate } from "date-fns";
 import { CreateSurvey } from "@/components/add/survey";
 import { TSurvey } from "@/utils/types";
 import Link from "next/link";
-import { CubeIcon } from "@heroicons/react/24/outline";
+import { CubeIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Flex from "@/components/design-sytem/flex";
 import { H3 } from "@/components/design-sytem/typography";
 import { TabsContainer, TabsList, TabsTrigger, } from "@/components/tab";
 import Box from "@/components/design-sytem/box";
-import { Button, Dialog, IconButton, Text, TextArea, TextField } from "@radix-ui/themes";
+import { Dialog, IconButton, Text, TextArea, TextField } from "@radix-ui/themes";
 import GigCard from "@/components/gig/card";
 import Separator from "@/components/design-sytem/separator";
 import SearchBox from "@/components/search/Search";
@@ -31,6 +31,7 @@ import { ChevronLeft } from "@/components/icons/chevron.left";
 import SelectWithOptions from "@/components/filter-button";
 import PageWithTableShell from "@/components/shells/gig";
 import { useSearchParams } from "next/navigation";
+import Button from "@/components/design-sytem/button";
 
 const gigs = [
   {
@@ -73,85 +74,6 @@ const gigs = [
 
 const tabs = ["All", "Pending", "Approved", "Archived"]
 
-const AddRewardPolicy = () => {
-  return (
-    <Dialog.Root>
-      <Dialog.Trigger>
-        <Button>
-          Add reward policy
-        </Button>
-      </Dialog.Trigger>
-
-      <Dialog.Content maxWidth="450px">
-        <Box css={{ height: 180, backgroundColor: "$gray1", position: "relative", margin: "0 -24px", marginTop: -24, marginBottom: 24 }}>
-          <Button variant="surface" className="absolute bottom-2 right-2">
-            Upload cover image
-          </Button>
-        </Box>
-
-
-        <Flex direction="column" gap="3">
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Title
-            </Text>
-            <TextField.Root
-            />
-          </label>
-          <Flex gap={"4"}>
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Location
-              </Text>
-              <TextField.Root
-              />
-            </label>
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Reward (USD)
-              </Text>
-              <TextField.Root
-              />
-            </label>
-          </Flex>
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
-              Description
-            </Text>
-            <TextArea
-            />
-          </label>
-          <Box css={{ backgroundColor: "$gray1", borderRadius: "16px", padding: "16px" }} className="space-y-4 flex flex-col">
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Closing date
-              </Text>
-              <TextField.Root type="date" />
-            </label>
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Reward type
-              </Text>
-              <TextField.Root type="date" />
-            </label>
-          </Box>
-        </Flex>
-
-        <Flex gap="3" mt="4" justify="end">
-          <Dialog.Close>
-            <Button variant="ghost">
-              Cancel
-            </Button>
-          </Dialog.Close>
-          <Dialog.Close>
-            <Button>Save</Button>
-          </Dialog.Close>
-        </Flex>
-      </Dialog.Content>
-    </Dialog.Root>
-
-  )
-}
 
 
 function Gig() {
@@ -179,7 +101,7 @@ function Gig() {
 
   return (
     <GeneralLayout>
-      <PageWithTableShell title="Gigs" activeTab={activeTab} tabs={tabs} total={surveys.length} currentPage={1} pageSize={10} fetchSurveys={fetchSurveys}>
+      <PageWithTableShell actions={<Link href={"/gigs/create_gig"}><Button><PlusIcon className="size-4 mr-2" />   Create gig</Button></Link>} title="Gigs" activeTab={activeTab} tabs={tabs} total={surveys.length} currentPage={1} pageSize={10} fetchSurveys={fetchSurveys}>
         <Box css={{ padding: "20px 0", }} className="py-2 space-y-[20px]">
           {
             gigs.map((gig) => (
