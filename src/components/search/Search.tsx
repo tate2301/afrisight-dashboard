@@ -1,8 +1,15 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Box from "../design-sytem/box";
+import { Search as SearchIcon } from "@/components/icons/search";
 
-function Search() {
-  const [searchQuery, setSearchQuery] = useState("");
+type SearchProps = {
+  value?: string;
+  onChange?: (query: string) => void;
+}
+
+function SearchBox({ value, onChange }: SearchProps) {
+  const [searchQuery, setSearchQuery] = useState(value ?? "");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
   // Custom debounce function
@@ -28,20 +35,26 @@ function Search() {
     setSearchQuery(query);
     debouncedSetSearchQuery(query);
   };
+
+  useEffect(() => {
+    onChange?.(debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
+
   return (
-    <div className="flex flex-row items-center space-x-4 w-full bg-zinc-400/15 px-2 group rounded-xl h-[36px] max-w-96">
-      <div className="flex flex-row items-center flex-1 main-border text-sm rounded-lg  space-x-2">
-        <MagnifyingGlassIcon height={20} width={20} className="text-zinc-400" />
-        <input
-          type="text"
-          onChange={handleSearchChange}
-          value={searchQuery}
-          className="border-none outline-none flex-1 py-2 text-zinc-700 bg-transparent placeholder:font-semibold"
-          placeholder="Search"
-        />
-      </div>
-    </div>
+    <Box css={{ backgroundColor: "$gray1" }} className="flex flex-row items-center main-border text-sm rounded-lg space-x-2 h-[36px] w-96 relative">
+      <SearchIcon className="text-zinc-400 absolute left-0 left-2 size-5" style={{
+        top: "50%",
+        transform: "translateY(-50%)"
+      }} />
+      <input
+        type="text"
+        onChange={handleSearchChange}
+        value={searchQuery}
+        className="border-none outline-none flex-1 py-2 pl-10 text-zinc-700 bg-transparent placeholder:font-semibold"
+        placeholder="Search"
+      />
+    </Box>
   );
 }
 
-export default Search;
+export default SearchBox;

@@ -2,7 +2,6 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import GeneralLayout from "../../layout/GeneralLayout";
 import { H1, H3, Paragraph } from "@/components/design-sytem/typography";
-import Button from "@/components/design-sytem/button";
 import Separator from "@/components/design-sytem/separator";
 import Flex from "@/components/design-sytem/flex";
 import Box from "@/components/design-sytem/box";
@@ -11,6 +10,7 @@ import { ArrowRight } from "@/components/icons/arrow.right";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTable } from "@/components/ui/datatable";
+import { Button, Heading } from "@radix-ui/themes";
 
 const gigs = [
   {
@@ -61,38 +61,35 @@ const Overview = () => {
         <div className="flex gap-8 px-4">
           <QuickActionCard
             title="Create a gig"
-            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Create gig</Button>}
+            button={<Button> <PlusIcon height={20} width={20} /> Create gig</Button>}
           />
           <QuickActionCard
             title="Add a client"
-            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Add client</Button>}
+            button={<Button> <PlusIcon height={20} width={20} /> Add client</Button>}
           />
           <QuickActionCard
             title="Add a reward policy"
-            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Add reward policy</Button>}
+            button={<Button> <PlusIcon height={20} width={20} /> Add reward policy</Button>}
           />
           <QuickActionCard
             title="Add a store item"
-            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Add store item</Button>}
+            button={<Button> <PlusIcon height={20} width={20} /> Add store item</Button>}
           />
           <QuickActionCard
             title="Add an admin user"
-            button={<Button padding="iconLeft" colorScheme="secondary"> <PlusIcon height={20} width={20} /> Add admin user</Button>}
+            button={<Button> <PlusIcon height={20} width={20} /> Add admin user</Button>}
           />
         </div>
         <Separator />
         <Box>
-          <H3 className="mb-2 px-4">Pending gigs</H3>
-
           <Box>
-            <Flex css={{ padding: "4px 12px", backgroundColor: "$gray1" }} justifyContent={"between"} alignItems={"center"}>
-              <Flex css={{ gap: 8 }}>
-                <input type="checkbox" />
-                <Paragraph weight={"medium"}>3 selected</Paragraph>
-              </Flex>
-              <Flex>
-                <Button colorScheme="primary" variant="text">Approve 2 gigs</Button>
-                <Button colorScheme="secondary" padding="small">Archive 2 gigs</Button>
+            <Flex css={{ padding: "4px 12px", }} justifyContent={"between"} alignItems={"center"}>
+              <Heading size="4">
+                Pending gigs
+              </Heading>
+              <Flex alignItems={"center"} css={{ gap: 8 }}>
+                <Button variant="ghost">Approve 2 gigs</Button>
+                <Button>Archive 2 gigs</Button>
               </Flex>
             </Flex>
             <Box css={{ padding: "20px 0", }} className="py-2 space-y-[20px]">
@@ -107,7 +104,7 @@ const Overview = () => {
         <Box>
           <Flex justifyContent={"between"} alignItems={"end"} css={{ padding: "0 20px", marginBottom: 20 }}>
             <H3 className="mb-2 px-4">Pending payout requests</H3>
-            <Button colorScheme="secondary" padding="small">
+            <Button>
               View all payout requests <ArrowRight />
             </Button>
           </Flex>

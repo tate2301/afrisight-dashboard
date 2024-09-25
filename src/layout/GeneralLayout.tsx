@@ -15,7 +15,8 @@ function GeneralLayout({ children }: Props) {
           <Navbar />
         </header>
         <div style={{
-          minHeight: "calc(100vh - 48px)"
+          minHeight: "calc(100vh - 48px)",
+          marginTop: "16px"
         }}>
           {children}
         </div>

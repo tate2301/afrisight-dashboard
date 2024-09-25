@@ -5,7 +5,7 @@ import { Cog6ToothIcon, UserIcon } from "@heroicons/react/24/outline";
 import { data } from "../../utils/data";
 import { Building2, StoreIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Search from "../search/Search";
+import SearchBox from "../search/Search";
 
 const Navbar = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ const Navbar = () => {
     <nav className="w-full h-[48px] flex items-center border-b border-zinc-300/30 bg-white">
       <div className="w-full px-4 flex items-center space-x-8">
         <div className="w-96">
-          <Search />
+          <SearchBox />
         </div>
         <div className="flex-1" />
         <div className="flex items-center space-x-4">

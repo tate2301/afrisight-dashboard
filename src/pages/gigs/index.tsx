@@ -25,9 +25,12 @@ import Box from "@/components/design-sytem/box";
 import { Button, IconButton, Text } from "@radix-ui/themes";
 import GigCard from "@/components/gig/card";
 import Separator from "@/components/design-sytem/separator";
-import Search from "@/components/search/Search";
+import SearchBox from "@/components/search/Search";
 import { ChevronRight } from "@/components/icons/chevron.right";
 import { ChevronLeft } from "@/components/icons/chevron.left";
+import SelectWithOptions from "@/components/filter-button";
+import PageWithTableShell from "@/components/shells/gig";
+import { useSearchParams } from "next/navigation";
 
 const gigs = [
   {
@@ -68,10 +71,15 @@ const gigs = [
   }
 ]
 
+const tabs = ["All", "Pending", "Approved", "Archived"]
 
 function Gig() {
+
   const [surveys, setSurveys] = useState<TSurvey[]>([]);
   const { error, isLoading, executor } = useWithStatus();
+
+  const query = useSearchParams();
+  const activeTab = query.get("tab") || tabs[0].toLowerCase().replaceAll(" ", "-");
 
   const fetchSurveys = async () => {
     try {
@@ -90,33 +98,7 @@ function Gig() {
 
   return (
     <GeneralLayout>
-      <Flex className="flex flex-row items-start justify-between mb-6 p-4">
-        <H3>Surveys</H3>
-        <CreateSurvey callback={fetchSurveys} />
-      </Flex>
-      <TabsContainer>
-        <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="pending">Pending</TabsTrigger>
-          <TabsTrigger value="published">Published</TabsTrigger>
-          <TabsTrigger value="archived">Archived</TabsTrigger>
-        </TabsList>
-      </TabsContainer>
-      <Box>
-
-        <Flex css={{ padding: "8px 12px", }} justifyContent={"between"} alignItems={"center"}>
-          <Search />
-          <Flex css={{ gap: 8 }} alignItems={"center"}>
-            <Text className="mr-4">1 - 20 of 39</Text>
-            <IconButton variant="ghost">
-              <ChevronLeft />
-            </IconButton>
-            <IconButton variant="ghost">
-              <ChevronRight />
-            </IconButton>
-          </Flex>
-        </Flex>
-        <Separator css={{ backgroundColor: "$gray2" }} />
+      <PageWithTableShell title="Gigs" activeTab={activeTab} tabs={tabs} total={surveys.length} currentPage={1} pageSize={10} fetchSurveys={fetchSurveys}>
         <Box css={{ padding: "20px 0", }} className="py-2 space-y-[20px]">
           {
             gigs.map((gig) => (
@@ -124,7 +106,7 @@ function Gig() {
             ))
           }
         </Box>
-      </Box>
+      </PageWithTableShell>
     </GeneralLayout>
   );
 }
