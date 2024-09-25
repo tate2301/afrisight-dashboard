@@ -13,6 +13,6 @@ export type GigShellProps = {
 
 export const useGetCurrentTabFromQuery = (tabs: string[]) => {
     const searchParams = useSearchParams();
-    const currentTab = searchParams.get("tab") || tabs[0];
+    const currentTab = searchParams.get("tab") || tabs[0].toLowerCase().replaceAll(" ", "-");
     return currentTab;
 }
