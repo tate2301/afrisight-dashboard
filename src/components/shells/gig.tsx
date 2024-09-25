@@ -15,7 +15,7 @@ import Box from "../design-sytem/box";
 
 
 
-export default function PageWithTableShell({ children, fetchSurveys, total, currentPage, pageSize, tabs, activeTab, title }: GigShellProps) {
+export default function PageWithTableShell({ children, fetchSurveys, total, currentPage, pageSize, tabs, activeTab, title, actions }: GigShellProps) {
     const router = useRouter();
     const handleTabChange = useCallback((tab: string) => {
         const currentQuery = new URLSearchParams(window.location.search);
@@ -34,7 +34,9 @@ export default function PageWithTableShell({ children, fetchSurveys, total, curr
                 <H3>
                     {title}
                 </H3>
-                <CreateSurvey callback={fetchSurveys} />
+                <Flex css={{ gap: 8 }} alignItems={"center"}>
+                    {actions}
+                </Flex>
             </Flex>
             <TabNav.Root>
                 {tabs.map((tab) => (

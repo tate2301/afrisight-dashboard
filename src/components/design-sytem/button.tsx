@@ -5,13 +5,14 @@ const Button = styled('button', {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '9999px',
+    borderRadius: '12px',
     fontWeight: 600,
     fontSize: '14px',
     transition: 'all 0.2s ease',
     cursor: 'pointer',
     border: 'none',
     outline: 'none',
+    gap: 4,
 
     // Variants
     variants: {
@@ -41,7 +42,10 @@ const Button = styled('button', {
             secondary: {},
             accent: {},
             surface: {},
-            danger: {},
+            danger: {
+                backgroundColor: "$danger",
+                color: "$white"
+            },
             warning: {},
         },
         size: {
@@ -52,7 +56,7 @@ const Button = styled('button', {
             },
             medium: {
                 height: '40px',
-                padding: '0 16px',
+                padding: '0 14px',
             },
             large: {
                 height: '48px',
@@ -70,8 +74,7 @@ const Button = styled('button', {
             colorScheme: 'primary',
             css: {
                 backgroundColor: '$primary',
-                color: '$onPrimary',
-                '&:hover': { backgroundColor: '$primaryHover' },
+                color: '$white',
             },
         },
         {
@@ -79,7 +82,7 @@ const Button = styled('button', {
             colorScheme: 'secondary',
             css: {
                 backgroundColor: '$secondary',
-                color: '$onSecondary',
+                color: '$labelPrimary',
                 '&:hover': { backgroundColor: '$secondaryHover' },
             },
         },
@@ -88,7 +91,7 @@ const Button = styled('button', {
             colorScheme: 'accent',
             css: {
                 backgroundColor: '$accent',
-                color: '$onAccent',
+                color: '$white',
                 '&:hover': { backgroundColor: '$accentHover' },
             },
         },
@@ -96,8 +99,8 @@ const Button = styled('button', {
             variant: 'solid',
             colorScheme: 'surface',
             css: {
-                backgroundColor: '$surface',
-                color: '$onSurface',
+                backgroundColor: '$gray2',
+                color: '$labelPrimary',
                 '&:hover': { backgroundColor: '$surfaceHover' },
             },
         },
@@ -106,8 +109,7 @@ const Button = styled('button', {
             colorScheme: 'danger',
             css: {
                 backgroundColor: '$danger',
-                color: '$onDanger',
-                '&:hover': { backgroundColor: '$dangerHover' },
+                color: '$white',
             },
         },
         {

@@ -11,7 +11,7 @@ export function DataTable<TData, TValue>({ columns, data }: { columns: ColumnDef
     })
 
     return (
-        <Box className="border">
+        <Box>
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (

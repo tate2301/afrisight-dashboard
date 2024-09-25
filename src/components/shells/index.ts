@@ -2,6 +2,7 @@ import { useSearchParams } from "next/navigation";
 
 export type GigShellProps = {
     title: string;
+    actions?: React.ReactNode;
     activeTab: string;
     total: number;
     currentPage: number;

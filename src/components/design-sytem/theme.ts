@@ -19,7 +19,8 @@ const { styled } = createStitches({
             gray6: "hsl(0, 0%, 20%)",
             gray7: "hsl(0, 0%, 10%)",
             gray8: "hsl(0, 0%, 4%)",
-            secondaryBase: "oklch(66.61% 0.219 35.61)"
+            secondaryBase: "oklch(66.61% 0.219 35.61)",
+            danger: "#FD1919"
         }
     }
 })

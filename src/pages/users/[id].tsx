@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { ChevronRight, Pencil, DownloadCloud } from "lucide-react";
+import { Pencil, DownloadCloud } from "lucide-react";
 import GeneralLayout from "@/layout/GeneralLayout";
 import useWithStatus from "@/hooks/useWithStatus";
 import { FORM_ROUTES, USER_ROUTES } from "@/lib/api-routes";
@@ -17,25 +17,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { Text } from "@radix-ui/themes";
+import { ChevronRight } from "@/components/icons/chevron.right";
+import { useQuery } from "@tanstack/react-query";
+import Button from "@/components/design-sytem/button";
+import { XFill } from "@/components/icons/x.fill";
 
 const UserManagementInterface = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { error, isLoading, executor } = useWithStatus();
-  const [profile, setUser] = useState<TProfile | null>(null);
   const fetchUserData = async (id: string) => {
-    const userDataResponse = await executor(() =>
-      axiosInstance.get(USER_ROUTES.GET_USER_BY_ID(id)),
-    );
-    setUser(userDataResponse.data);
+    const response = await axiosInstance.get(USER_ROUTES.GET_USER_BY_ID(id));
+    return response.data;
   };
 
-  useEffect(() => {
-    if (id) {
-      fetchUserData(id as string);
-    }
-  }, [id]);
+  const { data: profile, error, isLoading } = useQuery<TProfile, Error>({
+    queryKey: ['user', id],
+    queryFn: () => fetchUserData(id as string),
+    enabled: !!id,
+  });
 
   return (
     <GeneralLayout>
@@ -43,11 +44,11 @@ const UserManagementInterface = () => {
       {profile && (
         <div className="flex">
           {/* Main panel */}
-          <main className="flex-1 p-8">
+          <main className="flex-1 px-4">
             <Link href={"/users"} className="mb-4">
-              <span className="text-indigo-500 font-semibold flex items-center gap-1">
-                Users <ChevronRight size={16} />
-              </span>
+              <Text size="2" className="text-indigo-500 font-semibold flex items-center gap-1">
+                Users <ChevronRight className="size-4" />
+              </Text>
             </Link>
             <div className="flex justify-between items-center mb-8">
               <div>
@@ -59,12 +60,13 @@ const UserManagementInterface = () => {
                 <p>{profile.user.email}</p>
               </div>
               <div className="flex gap-2">
-                <button className="bg-white px-4 rounded pressable-shadow font-semibold h-[28px] flex items-center mr-2">
+                <Button>
                   Reset password
-                </button>
-                <button className="bg-white px-4 rounded pressable-shadow font-semibold h-[28px] flex items-center">
+                </Button>
+                <Button colorScheme={"danger"}>
+                  <XFill className="size-6" />
                   Disable user
-                </button>
+                </Button>
               </div>
             </div>
 
