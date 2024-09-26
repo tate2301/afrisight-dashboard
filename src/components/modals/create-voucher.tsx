@@ -12,6 +12,7 @@ import Button from "../design-sytem/button";
 
 export default function CreateVoucher(props: {
     callback: (voucher_id: string) => void
+    onClose?: () => void
 }) {
     const [code, setCode] = useState("")
     const queryClient = useQueryClient()
@@ -113,7 +114,12 @@ export default function CreateVoucher(props: {
                             </label>
 
                             <Flex justify={"end"} mt="4" gap={"4"}>
-                                <Dialog.Close>
+                                <Dialog.Close onClick={(e) => {
+                                    if (props.onClose) {
+                                        props.onClose()
+                                    }
+                                    return e;
+                                }}>
                                     <Button colorScheme="surface" variant="ghost">
                                         Cancel
                                     </Button>

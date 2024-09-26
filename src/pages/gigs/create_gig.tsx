@@ -7,12 +7,12 @@ import { Caption, H2, H3, Paragraph } from '@/components/design-sytem/typography
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import GeneralLayout from '@/layout/GeneralLayout';
 import { CameraIcon } from '@heroicons/react/24/outline';
-import { Avatar, Card, RadioCards, Section, TextField } from '@radix-ui/themes';
-import { Form, Formik, useFormik } from 'formik';
+import { Avatar, Card, RadioCards, TextField } from '@radix-ui/themes';
+import { useFormik } from 'formik';
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import * as Yup from 'yup';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/hooks/useApiFetcher';
 import { Combobox, ComboboxItem } from '@/components/ui/combobox';
 import { CommandItem } from '@/components/ui/command';
@@ -47,7 +47,7 @@ const SkeletonButton = styled(SkeletonBox, {
     width: '8em',
 });
 
-const TextInput = styled(TextField.Root, {
+export const TextInput = styled(TextField.Root, {
     maxWidth: 512,
     minWidth: 400,
 });
@@ -57,7 +57,7 @@ const RequiredAsterisk = styled('span', {
     marginLeft: '2px',
 });
 
-const ErrorMessage = styled(Caption, {
+export const ErrorMessage = styled(Caption, {
     color: '$danger',
     marginTop: '4px',
 });
@@ -80,7 +80,7 @@ type ClientItem = {
     profilePic: string;
 };
 
-const ClientsCombobox = (props: { data: any[]; form: any }) => {
+export const ClientsCombobox = (props: { data: any[]; form: any, value: string }) => {
     const renderVoucherItem = (
         item: ComboboxItem<ClientItem>,
         isSelected: boolean,
@@ -127,6 +127,7 @@ const ClientsCombobox = (props: { data: any[]; form: any }) => {
             placeholder="Select a client"
             emptyMessage="No clients found"
             footerAction={null}
+            value={props.value}
         />
     );
 };
@@ -140,7 +141,7 @@ type RewardPolicyItem = {
     createdAt: string;
 };
 
-const RewardPoliciesCombobox = (props: { data: any[]; form: any }) => {
+export const RewardPoliciesCombobox = (props: { data: any[]; form: any, value: string }) => {
     const renderRewardPolicyItem = (
         item: ComboboxItem<RewardPolicyItem>,
         isSelected: boolean,
@@ -180,6 +181,7 @@ const RewardPoliciesCombobox = (props: { data: any[]; form: any }) => {
             placeholder="Select a reward policy"
             emptyMessage="No reward policies found"
             footerAction={null}
+            value={props.value}
         />
     );
 };
@@ -338,6 +340,7 @@ const CreateGig = () => {
                                             <ClientsCombobox
                                                 data={clientsQuery.data}
                                                 form={formik}
+                                                value={formik.values.client}
                                             />
                                         )}
                                         {formik.touched.client && formik.errors.client && (
@@ -483,6 +486,7 @@ const CreateGig = () => {
                                             <RewardPoliciesCombobox
                                                 data={rewardPoliciesQuery.data}
                                                 form={formik}
+                                                value={formik.values.rewardPolicy}
                                             />
                                         )}
                                         {formik.touched.rewardPolicy && formik.errors.rewardPolicy && (

@@ -30,7 +30,7 @@ export default function PageWithTableShell({ children, fetchSurveys, total, curr
     }, [router]);
 
     return (
-        <Box>
+        <Box className="py-4">
             <Flex className="flex flex-row items-start justify-between px-4">
                 <H3>
                     {title}
@@ -49,7 +49,7 @@ export default function PageWithTableShell({ children, fetchSurveys, total, curr
                 ))}
 
             </TabNav.Root>
-            <Flex css={{ padding: "8px 12px", }} justifyContent={"between"} alignItems={"center"}>
+            {false && <Flex css={{ padding: "8px 12px", }} justifyContent={"between"} alignItems={"center"}>
                 <SearchBox />
                 <Flex css={{ gap: 8 }} alignItems={"center"}>
                     <SelectWithOptions options={["Date created", "Questions", "Responses"]} label="Sort by" />
@@ -61,7 +61,7 @@ export default function PageWithTableShell({ children, fetchSurveys, total, curr
                         <ChevronRight />
                     </Button>
                 </Flex>
-            </Flex>
+            </Flex>}
             <Separator css={{ backgroundColor: "$gray2" }} />
             {children}
         </Box>

@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Paragraph } from '@/components/design-sytem/typography';
 
 export function renderField(field: FormField) {
     const { id, label, required, type, properties } = field;
@@ -19,7 +20,7 @@ export function renderField(field: FormField) {
         case 'shortAnswer':
             return (
                 <div className="space-y-2">
-                    <Label htmlFor={id}>{label}{required && '*'}</Label>
+                    <Paragraph weight={"medium"} color={"primary"} as={"label"} htmlFor={id}>{label}{required && '*'}</Paragraph>
                     <Input
                         type="text"
                         {...commonProps}
@@ -31,7 +32,7 @@ export function renderField(field: FormField) {
         case 'longAnswer':
             return (
                 <div className="space-y-2">
-                    <Label htmlFor={id}>{label}{required && '*'}</Label>
+                    <Paragraph weight={"medium"} color={"primary"} as={"label"} htmlFor={id}>{label}{required && '*'}</Paragraph>
                     <Textarea
                         {...commonProps}
                         minLength={properties.minLength}
@@ -42,21 +43,21 @@ export function renderField(field: FormField) {
         case 'email':
             return (
                 <div className="space-y-2">
-                    <Label htmlFor={id}>{label}{required && '*'}</Label>
+                    <Paragraph weight={"medium"} color={"primary"} as={"label"} htmlFor={id}>{label}{required && '*'}</Paragraph>
                     <Input type="email" {...commonProps} />
                 </div>
             );
         case 'date':
             return (
                 <div className="space-y-2">
-                    <Label htmlFor={id}>{label}{required && '*'}</Label>
+                    <Paragraph weight={"medium"} color={"primary"} as={"label"} htmlFor={id}>{label}{required && '*'}</Paragraph>
                     <Input type="date" {...commonProps} />
                 </div>
             );
         case 'multipleChoice':
             return (
                 <div className="space-y-2">
-                    <Label>{label}{required && '*'}</Label>
+                    <Paragraph weight={"medium"} color={"primary"} as={"label"}>{label}{required && '*'}</Paragraph>
                     <RadioGroup>
                         {properties.choices?.map((choice, index) => (
                             <div key={index} className="flex items-center space-x-2">
@@ -70,22 +71,24 @@ export function renderField(field: FormField) {
         case 'yesNo':
             return (
                 <div className="space-y-2">
-                    <Label>{label}{required && '*'}</Label>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id={`${id}-yes`} />
-                        <Label htmlFor={`${id}-yes`}>Yes</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id={`${id}-no`} />
-                        <Label htmlFor={`${id}-no`}>No</Label>
-                    </div>
+                    <Paragraph weight={"medium"} color={"primary"} as={"label"}>{label}{required && '*'}</Paragraph>
+                    <RadioGroup>
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="yes" id={`${id}-yes`} />
+                            <Label htmlFor={`${id}-yes`}>Yes</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="no" id={`${id}-no`} />
+                            <Label htmlFor={`${id}-no`}>No</Label>
+                        </div>
+                    </RadioGroup>
                 </div>
             );
         case 'npsRating':
             const maxRating = properties.npsMaxRating || 10;
             return (
                 <div className="space-y-2">
-                    <Label htmlFor={id}>{label}{required && '*'}</Label>
+                    <Paragraph weight={"medium"} color={"primary"} as={"label"} htmlFor={id}>{label}{required && '*'}</Paragraph>
                     <div className="flex space-x-2">
                         {Array.from({ length: maxRating }, (_, i) => i + 1).map((value) => (
                             <button
@@ -106,7 +109,7 @@ export function renderField(field: FormField) {
         case 'fileUpload':
             return (
                 <div className="space-y-2">
-                    <Label htmlFor={id}>{label}{required && '*'}</Label>
+                    <Paragraph weight={"medium"} color={"primary"} as={"label"} htmlFor={id}>{label}{required && '*'}</Paragraph>
                     <Input
                         type="file"
                         {...commonProps}

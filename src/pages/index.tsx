@@ -35,7 +35,7 @@ function Home() {
 
       if (userInfo.role === "ADMIN") {
         await login(accessToken, refreshToken);
-        router.push("/home");
+        router.push("/gigs");
       }
     } catch (error) {
       console.error(error);

@@ -1,10 +1,11 @@
 import { useFormContext } from '../context';
 import { FormField } from '../types';
-import { CalendarIcon, CheckCircleIcon, FilePlusIcon, FileTextIcon, ListPlusIcon, MailIcon, StarIcon, TextIcon } from 'lucide-react';
+import { CalendarIcon, CheckCircleIcon, FilePlusIcon, FileTextIcon, ListPlusIcon, MailIcon, StarIcon, TextIcon, Trash2Icon } from 'lucide-react';
 import { Paragraph } from '@/components/design-sytem/typography';
 import Box from '@/components/design-sytem/box';
 import Button from '@/components/design-sytem/button';
 import styled from '@/components/design-sytem/theme';
+import Separator from '@/components/design-sytem/separator';
 
 const fieldTypes = [
     { type: 'shortAnswer', label: 'Short Answer', icon: <TextIcon className="size-4" /> },
@@ -18,23 +19,24 @@ const fieldTypes = [
 ];
 
 export function FieldList() {
-    const { form, addField } = useFormContext();
+    const { form, addField, selectedFieldId, setSelectedFieldId, removeField } = useFormContext();
 
     const handleAddField = (type: FormField['type']) => {
         const newField: FormField = {
             id: `field_${Date.now()}`,
             type,
-            label: `New ${type} field`,
+            label: `${fieldTypes.find(fieldType => fieldType.type === type)?.label}`,
             required: false,
             properties: {},
         };
         addField(newField);
+        setSelectedFieldId(newField.id);
     };
 
     return (
         <div>
             <div className="mb-4">
-                <Paragraph as={"h3"} weight={"bold"} className="text-md font-semibold mb-2 px-4">Add Field</Paragraph>
+                <Paragraph as={"h3"} weight={"bold"} className="text-md font-semibold mb-2 px-4">Add question</Paragraph>
                 <div className="grid grid-cols-2 gap-2 px-4">
                     {fieldTypes.map((fieldType) => (
                         <Button
@@ -55,11 +57,18 @@ export function FieldList() {
                     ))}
                 </div>
             </div>
+            <Separator className="my-4" />
             <Box>
-                <Paragraph as={"h3"} weight={"bold"} className="mb-4 px-4">Fields</Paragraph>
+                <Paragraph as={"h3"} weight={"bold"} className="mb-4 px-4">Questions</Paragraph>
                 <ul className="space-y-2 px-1">
                     {form.fields.map((field) => (
-                        <FieldListItem {...field} />
+                        <FieldListItem
+                            key={field.id}
+                            field={field}
+                            isSelected={field.id === selectedFieldId}
+                            onSelect={() => setSelectedFieldId(field.id)}
+                            onDelete={() => removeField(field.id)}
+                        />
                     ))}
                 </ul>
             </Box>
@@ -69,16 +78,55 @@ export function FieldList() {
 
 const Li = styled("li", {
     height: 40,
-    padding: "16px 12px",
+    padding: "8px 12px",
     backgroundColor: "transparent",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
     "&:hover": {
         backgroundColor: "$gray1"
+    },
+    variants: {
+        selected: {
+            true: {
+                backgroundColor: "$gray2",
+                "&:hover": {
+                    backgroundColor: "$gray2"
+                }
+            }
+        }
     }
-})
+});
 
-const FieldListItem = (field: FormField) => (
-    <Li key={field.id} className="p-2 bg-gray-100 rounded flex items-center gap-2">
-        {fieldTypes.find((type) => type.type === field.type)?.icon}
-        {field.label}
+const DeleteButton = styled(Button, {
+    opacity: 0,
+    transition: "opacity 0.2s ease-in-out",
+    "&:hover": {
+        opacity: 1,
+    }
+});
+
+const FieldListItem = ({ field, isSelected, onSelect, onDelete }: { field: FormField; isSelected: boolean; onSelect: () => void; onDelete: () => void }) => (
+    <Li
+        selected={isSelected}
+        onClick={onSelect}
+        className="rounded flex items-center gap-2 group"
+    >
+        <Paragraph className="flex items-center gap-2">
+            {fieldTypes.find((type) => type.type === field.type)?.icon}
+            {field.label}
+        </Paragraph>
+        <DeleteButton
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+            }}
+            className="group-hover:opacity-100"
+        >
+            <Trash2Icon className="size-4" />
+        </DeleteButton>
     </Li>
 )

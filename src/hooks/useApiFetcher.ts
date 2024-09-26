@@ -7,6 +7,7 @@ import {
   setAccessTokenToCookies,
   setRefreshTokenToCookies,
 } from "./cookies";
+import { useAuth } from "@/context/AuthContext";
 
 class ApiClient {
   private static instance: ApiClient;
@@ -81,14 +82,15 @@ class ApiClient {
 
       try {
         const refreshToken = await getRefreshTokenFromCookies();
+        if (!refreshToken) {
+          throw new Error("No refresh token available");
+        }
+
         const response = await this.axiosInstance.post(AUTH_ROUTES.REFRESH_TOKEN, {
           refreshToken,
         });
 
-        const { accessToken, refreshToken: newRefreshToken } = response as unknown as {
-          accessToken: string;
-          refreshToken: string;
-        };
+        const { accessToken, refreshToken: newRefreshToken } = response.data;
 
         await setAccessTokenToCookies(accessToken);
         await setRefreshTokenToCookies(newRefreshToken);
@@ -98,9 +100,7 @@ class ApiClient {
         return this.axiosInstance(originalRequest);
       } catch (refreshError) {
         this.processQueue(refreshError, null);
-        await setAccessTokenToCookies("");
-        await setRefreshTokenToCookies("");
-        window.location.href = "/"; // Redirect to home page on auth failure
+        await this.handleLogout();
         return Promise.reject(refreshError);
       } finally {
         this.isRefreshing = false;
@@ -109,6 +109,13 @@ class ApiClient {
 
     return Promise.reject(error);
   };
+
+  private async handleLogout(): Promise<void> {
+    await setAccessTokenToCookies("");
+    await setRefreshTokenToCookies("");
+    const { logout } = useAuth();
+    await logout();
+  }
 
   private processQueue(error: any, token: string | null = null): void {
     this.failedQueue.forEach((prom) => {

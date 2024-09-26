@@ -1,36 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormProvider, useFormContext } from '../context';
 import { FormPreview } from './FormPreview';
 import { FieldList } from './FieldList';
 import { FieldProperties } from './FieldProperties';
-import { FormSettings } from './FieldSettings';
 import Box from '@/components/design-sytem/box';
 import Flex from '@/components/design-sytem/flex';
 import Separator from '@/components/design-sytem/separator';
-import Button from '@/components/design-sytem/button';
-import { EyeFill } from '@/components/icons/eye.fill';
+import { FormBuilderHeader } from './FormBuilderHeader';
+import { FullscreenPreviewModal } from './FullscreenPreviewModal';
+import { Form } from '../types';
 
-export function FormBuilderPresenter({ gig_id }: { gig_id: string }) {
-    const { form } = useFormContext();
+interface FormBuilderProps {
+    gig_id: string;
+    formName: string;
+    formDescription: string;
+    initialForm?: Form;
+}
+
+export function FormBuilderPresenter({ gig_id, formName, formDescription }: FormBuilderProps) {
+    const { form, updateForm, selectedFieldId } = useFormContext();
+    const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+
+    // Update form with the provided name and description
+    React.useEffect(() => {
+        updateForm({ title: formName, description: formDescription });
+    }, [formName, formDescription, updateForm]);
+
+    const handlePreviewClick = () => {
+        setIsPreviewModalOpen(true);
+    };
+
+    const handlePublish = () => {
+        // Implement publish logic here
+        console.log('Publishing form:', form);
+    };
 
     return (
         <Box css={{
-            height: `calc(100vh - 48px - 48px)`,
+            height: `calc(100vh - 52px)`,
             backgroundColor: "$gray1"
         }} className="flex flex-col">
-            <Flex justifyContent={"between"} css={{ height: 48, backgroundColor: "$white" }}>
-                <Flex></Flex>
-                <Flex alignItems={"center"} className='px-4' css={{ gap: "8px" }}>
-                    <Button variant={"outline"} colorScheme={"surface"}>
-                        <EyeFill className='size-4' />
-                        Preview
-                    </Button>
-                    <Button>
-                        Publish changes
-                    </Button>
-                </Flex>
-            </Flex>
-            <Separator />
             <Flex css={{ gap: 0 }} className='flex-1 overflow-y-auto'>
                 <aside className="w-1/4 bg-white py-4 overflow-y-auto">
                     <FieldList />
@@ -38,19 +47,21 @@ export function FormBuilderPresenter({ gig_id }: { gig_id: string }) {
                 <main className="w-1/2 p-4 overflow-y-auto">
                     <FormPreview />
                 </main>
-                <aside className="w-1/4 bg-white p-4 overflow-y-auto">
-                    <div className="mb-8">
-                        <FormSettings />
-                    </div>
-                    <FieldProperties />
+                <aside className="w-1/4 bg-white overflow-y-auto">
+                    {selectedFieldId && <div className='p-4'><FieldProperties /></div>}
                 </aside>
             </Flex>
+            <FullscreenPreviewModal
+                isOpen={isPreviewModalOpen}
+                onClose={() => setIsPreviewModalOpen(false)}
+                form={form}
+            />
         </Box>
     );
 }
 
-export function FormBuilder({ gig_id }: { gig_id: string }) {
+export function FormBuilder(props: FormBuilderProps) {
     return (
-        <FormBuilderPresenter gig_id={gig_id} />
+        <FormBuilderPresenter {...props} />
     )
 }

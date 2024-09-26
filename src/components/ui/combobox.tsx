@@ -14,6 +14,7 @@ export interface ComboboxItem<T> {
 
 interface ComboboxProps<T> {
     items: ComboboxItem<T>[];
+    value: string;
     placeholder: string;
     emptyMessage: string;
     onChange: (value: string) => void;
@@ -21,9 +22,9 @@ interface ComboboxProps<T> {
     footerAction: React.ReactNode;
 }
 
-export function Combobox<T>({ items, placeholder, emptyMessage, onChange, footerAction, renderItem }: ComboboxProps<T>) {
+export function Combobox<T>({ items, placeholder, emptyMessage, onChange, footerAction, renderItem, value: initialValue }: ComboboxProps<T>) {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(initialValue);
 
     const handleSelect = (currentValue: string) => {
         setValue(currentValue === value ? "" : currentValue);
@@ -45,7 +46,7 @@ export function Combobox<T>({ items, placeholder, emptyMessage, onChange, footer
                             boxShadow: "var(--pressable-shadow)"
                         }
                     }}
-                    className="w-full justify-between text-left hover:pressable-shadow"
+                    className="w-full max-w-96 justify-between text-left hover:pressable-shadow"
                 >
                     <span>
                         {value

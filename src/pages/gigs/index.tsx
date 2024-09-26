@@ -78,8 +78,6 @@ function Gig() {
     },
   });
 
-  console.log(surveys)
-
   return (
     <GeneralLayout>
       {!isLoading && !error && (

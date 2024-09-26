@@ -16,7 +16,7 @@ const Navbar = () => {
       <div
         className="w-full px-4 flex items-center space-x-8">
         <div className="w-96">
-          <SearchBox />
+          {false && <SearchBox />}
         </div>
         <div className="flex-1" />
         <div className="flex items-center space-x-4">

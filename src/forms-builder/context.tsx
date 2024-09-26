@@ -1,29 +1,56 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Form, FormField } from './types';
 
 interface FormContextType {
     form: Form;
+    selectedFieldId: string | null;
+    exportForm: () => string
     updateForm: (updatedForm: Partial<Form>) => void;
     addField: (field: FormField) => void;
     updateField: (fieldId: string, updatedField: Partial<FormField>) => void;
     removeField: (fieldId: string) => void;
     reorderFields: (startIndex: number, endIndex: number) => void;
+    setSelectedFieldId: (fieldId: string | null) => void;
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
-export function FormProvider({ children }: { children: ReactNode }) {
-    const [form, setForm] = useState<Form>({
-        id: '',
-        title: 'Untitled Form',
-        description: '',
-        theme: {
-            primaryColor: '#3b82f6',
-            backgroundColor: '#ffffff',
-            fontFamily: 'Inter, sans-serif',
-        },
-        fields: [],
+interface FormProviderProps {
+    children: ReactNode;
+    initialForm?: string;
+    onFormChange?: (form: Form) => void;
+}
+
+export function FormProvider({ children, initialForm, onFormChange }: FormProviderProps) {
+    const hydrateForm = (form: string): Form => JSON.parse(form)
+
+    const [form, setForm] = useState<Form>(() => {
+        if (initialForm) {
+            return hydrateForm(initialForm);
+        }
+
+        const initialShortAnswerField: FormField = {
+            id: `field_${Date.now()}`,
+            type: 'shortAnswer',
+            label: 'Short Answer',
+            required: false,
+            properties: {},
+        };
+
+        return {
+            id: '',
+            title: '',
+            description: '',
+            theme: {
+                primaryColor: '#3b82f6',
+                backgroundColor: '#ffffff',
+                fontFamily: 'Inter, sans-serif',
+            },
+            fields: [initialShortAnswerField],
+        };
     });
+
+    const [selectedFieldId, setSelectedFieldId] = useState<string | null>(form.fields[0]?.id || null);
 
     const updateForm = (updatedForm: Partial<Form>) => {
         setForm((prevForm) => ({ ...prevForm, ...updatedForm }));
@@ -61,9 +88,37 @@ export function FormProvider({ children }: { children: ReactNode }) {
         });
     };
 
+    const dumpForm = useCallback(() => JSON.stringify(form), [form])
+
+
+    useEffect(() => {
+        if (initialForm) {
+            setForm(hydrateForm(initialForm));
+        }
+    }, [initialForm]);
+
+    // Notify parent component of form changes
+    useEffect(() => {
+        if (onFormChange) {
+            onFormChange(form);
+        }
+    }, [form, onFormChange]);
+
+
+
     return (
         <FormContext.Provider
-            value={{ form, updateForm, addField, updateField, removeField, reorderFields }}
+            value={{
+                form,
+                selectedFieldId,
+                updateForm,
+                addField,
+                updateField,
+                removeField,
+                reorderFields,
+                setSelectedFieldId,
+                exportForm: dumpForm
+            }}
         >
             {children}
         </FormContext.Provider>

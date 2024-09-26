@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/AuthContext';
 import { ComponentType, useEffect } from 'react';
+import Spinner from './spinner/Spinner';
 
 export function withAuth<T extends object>(WrappedComponent: ComponentType<T>) {
     return function WithAuth(props: T) {
@@ -9,12 +10,12 @@ export function withAuth<T extends object>(WrappedComponent: ComponentType<T>) {
 
         useEffect(() => {
             if (!isLoading && !isAuthenticated) {
-                router.replace('/');
+                router.replace('/login'); // Change this to your login page route
             }
         }, [isLoading, isAuthenticated, router]);
 
         if (isLoading) {
-            return <div>Loading...</div>; // You can replace this with a proper loading component
+            return <Spinner />;
         }
 
         if (!isAuthenticated) {

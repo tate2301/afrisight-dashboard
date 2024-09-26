@@ -6,15 +6,20 @@ import Box from "../design-sytem/box";
 import { useRouter } from "next/router";
 
 const sidebarNavItems: SidebarNavItemProps[] = [
-    {
-        Icon: Home,
-        text: "Home",
-        href: "/home"
-    },
+    // {
+    //     Icon: Home,
+    //     text: "Home",
+    //     href: "/home"
+    // },
     {
         Icon: FileText,
         text: "Gigs",
         href: "/gigs"
+    },
+    {
+        Icon: Users,
+        text: "Administrators",
+        href: "/users"
     },
     {
         Icon: Building,
@@ -22,30 +27,25 @@ const sidebarNavItems: SidebarNavItemProps[] = [
         href: "/clients"
     },
     {
-        Icon: PersonStanding,
-        text: "Participants",
-        href: "/participants"
-    },
-    {
         Icon: Gift,
         text: "Rewards",
         href: "/rewards"
     },
-    {
-        Icon: Store,
-        text: "Store",
-        href: "/store"
-    },
-    {
-        Icon: Inbox,
-        text: "Payout requests",
-        href: "/payout-requests"
-    },
-    {
-        Icon: Users,
-        text: "Users",
-        href: "/users"
-    }
+    // {
+    //     Icon: PersonStanding,
+    //     text: "Participants",
+    //     href: "/participants"
+    // },
+    // {
+    //     Icon: Store,
+    //     text: "Store",
+    //     href: "/store"
+    // },
+    // {
+    //     Icon: Inbox,
+    //     text: "Payout requests",
+    //     href: "/payout-requests"
+    // }
 
 
 ]

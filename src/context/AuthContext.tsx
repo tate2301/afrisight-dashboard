@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUserProfile(null);
         await setAccessTokenToCookies('');
         await setRefreshTokenToCookies('');
-        router.push('/');
+        router.push('/login'); // Change this to your login page route
     };
 
     return (

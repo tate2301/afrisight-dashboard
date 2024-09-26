@@ -79,17 +79,7 @@ const clientsColumns: ColumnDef<RewardPolicy>[] = [
     {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => (
-            <Flex>
-                <Button variant={"ghost"} colorScheme={"surface"}>
-                    <HrefIcon className="size-5 mr-2" />
-                    Link to gig</Button>
-                <Button variant={"ghost"} colorScheme={"surface"}>
-                    View
-                    <ArrowRight className="size-4 ml-2" />
-                </Button>
-            </Flex>
-        )
+        cell: ({ row }) => null
     }
 
 ]
@@ -110,7 +100,7 @@ export default function Rewards() {
                 description: item.description,
                 dollarValue: item.dollarValue,
                 pointsValue: item.pointsValue,
-                voucher: item.voucher,
+                voucher: !!item.voucher,
                 createdAt: new Date(item.createdAt).toLocaleDateString(),
                 updatedAt: new Date(item.updatedAt).toLocaleDateString(),
             }));

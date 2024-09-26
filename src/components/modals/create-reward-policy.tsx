@@ -166,6 +166,7 @@ const AddRewardPolicy = () => {
                                             Voucher
                                         </Text>
                                         <Combobox<VoucherItem>
+                                            value={values.voucher}
                                             onChange={(value) => handleChange({ target: { name: "voucher", value } })}
                                             items={vouchers}
                                             renderItem={renderVoucherItem}
@@ -176,7 +177,7 @@ const AddRewardPolicy = () => {
                                     </label>
                                 </Box>
                                 {isVoucherFormOpen && <Card variant="ghost" className="bg-zinc-100" mb={"4"}>
-                                    <CreateVoucher callback={(voucher_id: string) => {
+                                    <CreateVoucher onClose={closeVoucherForm} callback={(voucher_id: string) => {
                                         closeVoucherForm()
                                         setFieldValue("voucher", voucher_id)
                                     }} />
