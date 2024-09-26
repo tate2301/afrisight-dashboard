@@ -6,6 +6,7 @@ import { StoreProvider } from "../context/Store";
 import { Theme } from "@radix-ui/themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/context/AuthContext";
+import { GeneralLayoutProvider } from "@/layout/context";
 
 const queryClient = new QueryClient()
 
@@ -13,10 +14,10 @@ const queryClient = new QueryClient()
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <Theme accentColor="indigo" radius="large">
-      <Head>
-        <title>CX Mappers Admin</title>
-      </Head>
-      <main className="subpixel-antialiased text-zinc-600 flex">
+      <GeneralLayoutProvider>
+        <Head>
+          <title>CX Mappers Admin</title>
+        </Head>
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
             <StoreProvider>
@@ -24,7 +25,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
             </StoreProvider>
           </QueryClientProvider>
         </AuthProvider>
-      </main>
+      </GeneralLayoutProvider>
     </Theme>
   );
 }

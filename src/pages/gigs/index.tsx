@@ -33,6 +33,7 @@ import PageWithTableShell from '@/components/shells/gig';
 import { useSearchParams } from 'next/navigation';
 import Button from '@/components/design-sytem/button';
 import { useQuery } from '@tanstack/react-query';
+import { useSetPageTitle } from '@/layout/context';
 
 const tabs = ['All', 'Pending', 'Approved', 'Archived'];
 
@@ -61,6 +62,7 @@ export type SurveyGig = {
 }
 
 function Gig() {
+  useSetPageTitle('Gigs');
   const query = useSearchParams();
   const activeTab =
     query.get('tab') || tabs[0].toLowerCase().replaceAll(' ', '-');
