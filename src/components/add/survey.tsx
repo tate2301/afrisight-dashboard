@@ -77,6 +77,7 @@ export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
 
     await executor(() =>
       axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY, formData, {
+        // @ts-ignore
         headers: {
           'Content-Type': 'multipart/form-data',
         },

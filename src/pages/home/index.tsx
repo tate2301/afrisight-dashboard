@@ -14,7 +14,7 @@ import { Button, Heading } from "@radix-ui/themes";
 
 const gigs = [
   {
-    id: 1,
+    _id: 1,
     title: "Gig title",
     createdDate: "2024-02-01",
     status: "pending",
@@ -23,7 +23,7 @@ const gigs = [
     views: 0,
   },
   {
-    id: 2,
+    _id: 2,
     title: "Gig title",
     createdDate: "2024-02-01",
     status: "pending",
@@ -32,7 +32,7 @@ const gigs = [
     views: 0,
   },
   {
-    id: 3,
+    _id: 3,
     title: "Gig title",
     createdDate: "2024-02-01",
     status: "approved",
@@ -95,7 +95,7 @@ const Overview = () => {
             <Box css={{ padding: "20px 0", }} className="py-2 space-y-[20px]">
               {
                 gigs.map((gig) => (
-                  <GigCard key={gig.id} createdDate={gig.createdDate} status={"DRAFT"} title={gig.title} questions={gig.questions} responses={gig.responses} views={gig.views} />
+                  <GigCard key={gig._id} _id={gig._id?.toString() ?? ""} createdDate={gig.createdDate} status={"DRAFT"} title={gig.title} questions={gig.questions} responses={gig.responses} views={gig.views} />
                 ))
               }
             </Box>
