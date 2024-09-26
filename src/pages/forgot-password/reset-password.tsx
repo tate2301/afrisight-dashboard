@@ -45,7 +45,7 @@ function ChangePassword() {
             });
             setSuccess(true);
         } catch (error: any) {
-            setErr(error.response?.data.message || "An error . Please try again");
+            setErr(error.response ? error.response.data.message || "An error occurred. Please try again" : "An error occurred. Please try again");
         } finally {
             setLoading(false);
         }

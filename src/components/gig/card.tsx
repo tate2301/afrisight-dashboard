@@ -9,9 +9,10 @@ import { Button, IconButton } from '@radix-ui/themes';
 import { ChevronRight } from '../icons/chevron.right';
 import { ArrowRight } from '../icons/arrow.right';
 
-type GigStatus = "pending" | "approved" | "archived";
+type GigStatus = "DRAFT" | "ACTIVE" | "PAUSED" | "CLOSED";
 
 interface GigProps {
+    _id: string
     title: string;
     questions: number;
     responses: number;
@@ -20,65 +21,71 @@ interface GigProps {
     status: GigStatus;
 }
 
-const GigCard = ({ title, questions, responses, views, createdDate, status }: GigProps) => {
-    const isPending = status === "pending";
-    const isPublished = status === "approved";
-    const isArchived = status === "archived";
+const GigCard = ({ title, questions, responses, views, createdDate, status, _id }: GigProps) => {
+    const isPending = status === "DRAFT";
+    const isPublished = status === "ACTIVE";
+    const isArchived = status === "PAUSED";
     return (
-        <Flex className="items-start px-4 gap-8">
-            <div className="w-[100px] h-[100px] relative">
-                <Image
-                    src="/gig-placeholder.png"
-                    alt="Gig Image"
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-xl border border-zinc-400/30"
-                />
-            </div>
-            <Flex className="flex-1 ml-4" alignItems={"start"} css={{ borderBottom: "1px solid $gray2", height: "120px" }}>
-                <div className="flex-1 flex flex-col h-[100px]">
-                    <Box className="flex flex-col flex-1">
-                        <Flex>
-                            <Paragraph color={"primary"} weight={"semibold"}>{title}</Paragraph>
-                            <GigStatus status={status} />
-                        </Flex>
-                        <div className="text-sm text-gray-500">
-                            {questions} questions • {responses} responses • {views} views
-                        </div>
-                    </Box>
-                    <Caption color={"secondary"} weight={"medium"}>
-                        Created {formatDate(createdDate)}
-                    </Caption>
+        <Link href={`/gigs/${_id}`} className='mb-4 block'>
+            <Flex className="items-start px-4 gap-8">
+                <div className="w-[100px] h-[100px] relative">
+                    <Image
+                        src="/gig-placeholder.png"
+                        alt="Gig Image"
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-xl border border-zinc-400/30"
+                    />
                 </div>
-                <Flex className="ml-4 gap-4 flex items-center">
-                    {isPending && <Button variant={"ghost"}>Publish Gig</Button>}
-                    <Link css={{ alignItems: "center", display: "flex", gap: 8 }} href="#" className='ml-4'>View
-                        <IconButton variant="ghost">
-                            <ArrowRight />
-                        </IconButton>
-                    </Link>
+                <Flex className="flex-1 ml-4" alignItems={"start"} css={{ borderBottom: "1px solid $gray2", height: "120px" }}>
+                    <div className="flex-1 flex flex-col h-[100px]">
+                        <Box className="flex flex-col flex-1">
+                            <Flex>
+                                <Paragraph color={"primary"} weight={"semibold"}>{title}</Paragraph>
+                                <GigStatus status={status} />
+                            </Flex>
+                            <div className="text-sm text-gray-500">
+                                {questions} questions • {responses} responses • {views} views
+                            </div>
+                        </Box>
+                        <Caption color={"secondary"} weight={"medium"}>
+                            Created {formatDate(createdDate)}
+                        </Caption>
+                    </div>
+                    <Flex className="ml-4 gap-4 flex items-center">
+                        {isPending && <Button variant={"ghost"}>Publish Gig</Button>}
+                        <Link css={{ alignItems: "center", display: "flex", gap: 8 }} href="#" className='ml-4'>View
+                            <IconButton variant="ghost">
+                                <ArrowRight />
+                            </IconButton>
+                        </Link>
+                    </Flex>
                 </Flex>
             </Flex>
-        </Flex>
+        </Link>
     );
 }
 
 const GigStatus = ({ status }: { status: GigStatus }) => {
+
     const statusIcons = {
-        pending: icons.inProgress,
-        approved: icons.check_fill,
-        archived: icons.x_fill
+        DRAFT: icons.inProgress,
+        ACTIVE: icons.check_fill,
+        CLOSED: icons.x_fill,
+        PAUSED: icons.x_fill
     }
     const statusText = {
-        pending: "Pending approval",
-        approved: "Approved",
-        archived: "Archived"
+        DRAFT: "Pending approval",
+        ACTIVE: "Ongoing",
+        CLOSED: "Closed",
+        PAUSED: "Paused"
     }
 
     const statusColor = {
-        pending: "bg-blue-50 text-blue-700",
-        approved: "bg-green-50 text-green-700",
-        archived: "bg-gray-50 text-gray-700"
+        DRAFT: "bg-blue-50 text-blue-700",
+        ACTIVE: "bg-green-50 text-green-700",
+        CLOSED: "bg-gray-50 text-gray-700",
+        PAUSED: "bg-gray-50 text-gray-700"
     }
 
     const StatusIcon = statusIcons[status];

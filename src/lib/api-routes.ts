@@ -4,6 +4,7 @@ export const AUTH_ROUTES = {
   USER_PROFILE: "/profile",
   LOGIN: "/auth/login/email",
   CREATE_USER: "/auth/register/email",
+  PROFILE: "/profile/me"
 };
 
 export const USER_ROUTES = {

@@ -29,7 +29,7 @@ const UserManagementInterface = () => {
 
   const fetchUserData = async (id: string) => {
     const response = await axiosInstance.get(USER_ROUTES.GET_USER_BY_ID(id));
-    return response.data;
+    return response;
   };
 
   const { data: profile, error, isLoading } = useQuery<TProfile, Error>({
@@ -134,7 +134,7 @@ const FormsCreated = (props: TProfile) => {
     const response = await axiosInstance.get(
       FORM_ROUTES.GET_FORMS_FOR_USER_BY_ID(props.user._id),
     );
-    setForms(response.data);
+    setForms(response);
   };
 
   useEffect(() => {

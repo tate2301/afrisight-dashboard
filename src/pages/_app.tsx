@@ -5,22 +5,25 @@ import "./styles.css";
 import { StoreProvider } from "../context/Store";
 import { Theme } from "@radix-ui/themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "@/context/AuthContext";
 
 const queryClient = new QueryClient()
 
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
-    <Theme accentColor="gray" radius="large">
+    <Theme accentColor="indigo" radius="large">
       <Head>
         <title>Welcome to dashboard!</title>
       </Head>
       <main className="subpixel-antialiased text-zinc-600 flex">
-        <QueryClientProvider client={queryClient}>
-          <StoreProvider>
-            <Component {...pageProps} />
-          </StoreProvider>
-        </QueryClientProvider>
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <StoreProvider>
+              <Component {...pageProps} />
+            </StoreProvider>
+          </QueryClientProvider>
+        </AuthProvider>
       </main>
     </Theme>
   );

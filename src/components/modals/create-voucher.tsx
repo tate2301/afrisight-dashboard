@@ -19,7 +19,7 @@ export default function CreateVoucher(props: {
         queryKey: ['generate-voucher'],
         queryFn: async () => {
             const res = await axiosInstance.get("/gamification/voucher/generate")
-            return res.data.voucher
+            return res.voucher
         }
     })
 
@@ -36,7 +36,7 @@ export default function CreateVoucher(props: {
                 name: values.name,
                 expiresAt: values.expiresAt
             })
-            const voucher_id = response.data.voucher._id
+            const voucher_id = response.voucher._id
             queryClient.invalidateQueries({ queryKey: ['vouchers'] })
             props.callback(voucher_id)
         } catch (error) {

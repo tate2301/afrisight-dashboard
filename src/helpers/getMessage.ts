@@ -1,6 +1,6 @@
 const getMessage = (err: any) => {
-  return err.response && err.response.data && err.response.data.message
-    ? err.response.data.message
+  return err.response && err.response && err.response.message
+    ? err.response.message
     : err.message;
 };
 

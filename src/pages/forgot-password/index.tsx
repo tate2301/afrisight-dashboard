@@ -25,11 +25,11 @@ function Home() {
                 email: email,
             });
 
-            if (response.data) {
+            if (response) {
                 setSuccess(true);
             }
         } catch (error: any) {
-            setErr(error.response.data);
+            setErr(error.response);
             setLoading(false);
         } finally {
             setLoading(false);

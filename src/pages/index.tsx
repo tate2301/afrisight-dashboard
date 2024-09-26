@@ -8,6 +8,8 @@ import { Store } from "../context/Store";
 import { useRouter } from "next/router";
 import CXMappersHeader from "@/components/page-header/CXMappersHeader";
 import Link from "next/link";
+import { setAccessTokenToCookies, setRefreshTokenToCookies } from "@/hooks/cookies";
+import { useAuth } from "@/context/AuthContext";
 
 function Home() {
   const [username, setUsername] = useState("");
@@ -17,6 +19,7 @@ function Home() {
   const [msg, setMsg] = useState("");
   const { dispatch } = useContext<any>(Store);
   const router = useRouter();
+  const { login } = useAuth();
 
   const loginToDashboard = async () => {
     setLoading(true);
@@ -27,18 +30,11 @@ function Home() {
       });
       const { accessToken, refreshToken, ...userInfo } = data;
 
+      await setAccessTokenToCookies(accessToken);
+      await setRefreshTokenToCookies(refreshToken);
+
       if (userInfo.role === "ADMIN") {
-        setMsg(getMessage(data));
-        dispatch({
-          type: "USER_LOGIN",
-          payload: {
-            access_token: accessToken,
-            refresh_token: refreshToken,
-            userInfo,
-          },
-        });
-        setErr("");
-        setLoading(false);
+        await login(accessToken, refreshToken);
         router.push("/home");
       }
     } catch (error) {
@@ -68,7 +64,7 @@ function Home() {
           <input
             type="email"
             placeholder="username"
-            className="border border-zinc-400/10 py-2 px-4 rounded-xl shadow-sm"
+            className="border border-zinc-400/10 py-2 px-4 rounded-xl pressable-shadow"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -80,7 +76,7 @@ function Home() {
           <input
             type="password"
             placeholder="password"
-            className="border border-zinc-400/10 py-2 px-4 rounded-xl shadow-sm"
+            className="border border-zinc-400/10 py-2 px-4 rounded-xl pressable-shadow"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

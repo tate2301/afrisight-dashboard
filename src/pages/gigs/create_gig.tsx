@@ -12,7 +12,7 @@ import { Form, Formik, useFormik } from 'formik';
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import * as Yup from 'yup';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/hooks/useApiFetcher';
 import { Combobox, ComboboxItem } from '@/components/ui/combobox';
 import { CommandItem } from '@/components/ui/command';
@@ -21,6 +21,9 @@ import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SURVEY_ROUTES } from '@/lib/api-routes';
 import { useRouter } from 'next/router';
+import { AxiosRequestHeaders } from 'axios';
+import { withAuth } from '@/components/withAuth';
+import Spinner from '@/components/spinner/Spinner';
 
 const SkeletonBox = styled('div', {
     backgroundColor: '$gray3',
@@ -223,10 +226,10 @@ const CreateGig = () => {
 
             const response = await axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                    "Content-Type": "multipart/form-data"
+                } as AxiosRequestHeaders,
             })
-            router.push(`/gigs/${response.data._id}`)
+            router.push(`/gigs/${response._id}`)
         },
     });
 
@@ -234,7 +237,7 @@ const CreateGig = () => {
         queryKey: ['clients'],
         queryFn: async () => {
             const res = await axiosInstance.get('/admin/client');
-            const data = res.data.docs.map((doc: any) => ({
+            const data = res.docs.map((doc: any) => ({
                 data: {
                     name: doc.firstname,
                     email: doc.user.email,
@@ -253,7 +256,8 @@ const CreateGig = () => {
         queryKey: ['reward-policies'],
         queryFn: async () => {
             const res = await axiosInstance.get('/gamification/reward-policy');
-            const data = res.data.map((policy: any) => ({
+
+            const data = res.map((policy: any) => ({
                 data: {
                     name: policy.name,
                     dollarValue: policy.dollarValue,
@@ -265,6 +269,8 @@ const CreateGig = () => {
                 label: policy.name,
                 value: policy._id,
             }));
+            console.log({ res, data })
+
             return data;
         },
     });
@@ -276,7 +282,7 @@ const CreateGig = () => {
             const res = await axiosInstance.get(
                 `/admin/client/${formik.values.client}`,
             );
-            return res.data;
+            return res;
         },
     });
 
@@ -295,7 +301,6 @@ const CreateGig = () => {
         }
     };
 
-    console.log(selectedRewardPolicy)
 
     return (
         <GeneralLayout>
@@ -618,9 +623,11 @@ const CreateGig = () => {
                                     <Flex>
                                         <Button
                                             type="submit"
-                                            colorScheme={'primary'}
+                                            colorScheme={formik.isSubmitting ? 'surface' : 'primary'}
                                             disabled={!formik.isValid || formik.isSubmitting}>
-                                            Create Gig
+                                            {
+                                                formik.isSubmitting ? <Spinner /> : "Create gig"
+                                            }
                                         </Button>
                                     </Flex>
                                 </Flex>
@@ -741,4 +748,4 @@ const GigSkeleton = () => (
     </>
 );
 
-export default CreateGig;
+export default withAuth(CreateGig);

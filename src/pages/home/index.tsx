@@ -95,7 +95,7 @@ const Overview = () => {
             <Box css={{ padding: "20px 0", }} className="py-2 space-y-[20px]">
               {
                 gigs.map((gig) => (
-                  <GigCard key={gig.id} createdDate={gig.createdDate} status={gig.status as unknown as any} title={gig.title} questions={gig.questions} responses={gig.responses} views={gig.views} />
+                  <GigCard key={gig.id} createdDate={gig.createdDate} status={"DRAFT"} title={gig.title} questions={gig.questions} responses={gig.responses} views={gig.views} />
                 ))
               }
             </Box>

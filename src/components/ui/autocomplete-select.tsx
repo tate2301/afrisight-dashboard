@@ -46,7 +46,7 @@ function AutocompleteSelect<T extends AutocompleteOption>({
         const response = await axiosInstance.get(
           `${fetchUrl}?search=${debouncedSearchTerm}`,
         );
-        const data = await response.data;
+        const data = await response;
         setOptions(data);
       } catch (error) {
         console.error("Error fetching options:", error);

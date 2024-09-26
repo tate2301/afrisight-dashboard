@@ -3,6 +3,7 @@ import { Building, FileText, Gift, Home, Inbox, PersonStanding, Store, Users } f
 import { usePathname } from "next/navigation";
 import Link from "../design-sytem/link";
 import Box from "../design-sytem/box";
+import { useRouter } from "next/router";
 
 const sidebarNavItems: SidebarNavItemProps[] = [
     {
@@ -70,8 +71,10 @@ type SidebarNavItemProps = {
     href: string;
 }
 const SidebarNavItem = ({ Icon, text, href }: SidebarNavItemProps) => {
-    const pathname = usePathname();
+    const router = useRouter();
+    const pathname = router.pathname;
     const active = pathname.includes(href);
+
     return (
         <li className={cn("p-2 rounded-md hover:bg-zinc-400/20", active && "bg-zinc-400/20 hover:bg-zinc-100")}>
             <Link color={active ? "primary" : "default"} className="flex w-full items-center gap-2" href={href}>

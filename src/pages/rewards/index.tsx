@@ -7,7 +7,7 @@ import GeneralLayout from "@/layout/GeneralLayout";
 import { Avatar, Card, Checkbox, Dialog, Flex, Switch, Text, TextArea, TextField } from "@radix-ui/themes";
 import { ColumnDef } from "@tanstack/react-table";
 import useDisclosure from "@/hooks/useDisclosure";
-import CreateVoucher from "@/components/forms/voucher";
+import CreateVoucher from "@/components/modals/create-voucher";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -23,6 +23,7 @@ import { Combobox, ComboboxItem } from "@/components/ui/combobox";
 import { HrefIcon } from "@/components/icons/href.icon";
 import { EyeFill } from "@/components/icons/eye.fill";
 import { ArrowRight } from "@/components/icons/arrow.right";
+import AddRewardPolicy from "@/components/modals/create-reward-policy";
 
 const tabs = ["All", "Connected", "Archived"];
 
@@ -93,192 +94,7 @@ const clientsColumns: ColumnDef<RewardPolicy>[] = [
 
 ]
 
-type VoucherItem = {
-    _id: string;
-    name: string;
-    expiresAt: string;
-}
 
-
-
-const AddRewardPolicy = () => {
-    const { isOpen: isVoucherFormOpen, onOpen: openVoucherForm, onClose: closeVoucherForm } = useDisclosure()
-    const { data, isLoading, isError, refetch, } = useQuery({
-        queryKey: ['vouchers'],
-        queryFn: async () => {
-            const res = await axiosInstance.get("/gamification/voucher")
-            return res.data.vouchers
-        }
-    })
-
-    const vouchers = data?.map((voucher: any) => ({
-        value: voucher._id,
-        label: voucher.name,
-        data: voucher
-    }))
-
-    const queryClient = useQueryClient();
-    const createRewardPolicyMutation = useMutation({
-        mutationFn: async (values: any) => {
-            return axiosInstance.post("/gamification/reward-policy/create", {
-                name: values.name,
-                description: values.company,
-                amount: values.amount,
-                voucher: values.voucher,
-                extraRewardType: values.extraRewardType,
-                dollarValue: values.amount,
-                pointsValue: values.points
-            });
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['reward-policies'] });
-        },
-        onError: (error) => {
-            console.error('Error creating reward policy:', error);
-        }
-    });
-
-    const handleSubmit = async (values: any) => {
-        createRewardPolicyMutation.mutate(values);
-    };
-
-    const createVoucherCallback = () => {
-
-    }
-
-    const renderVoucherItem = (item: ComboboxItem<VoucherItem>, isSelected: boolean, handleSelect: (value: string) => void) => {
-        return (
-            <CommandItem
-                onSelect={handleSelect}
-                key={item.value}
-                value={item.value}
-                className="flex"
-            >
-                <Check
-                    className={cn(
-                        "mr-2 h-4 w-4",
-                        isSelected ? "opacity-100" : "opacity-0"
-                    )}
-                />
-                <Flex justify={"between"} className="flex-1">
-                    <Text className="truncate">{item.label}</Text>
-                    <Caption>
-                        {formatDate(item.data.expiresAt)}
-                    </Caption>
-                </Flex>
-            </CommandItem>
-        )
-    }
-
-    return (
-        <Dialog.Root >
-            <Dialog.Trigger>
-                <Button className="w-full">
-                    Add reward policy
-                </Button>
-            </Dialog.Trigger>
-
-            <Dialog.Content maxWidth="450px">
-                <Dialog.Title>Add reward policy</Dialog.Title>
-                <Dialog.Description size="2" mb="6">
-                    Add a new reward policy to the platform.
-                </Dialog.Description>
-
-                <Formik initialValues={{
-                    name: "",
-                    company: "",
-                    amount: 0,
-                    points: 0,
-                    voucher: ""
-                }} onSubmit={handleSubmit}>
-                    {({ values, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
-                        <Form>
-                            <Flex direction="column" gap="3">
-                                <label>
-                                    <Text as="div" size="2" mb="1" weight="bold">
-                                        Name
-                                    </Text>
-                                    <TextField.Root
-                                        name="name"
-                                        value={values.name}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                </label>
-                                <label>
-                                    <Text as="div" size="2" mb="1" weight="bold">
-                                        Company
-                                    </Text>
-                                    <TextField.Root
-                                        name="company"
-                                        value={values.company}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                </label>
-                                <Flex gap="4">
-                                    <label>
-                                        <Text as="div" size="2" mb="1" weight="bold">
-                                            Amount (USD)
-                                        </Text>
-                                        <TextField.Root
-                                            name="amount"
-                                            value={values.amount}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                        />
-                                    </label>
-                                    <label>
-                                        <Text as="div" size="2" mb="1" weight="bold">
-                                            Points (XP)
-                                        </Text>
-                                        <TextField.Root
-                                            name="points"
-                                            value={values.points}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                        />
-                                    </label>
-                                </Flex>
-                                <Box>
-                                    <label>
-                                        <Text as="div" size="2" mb="1" weight="bold">
-                                            Voucher
-                                        </Text>
-                                        <Combobox<VoucherItem>
-                                            onChange={(value) => handleChange({ target: { name: "voucher", value } })}
-                                            items={vouchers}
-                                            renderItem={renderVoucherItem}
-                                            placeholder="Select a voucher"
-                                            emptyMessage="No vouchers found"
-                                            footerAction={<Button variant="outline" colorScheme={"surface"} onClick={openVoucherForm} className="w-full"><PlusIcon className="size-5" /> Add voucher</Button>}
-                                        />
-                                    </label>
-                                </Box>
-                                {isVoucherFormOpen && <Card variant="ghost" className="bg-zinc-100" mb={"4"}>
-                                    <CreateVoucher callback={(voucher_id: string) => {
-                                        closeVoucherForm()
-                                        setFieldValue("voucher", voucher_id)
-                                    }} />
-                                </Card>}
-                            </Flex>
-
-                            <Flex gap="3" mt="4" justify="end">
-                                <Dialog.Close>
-                                    <Button variant="ghost">
-                                        Cancel
-                                    </Button>
-                                </Dialog.Close>
-                                <Button type="submit">Save</Button>
-                            </Flex>
-                        </Form>
-                    )}
-                </Formik>
-            </Dialog.Content>
-        </Dialog.Root>
-
-    )
-}
 
 
 export default function Rewards() {
@@ -288,7 +104,7 @@ export default function Rewards() {
         queryFn: async () => {
             const res = await axiosInstance.get("/gamification/reward-policy")
             // Transform the response data to match the columns
-            res.data = res.data.map((item: any) => ({
+            return res.map((item: any) => ({
                 id: item._id,
                 name: item.name,
                 description: item.description,
@@ -298,11 +114,9 @@ export default function Rewards() {
                 createdAt: new Date(item.createdAt).toLocaleDateString(),
                 updatedAt: new Date(item.updatedAt).toLocaleDateString(),
             }));
-            return res.data;
         }
     })
 
-    console.log(data)
     return (
         <GeneralLayout>
             <PageWithTableShell actions={<AddRewardPolicy />} title="Reward policies" activeTab={currentTab} tabs={tabs} total={0} currentPage={1} pageSize={10} fetchSurveys={() => Promise.resolve()}>

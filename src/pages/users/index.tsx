@@ -213,8 +213,8 @@ export default function Users() {
 
   const getUsers = async (page = 0) => {
     const res = await axiosInstance.get<PaginatedResponse<Participant>>(`/auth/users/admin?page=${page}&select=${currentTab}`)
-    if (!res.data.docs) throw new Error("No users found")
-    const users = res.data.docs.map((profile: any) => ({
+    if (!res.docs) throw new Error("No users found")
+    const users = res.docs.map((profile: any) => ({
       _id: profile.user._id,
       fullName: profile.firstName ? `${profile.firstName} ${profile.lastName}` : "Admin User",
       email: profile.user.email,
@@ -223,7 +223,7 @@ export default function Users() {
       createdAt: formatDate(profile.user.createdAt)
     }))
     return {
-      ...res.data,
+      ...res,
       docs: users
     }
   }

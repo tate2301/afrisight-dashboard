@@ -47,7 +47,7 @@ const ClientsAutocompleteSelect: React.FC<ClientsAutocompleteSelectProps> = ({
         const response = await axiosInstance.get(
           `${fetchUrl}?search=${debouncedSearchTerm}`,
         );
-        const data = await response.data.profiles;
+        const data = await response.profiles;
         setClients(data);
       } catch (error) {
         console.error("Error fetching clients:", error);
