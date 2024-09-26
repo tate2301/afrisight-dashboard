@@ -6,6 +6,7 @@ import { apiUrl } from "@/utils/apiUrl";
 import AlertMessage from "@/components/alerts/AlertMessage";
 import Button from "@/components/buttons/CustomButton";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import Head from "next/head";
 
 function ChangePassword() {
     const [newPassword, setNewPassword] = useState("");
@@ -74,6 +75,9 @@ function ChangePassword() {
     if (success) {
         return (
             <div className=" w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
+                <Head>
+                    <title>Reset Password</title>
+                </Head>
                 <CXMappersHeader subtitle="Secure Portal" />
                 <div className="p-4 md:p-0 max-w-sm mx-auto w-full">
                     <Card>

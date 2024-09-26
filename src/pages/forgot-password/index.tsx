@@ -6,6 +6,7 @@ import Link from "next/link";
 import { apiUrl } from "@/utils/apiUrl";
 import AlertMessage from "@/components/alerts/AlertMessage";
 import Button from "@/components/buttons/CustomButton";
+import Head from "next/head";
 
 function Home() {
     const [email, setEmail] = useState("");
@@ -38,6 +39,9 @@ function Home() {
 
     return (
         <div className=" w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
+            <Head>
+                <title>Forgot Password</title>
+            </Head>
             <CXMappersHeader subtitle="Secure Portal" />
             <div className="max-w-sm p-4 md:p-0 mx-auto w-full h-fit flex flex-col space-y-6">
                 <div>

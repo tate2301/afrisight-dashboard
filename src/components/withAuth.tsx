@@ -10,7 +10,7 @@ export function withAuth<T extends object>(WrappedComponent: ComponentType<T>) {
 
         useEffect(() => {
             if (!isLoading && !isAuthenticated) {
-                router.replace('/login'); // Change this to your login page route
+                router.replace('/'); // Change this to your login page route
             }
         }, [isLoading, isAuthenticated, router]);
 

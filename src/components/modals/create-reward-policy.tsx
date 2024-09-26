@@ -15,6 +15,8 @@ import Box from "../design-sytem/box";
 import CreateVoucher from "./create-voucher";
 import useDisclosure from "@/hooks/useDisclosure";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import Spinner from "../spinner/Spinner";
+import { useRef } from "react";
 type VoucherItem = {
     _id: string;
     name: string;
@@ -23,6 +25,7 @@ type VoucherItem = {
 
 const AddRewardPolicy = () => {
     const { isOpen: isVoucherFormOpen, onOpen: openVoucherForm, onClose: closeVoucherForm } = useDisclosure()
+    const closeRef = useRef<HTMLButtonElement>(null);
     const { data, isLoading, isError, refetch, } = useQuery({
         queryKey: ['vouchers'],
         queryFn: async () => {
@@ -48,7 +51,7 @@ const AddRewardPolicy = () => {
                 extraRewardType: values.extraRewardType,
                 dollarValue: values.amount,
                 pointsValue: values.points
-            });
+            }).then(() => closeRef.current?.click());
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['reward-policies'] });
@@ -185,12 +188,14 @@ const AddRewardPolicy = () => {
                             </Flex>
 
                             <Flex gap="3" mt="4" justify="end">
-                                <Dialog.Close>
+                                <Dialog.Close ref={closeRef}>
                                     <Button variant="ghost">
                                         Cancel
                                     </Button>
                                 </Dialog.Close>
-                                <Button type="submit">Save</Button>
+                                <Button type="submit" disabled={createRewardPolicyMutation.isPending} colorScheme={createRewardPolicyMutation.isPending ? "surface" : "primary"}>
+                                    {createRewardPolicyMutation.isPending ? <Spinner /> : "Save"}
+                                </Button>
                             </Flex>
                         </Form>
                     )}

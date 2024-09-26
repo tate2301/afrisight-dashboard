@@ -14,7 +14,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <Theme accentColor="indigo" radius="large">
       <Head>
-        <title>Welcome to dashboard!</title>
+        <title>CX Mappers Admin</title>
       </Head>
       <main className="subpixel-antialiased text-zinc-600 flex">
         <AuthProvider>

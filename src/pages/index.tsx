@@ -36,7 +36,12 @@ function Home() {
       if (userInfo.role === "ADMIN") {
         await login(accessToken, refreshToken);
         router.push("/gigs");
+        return;
       }
+
+      setErr("You are not authorized to access this application");
+
+
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error)) {
@@ -46,6 +51,8 @@ function Home() {
           setErr(getMessage(error));
         }
       }
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };
