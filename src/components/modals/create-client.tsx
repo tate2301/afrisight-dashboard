@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Input } from "../ui/input";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "@/hooks/useApiFetcher";
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Avatar, Dialog, Flex, TextField } from "@radix-ui/themes";
 import { Text } from "@radix-ui/themes";
 import Box from "../design-sytem/box";
@@ -21,8 +21,12 @@ export type Client = {
     isEmailVerified: boolean
 }
 
+export type AddModalProp = {
+    callback?: (_id: string) => void
+    trigger?: ReactNode
+}
 
-const AddClient = () => {
+const AddClient = ({ callback, trigger }: AddModalProp) => {
     const closeDialogRef = useRef<HTMLButtonElement>(null);
     const queryClient = useQueryClient();
 
@@ -34,11 +38,19 @@ const AddClient = () => {
             formData.append("name", values.legalName);
             return axiosInstance.post("/admin/client", formData);
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
+            if (callback) {
+                callback(data.user._id)
+            }
             queryClient.invalidateQueries({ queryKey: ["clients"] });
-            closeDialogRef.current?.click(); // Close the dialog
+            onClose()
         },
     });
+
+    const onClose = () => {
+        closeDialogRef.current?.click();
+        console.log('close')
+    }
 
     const handleSubmit = (values: any) => {
         addClientMutation.mutate(values);
@@ -47,7 +59,7 @@ const AddClient = () => {
     return (
         <Dialog.Root>
             <Dialog.Trigger>
-                <Button>Add Client</Button>
+                {trigger ? trigger : <Button>Add Client</Button>}
             </Dialog.Trigger>
 
             <Dialog.Content maxWidth="450px">
@@ -119,7 +131,7 @@ const AddClient = () => {
                             </Box>
                             <Flex gap="3" mt="4" justify="end">
                                 <Dialog.Close ref={closeDialogRef}>
-                                    <Button variant="ghost" disabled={addClientMutation.isPending} colorScheme={"surface"} css={{ color: addClientMutation.isPending ? "$gray3" : "$labelPrimary" }}>
+                                    <Button variant="ghost" colorScheme={"surface"}>
                                         Cancel
                                     </Button>
                                 </Dialog.Close>

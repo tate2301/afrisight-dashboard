@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import Button from "../design-sytem/button";
 import { UpDown } from "../icons/up.down";
@@ -31,6 +31,12 @@ export function Combobox<T>({ items, placeholder, emptyMessage, onChange, footer
         onChange(currentValue === value ? "" : currentValue);
         setOpen(false);
     };
+
+    useEffect(() => {
+        if (initialValue) {
+            setValue(initialValue)
+        }
+    }, [initialValue])
 
     return (
         <Popover open={open} onOpenChange={setOpen}>

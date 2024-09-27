@@ -17,13 +17,14 @@ import useDisclosure from "@/hooks/useDisclosure";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Spinner from "../spinner/Spinner";
 import { useRef } from "react";
+import { AddModalProp } from "./create-client";
 type VoucherItem = {
     _id: string;
     name: string;
     expiresAt: string;
 }
 
-const AddRewardPolicy = () => {
+const AddRewardPolicy = ({ callback, trigger }: AddModalProp) => {
     const { isOpen: isVoucherFormOpen, onOpen: openVoucherForm, onClose: closeVoucherForm } = useDisclosure()
     const closeRef = useRef<HTMLButtonElement>(null);
     const { data, isLoading, isError, refetch, } = useQuery({
@@ -51,10 +52,14 @@ const AddRewardPolicy = () => {
                 extraRewardType: values.extraRewardType,
                 dollarValue: values.amount,
                 pointsValue: values.points
-            }).then(() => closeRef.current?.click());
+            })
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
+            if (callback) {
+                callback(data._id)
+            }
             queryClient.invalidateQueries({ queryKey: ['reward-policies'] });
+            closeRef.current?.click()
         },
         onError: (error) => {
             console.error('Error creating reward policy:', error);
@@ -96,9 +101,9 @@ const AddRewardPolicy = () => {
     return (
         <Dialog.Root >
             <Dialog.Trigger>
-                <Button className="w-full">
+                {trigger ? trigger : <Button className="w-full">
                     Add reward policy
-                </Button>
+                </Button>}
             </Dialog.Trigger>
 
             <Dialog.Content maxWidth="450px">

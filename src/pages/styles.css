@@ -57,6 +57,7 @@ body {
 	font-family: 'Inter', sans-serif !important;
 	font-size: 0.875rem;
 	line-height: 1.25rem;
+	overflow-y: hidden;
 }
 
 .inter {
