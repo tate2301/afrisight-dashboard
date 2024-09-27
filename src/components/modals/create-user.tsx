@@ -1,8 +1,14 @@
-import {Avatar, Dialog, Flex, Text as RText, TextField} from '@radix-ui/themes';
+import {
+	Avatar,
+	Button,
+	Dialog,
+	Flex,
+	Text as RText,
+	TextField,
+} from '@radix-ui/themes';
 import Box from '../design-sytem/box';
 import {CameraIcon} from '@heroicons/react/24/outline';
 import styled from '../design-sytem/theme';
-import Button from '../design-sytem/button';
 import {AddModalProp} from './create-client';
 import {Paragraph} from '../design-sytem/typography';
 import Spinner from '../spinner/Spinner';
@@ -12,6 +18,7 @@ import apiClient from '@/hooks/useApiFetcher';
 import {AUTH_ROUTES} from '@/lib/api-routes';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
+import {TeamMember} from '../icons/team.member';
 
 const Text = styled(Paragraph, {});
 
@@ -77,7 +84,13 @@ const AddUser = ({trigger, callback}: AddModalProp) => {
 	return (
 		<Dialog.Root>
 			<Dialog.Trigger>
-				{trigger ? trigger : <Button>Add team member</Button>}
+				{trigger ? (
+					trigger
+				) : (
+					<Button>
+						<TeamMember className="size-5" /> Add team member
+					</Button>
+				)}
 			</Dialog.Trigger>
 
 			<Dialog.Content maxWidth="450px">
@@ -178,7 +191,7 @@ const AddUser = ({trigger, callback}: AddModalProp) => {
 							<Button
 								type="button"
 								onClick={generatePassword}
-								size={'small'}
+								size={'1'}
 								variant={'ghost'}>
 								Generate password
 							</Button>
@@ -191,23 +204,16 @@ const AddUser = ({trigger, callback}: AddModalProp) => {
 						justify="end">
 						<Dialog.Close ref={closeDialogRef}>
 							<Button
-								variant="ghost"
-								colorScheme={'surface'}>
+								variant="soft"
+								color={'gray'}>
 								Cancel
 							</Button>
 						</Dialog.Close>
 						<Button
-							css={{
-								opacity:
-									addClientMutation.isPending || !formik.isValid ? 0.2 : 1,
-							}}
+							loading={addClientMutation.isPending}
 							disabled={addClientMutation.isPending || !formik.isValid}
 							type="submit"
-							colorScheme={
-								addClientMutation.isPending || !formik.isValid
-									? 'surface'
-									: 'primary'
-							}>
+							variant={'solid'}>
 							{addClientMutation.isPending ? (
 								<>
 									<Spinner /> Adding...
