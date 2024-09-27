@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import Navbar from "./navbar";
 import Sidebar from "@/layout/sidebar";
 import Separator from "@/components/design-sytem/separator";
-import { GeneralLayoutProvider } from "./context";
 
 interface Props {
   children: ReactNode;
