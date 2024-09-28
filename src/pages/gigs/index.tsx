@@ -22,7 +22,14 @@ import Flex from '@/components/design-sytem/flex';
 import {H3} from '@/components/design-sytem/typography';
 import {TabsContainer, TabsList, TabsTrigger} from '@/components/tab';
 import Box from '@/components/design-sytem/box';
-import {Dialog, IconButton, Text, TextArea, TextField} from '@radix-ui/themes';
+import {
+	Button,
+	Dialog,
+	IconButton,
+	Text,
+	TextArea,
+	TextField,
+} from '@radix-ui/themes';
 import GigCard from '@/components/gig/card';
 import Separator from '@/components/design-sytem/separator';
 import SearchBox from '@/components/search/Search';
@@ -31,7 +38,6 @@ import {ChevronLeft} from '@/components/icons/chevron.left';
 import SelectWithOptions from '@/components/filter-button';
 import PageWithTableShell from '@/components/shells/table-shell';
 import {useSearchParams} from 'next/navigation';
-import Button from '@/components/design-sytem/button';
 import {useQuery} from '@tanstack/react-query';
 import {useSetPageTitle} from '@/layout/context';
 
@@ -85,7 +91,7 @@ function Gig() {
 					actions={
 						<Link href={'/gigs/create_gig'}>
 							<Button>
-								<PlusIcon className="size-4 mr-2" /> Create gig
+								<PlusIcon className="size-4" /> Create gig
 							</Button>
 						</Link>
 					}

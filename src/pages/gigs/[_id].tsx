@@ -14,7 +14,14 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import {Button, Checkbox, RadioCards, Section, Tabs} from '@radix-ui/themes';
+import {
+	Badge,
+	Button,
+	Checkbox,
+	RadioCards,
+	Section,
+	Tabs,
+} from '@radix-ui/themes';
 import {FormBuilder} from '@/forms-builder/components/FormBuilder';
 import {FormProvider, useFormContext} from '@/forms-builder/context';
 import Flex from '@/components/design-sytem/flex';
@@ -128,6 +135,7 @@ type BasicInfoValues = Pick<Gig, 'name' | 'description' | 'client'>;
 interface FormBuilderHeaderProps {
 	save: (form: any) => void;
 	publish: (form: any) => void;
+	status: string;
 	isPublishing: boolean;
 	isSaving: boolean;
 }
@@ -156,6 +164,8 @@ export default function GigPage() {
 		enabled: !!id,
 	});
 
+	const survey: Gig | undefined = useMemo(() => gig?.data ?? undefined, [gig]);
+
 	const {mutate, isPending} = useMutation({
 		mutationFn: async (values: FormState) => {
 			await patchGig(id as string, values);
@@ -167,15 +177,12 @@ export default function GigPage() {
 
 	const publishMutation = useMutation({
 		mutationFn: async () => {
-			await apiClient.post(`/survey/${id as string}/publish`);
+			await apiClient.post(`/survey/${id as string}/publish/toggle`);
 		},
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({queryKey: [queryKey]});
 		},
 	});
-
-	const survey: Gig | undefined = useMemo(() => gig?.data ?? undefined, [gig]);
-	console.log(gig.data);
 
 	const saveGigChanges = useCallback(
 		(form: string) => {
@@ -253,6 +260,7 @@ function GigPresenter(props: {
 									publish={publishGig}
 									isPublishing={props.isPublishing}
 									isSaving={props.isPending}
+									status={survey?.status}
 								/>
 							</Tabs.List>
 							<ResponsesTab _id={id as string} />
@@ -316,6 +324,7 @@ const NavActions = ({
 	publish,
 	isSaving,
 	isPublishing,
+	status,
 }: FormBuilderHeaderProps) => {
 	const {form, exportForm} = useFormContext();
 	const onSaveChanges = () => save(exportForm());
@@ -323,7 +332,9 @@ const NavActions = ({
 	return (
 		<Flex
 			alignItems="center"
+			className="px-4"
 			css={{gap: '8px'}}>
+			<Badge style={{fontWeight: 600}}>{status}</Badge>
 			<Button
 				variant="outline"
 				color="gray"
@@ -333,9 +344,10 @@ const NavActions = ({
 				Save changes
 			</Button>
 			<Button
+				color={status === 'DRAFT' ? 'blue' : 'red'}
 				loading={isPublishing}
 				onClick={onPublish}>
-				Publish
+				{status === 'DRAFT' ? 'Publish' : 'Pause'}
 			</Button>
 		</Flex>
 	);

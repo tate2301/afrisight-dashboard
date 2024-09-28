@@ -46,6 +46,11 @@ const fieldTypes = [
 		icon: <StarIcon className="size-4" />,
 	},
 	{
+		type: 'likertScale',
+		label: 'Likert Scale',
+		icon: <StarIcon className="size-4" />,
+	},
+	{
 		type: 'fileUpload',
 		label: 'File Upload',
 		icon: <FilePlusIcon className="size-4" />,
