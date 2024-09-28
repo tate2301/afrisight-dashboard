@@ -12,7 +12,7 @@ import { useFormik } from 'formik';
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import * as Yup from 'yup';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/hooks/useApiFetcher';
 import { Combobox, ComboboxItem } from '@/components/ui/combobox';
 import { CommandItem } from '@/components/ui/command';
@@ -24,6 +24,9 @@ import { useRouter } from 'next/router';
 import { AxiosRequestHeaders } from 'axios';
 import { withAuth } from '@/components/withAuth';
 import Spinner from '@/components/spinner/Spinner';
+import useDisclosure from '@/hooks/useDisclosure';
+import AddClient from '@/components/modals/create-client';
+import AddRewardPolicy from '@/components/modals/create-reward-policy';
 
 const SkeletonBox = styled('div', {
     backgroundColor: '$gray3',
@@ -80,7 +83,11 @@ type ClientItem = {
     profilePic: string;
 };
 
-export const ClientsCombobox = (props: { data: any[]; form: any, value: string }) => {
+export const ClientsCombobox = (props: {
+    data: any[];
+    form: any;
+    value: string;
+}) => {
     const renderVoucherItem = (
         item: ComboboxItem<ClientItem>,
         isSelected: boolean,
@@ -141,7 +148,11 @@ type RewardPolicyItem = {
     createdAt: string;
 };
 
-export const RewardPoliciesCombobox = (props: { data: any[]; form: any, value: string }) => {
+export const RewardPoliciesCombobox = (props: {
+    data: any[];
+    form: any;
+    value: string;
+}) => {
     const renderRewardPolicyItem = (
         item: ComboboxItem<RewardPolicyItem>,
         isSelected: boolean,
@@ -159,11 +170,18 @@ export const RewardPoliciesCombobox = (props: { data: any[]; form: any, value: s
                         isSelected ? 'opacity-100' : 'opacity-0',
                     )}
                 />
-                <Flex direction={'column'} className="flex-1">
-                    <Paragraph className="truncate" weight={"semibold"} color={'primary'}>{item.label}</Paragraph>
+                <Flex
+                    direction={'column'}
+                    className="flex-1">
+                    <Paragraph
+                        className="truncate"
+                        weight={'semibold'}
+                        color={'primary'}>
+                        {item.label}
+                    </Paragraph>
                     <Caption>
                         ${item.data.dollarValue} &bull; {item.data.pointsValue} XP
-                        {item.data.voucher && <>{" "}&bull; Includes voucher</>}
+                        {item.data.voucher && <> &bull; Includes voucher</>}
                     </Caption>
                     <Caption color="tertiary">
                         Created: {formatDate(item.data.createdAt)}
@@ -186,10 +204,19 @@ export const RewardPoliciesCombobox = (props: { data: any[]; form: any, value: s
     );
 };
 
-
 const CreateGig = () => {
-    const router = useRouter()
+    const router = useRouter();
     const [previewImage, setPreviewImage] = useState('/gig-preview.png');
+    const {
+        isOpen: isAddClientModalOpen,
+        onClose: closeAddClientModal,
+        onOpen: openAddClientModal,
+    } = useDisclosure();
+    const {
+        isOpen: isAddRewardPolicyModalOpen,
+        onClose: closeAddRewardPolicyModal,
+        onOpen: openAddRewardPolicyModal,
+    } = useDisclosure();
 
     const formik = useFormik({
         initialValues: {
@@ -202,8 +229,8 @@ const CreateGig = () => {
             location: '',
             questionOrdering: 'preserve',
             difficulty: 'easy',
-            category: "default",
-            duration: 5
+            category: 'default',
+            duration: 5,
         },
         validationSchema,
         onSubmit: async (values) => {
@@ -218,20 +245,31 @@ const CreateGig = () => {
                 rewardPolicy: values.rewardPolicy,
                 location: values.location,
                 endDate: values.closingDate,
-                category: values.category
-            }
+                category: values.category,
+            };
 
             const formData = new FormData();
             Object.keys(safeValues).forEach((key) => {
-                formData.append(key, (safeValues as any)[key as any])
-            })
+                formData.append(key, (safeValues as any)[key as any]);
+            });
+            return gigMutation.mutate(formData);
+        },
+    });
 
-            const response = await axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                } as AxiosRequestHeaders,
-            })
-            router.push(`/gigs/${response._id}`)
+    const gigMutation = useMutation({
+        mutationKey: ['gigs'],
+        mutationFn: async (formData: FormData) => {
+            const response = await axiosInstance.post(
+                SURVEY_ROUTES.CREATE_SURVEY,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    } as AxiosRequestHeaders,
+                },
+            );
+
+            router.push(`/gigs/${response._id}`);
         },
     });
 
@@ -271,29 +309,24 @@ const CreateGig = () => {
                 label: policy.name,
                 value: policy._id,
             }));
-            console.log({ res, data })
+            console.log({ res, data });
 
             return data;
         },
     });
 
-    const selectedClientQuery = useQuery({
-        queryKey: ['clients', `client-${formik.values.client}`],
-        queryFn: async () => {
-            if (!formik.values.client) return null;
-            const res = await axiosInstance.get(
-                `/admin/client/${formik.values.client}`,
-            );
-            return res;
-        },
-    });
-
+    const selectedClient = useMemo(() => {
+        if (!formik.values.client) return null;
+        return clientsQuery.data?.find((client: any) => client.value === formik.values.client)
+    }, [formik.values.client, clientsQuery.data])
 
     const selectedRewardPolicy = useMemo(() => {
         if (!rewardPoliciesQuery.data) return null;
-        const policy = rewardPoliciesQuery.data.find((item: any) => item.value === formik.values.rewardPolicy)
-        return policy ?? null
-    }, [formik.values.rewardPolicy, rewardPoliciesQuery.data])
+        const policy = rewardPoliciesQuery.data.find(
+            (item: any) => item.value === formik.values.rewardPolicy,
+        );
+        return policy ?? null;
+    }, [formik.values.rewardPolicy, rewardPoliciesQuery.data]);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -303,6 +336,10 @@ const CreateGig = () => {
         }
     };
 
+    const addClientModalCallback = (client: string) =>
+        formik.setFieldValue('client', client);
+    const addRewardPolicyModalCallback = (rewardPolicy: string) =>
+        formik.setFieldValue('rewardPolicy', rewardPolicy);
 
     return (
         <GeneralLayout>
@@ -332,31 +369,39 @@ const CreateGig = () => {
                                     direction={'column'}
                                     alignItems={'start'}
                                     className="px-4">
-                                    <label className="space-y-2">
-                                        <Paragraph weight={'semibold'}>
-                                            Client <RequiredAsterisk>*</RequiredAsterisk>
-                                        </Paragraph>
-                                        {clientsQuery.data && (
-                                            <ClientsCombobox
-                                                data={clientsQuery.data}
-                                                form={formik}
-                                                value={formik.values.client}
-                                            />
-                                        )}
-                                        {formik.touched.client && formik.errors.client && (
-                                            <ErrorMessage>{formik.errors.client}</ErrorMessage>
-                                        )}
+                                    <Box className='space-y-2'>
+                                        <label className="space-y-2">
+                                            <Paragraph weight={'semibold'}>
+                                                Client <RequiredAsterisk>*</RequiredAsterisk>
+                                            </Paragraph>
+                                            {clientsQuery.data && (
+                                                <ClientsCombobox
+                                                    data={clientsQuery.data}
+                                                    form={formik}
+                                                    value={formik.values.client}
+                                                />
+                                            )}
+                                            {formik.touched.client && formik.errors.client && (
+                                                <ErrorMessage>{formik.errors.client}</ErrorMessage>
+                                            )}
+                                        </label>
                                         <Flex>
                                             <Caption color={'tertiary'}>
                                                 Select a client to associate this gig with.
                                             </Caption>
-                                            <Caption
-                                                weight={'bold'}
-                                                color={'primary'}>
-                                                Add a new client?
-                                            </Caption>
+                                            <AddClient
+                                                callback={addClientModalCallback}
+                                                trigger={
+                                                    <Caption
+                                                        as={"button"}
+                                                        weight={'bold'}
+                                                        color={'primary'}>
+                                                        Add a new client?
+                                                    </Caption>
+                                                }
+                                            />
                                         </Flex>
-                                    </label>
+                                    </Box>
                                     <Separator className="my-2" />
                                     <label className="mb-4">
                                         <Paragraph weight={'semibold'}>
@@ -427,10 +472,9 @@ const CreateGig = () => {
                                             onChange={formik.handleChange}
                                             onBlur={formik.handleBlur}
                                         />
-                                        {formik.touched.closingDate &&
-                                            formik.errors.duration && (
-                                                <ErrorMessage>{formik.errors.duration}</ErrorMessage>
-                                            )}
+                                        {formik.touched.closingDate && formik.errors.duration && (
+                                            <ErrorMessage>{formik.errors.duration}</ErrorMessage>
+                                        )}
                                         <Caption color={'tertiary'}>
                                             The closing date is the last date by which the gig can be
                                             completed.
@@ -448,8 +492,7 @@ const CreateGig = () => {
                                                 flexDirection: 'column',
                                                 zIndex: 0,
                                             }}
-                                            className="py-4 relative z-0 cursor-pointer"
-                                        >
+                                            className="py-4 relative z-0 cursor-pointer">
                                             <CameraIcon className="size-4" />
                                             <Paragraph
                                                 weight={'medium'}
@@ -467,11 +510,14 @@ const CreateGig = () => {
                                             accept="image/*"
                                             onChange={handleImageChange}
                                         />
-                                        {
-                                            formik.values.coverImage && <Caption className='mt-2' color={'tertiary'} weight={"bold"}>
+                                        {formik.values.coverImage && (
+                                            <Caption
+                                                className="mt-2"
+                                                color={'tertiary'}
+                                                weight={'bold'}>
                                                 {(formik.values.coverImage as File).name}
                                             </Caption>
-                                        }
+                                        )}
                                     </label>
                                     <Separator className="mt-4 mb-6" />
                                     <H3
@@ -480,27 +526,41 @@ const CreateGig = () => {
                                         className="mb-2">
                                         Additional information
                                     </H3>
-                                    <label className="mb-4 space-y-2">
-                                        <Paragraph weight={"semibold"}>Reward Policy</Paragraph>
-                                        {rewardPoliciesQuery.data && (
-                                            <RewardPoliciesCombobox
-                                                data={rewardPoliciesQuery.data}
-                                                form={formik}
-                                                value={formik.values.rewardPolicy}
-                                            />
-                                        )}
-                                        {formik.touched.rewardPolicy && formik.errors.rewardPolicy && (
-                                            <ErrorMessage>{formik.errors.rewardPolicy}</ErrorMessage>
-                                        )}
+                                    <Box className='space-y-2 mb-4'>
+                                        <label className="space-y-2">
+                                            <Paragraph weight={'semibold'}>Reward Policy</Paragraph>
+                                            {rewardPoliciesQuery.data && (
+                                                <RewardPoliciesCombobox
+                                                    data={rewardPoliciesQuery.data}
+                                                    form={formik}
+                                                    value={formik.values.rewardPolicy}
+                                                />
+                                            )}
+                                            {formik.touched.rewardPolicy &&
+                                                formik.errors.rewardPolicy && (
+                                                    <ErrorMessage>
+                                                        {formik.errors.rewardPolicy}
+                                                    </ErrorMessage>
+                                                )}
+                                        </label>
                                         <Flex>
-                                            <Caption color={"tertiary"}>
+                                            <Caption color={'tertiary'}>
                                                 Select a reward policy for this gig.
                                             </Caption>
-                                            <Caption weight={"bold"} color={"primary"}>
-                                                Create new reward policy?
-                                            </Caption>
+                                            <AddRewardPolicy
+                                                callback={addRewardPolicyModalCallback}
+                                                trigger={
+                                                    <Caption
+                                                        as={'button'}
+                                                        onClick={openAddRewardPolicyModal}
+                                                        weight={'bold'}
+                                                        color={'primary'}>
+                                                        Create new reward policy?
+                                                    </Caption>
+                                                }
+                                            />
                                         </Flex>
-                                    </label>
+                                    </Box>
                                     <label className="mb-4">
                                         <Paragraph weight={'semibold'}>Location</Paragraph>
                                         <TextInput
@@ -627,12 +687,26 @@ const CreateGig = () => {
                                     <Flex>
                                         <Button
                                             type="submit"
-                                            colorScheme={formik.isSubmitting ? 'surface' : 'primary'}
-                                            disabled={!formik.isValid || formik.isSubmitting}>
-                                            {
-                                                formik.isSubmitting ? <Spinner /> : "Create gig"
+                                            colorScheme={
+                                                gigMutation.isPending ? 'surface' : 'primary'
                                             }
+                                            disabled={!formik.isValid || gigMutation.isPending}>
+                                            {gigMutation.isPending ? (
+                                                <>
+                                                    <Spinner /> Creating...
+                                                </>
+                                            ) : (
+                                                'Create gig'
+                                            )}
                                         </Button>
+                                    </Flex>
+                                    <Flex className="mt-2">
+                                        {gigMutation.isError && (
+                                            <ErrorMessage>
+                                                {(gigMutation.data as any)?.message ??
+                                                    gigMutation.error?.message}
+                                            </ErrorMessage>
+                                        )}
                                     </Flex>
                                 </Flex>
                             </form>
@@ -640,22 +714,22 @@ const CreateGig = () => {
                     </div>
                 </Box>
                 <Box className="col-span-1 h-fit sticky top-[48px] space-y-4 py-8">
-                    {selectedClientQuery.data ? (
+                    {selectedClient?.data ? (
                         <Flex
                             alignItems={'center'}
                             css={{ gap: 16 }}>
                             <Avatar
                                 radius={'full'}
                                 fallback={'C'}
-                                src={selectedClientQuery.data.profilePic}
+                                src={selectedClient.data.profilePic}
                             />
                             <Box>
                                 <Paragraph
                                     weight={'bold'}
                                     color={'primary'}>
-                                    {selectedClientQuery.data.firstname || 'No name'}
+                                    {selectedClient.data.name || 'No name'}
                                 </Paragraph>
-                                <Caption>{selectedClientQuery.data.user.email}</Caption>
+                                <Caption>{selectedClient.data.email}</Caption>
                             </Box>
                         </Flex>
                     ) : (
@@ -668,7 +742,7 @@ const CreateGig = () => {
                                 borderRadius: 16,
                                 height: 400,
                                 overflow: 'hidden',
-                                position: "relative"
+                                position: 'relative',
                             }}>
                             <Image
                                 src={previewImage}
@@ -703,8 +777,7 @@ const CreateGig = () => {
                         )}
                         <Flex>
                             {selectedRewardPolicy ? (
-                                <Paragraph
-                                    color={'primary'}>
+                                <Paragraph color={'primary'}>
                                     US$ {selectedRewardPolicy.data.dollarValue}
                                 </Paragraph>
                             ) : (
@@ -712,11 +785,11 @@ const CreateGig = () => {
                             )}
                             {selectedRewardPolicy && <Paragraph>&bull;</Paragraph>}
                             {selectedRewardPolicy ? (
-                                <Paragraph
-                                    color={'primary'}>
+                                <Paragraph color={'primary'}>
                                     {selectedRewardPolicy.data.pointsValue}XP
-
-                                    {selectedRewardPolicy.data.voucher && <>{" "} &bull; Plus Voucher</>}
+                                    {selectedRewardPolicy.data.voucher && (
+                                        <> &bull; Plus Voucher</>
+                                    )}
                                 </Paragraph>
                             ) : (
                                 <SkeletonText css={{ width: '60%' }} />

@@ -1,26 +1,41 @@
-import React, { ReactNode } from "react";
-import Navbar from "./navbar";
-import Sidebar from "@/layout/sidebar";
-import Separator from "@/components/design-sytem/separator";
-import { GeneralLayoutProvider } from "./context";
+import React, {ReactNode} from 'react';
+import Navbar from './navbar';
+import Sidebar from '@/layout/sidebar';
+import Separator from '@/components/design-sytem/separator';
+import {QueryErrorResetBoundary} from '@tanstack/react-query';
+import {ErrorBoundary} from 'react-error-boundary';
+import {Button} from '@radix-ui/themes';
 
 interface Props {
-  children: ReactNode;
+	children: ReactNode;
 }
 
-function GeneralLayout({ children }: Props) {
-  return (
-    <main className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1">
-        <header className="flex sticky top-0 h-[48px]">
-          <Navbar />
-        </header>
-        <Separator />
-        {children}
-      </div>
-    </main>
-  );
+function GeneralLayout({children}: Props) {
+	return (
+		<QueryErrorResetBoundary>
+			{({reset}) => (
+				<ErrorBoundary
+					onReset={reset}
+					fallbackRender={({resetErrorBoundary}) => (
+						<div>
+							There was an error!
+							<Button onClick={() => resetErrorBoundary()}>Try again</Button>
+						</div>
+					)}>
+					<main className="flex h-screen">
+						<Sidebar />
+						<div className="flex-1 h-screen overflow-y-auto">
+							<header className="flex sticky top-0 h-[48px] z-50">
+								<Navbar />
+							</header>
+							<Separator className="sticky top-[48px] z-50" />
+							{children}
+						</div>
+					</main>
+				</ErrorBoundary>
+			)}
+		</QueryErrorResetBoundary>
+	);
 }
 
 export default GeneralLayout;

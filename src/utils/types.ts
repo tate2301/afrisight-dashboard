@@ -1,215 +1,215 @@
 export interface UserInfoTypes {
-  id: number;
-  username: string;
-  email: string;
-  otp: string | null;
-  profilePic: string | null;
-  name: string | null;
-  role: "ADMIN" | "USER";
-  createdAt: string;
-  updatedAt: string;
-  iat: number | null;
-  exp: number | null;
+	id: number;
+	username: string;
+	email: string;
+	otp: string | null;
+	profilePic: string | null;
+	name: string | null;
+	role: 'ADMIN' | 'USER';
+	createdAt: string;
+	updatedAt: string;
+	iat: number | null;
+	exp: number | null;
 }
 
 export interface DashboardItemProps {
-  link: string;
-  name: string;
-  createdAt: string;
-  branch: string;
-  status: string;
-  Icon?: any;
-  _id?: string | number;
+	link: string;
+	name: string;
+	createdAt: string;
+	branch: string;
+	status: string;
+	Icon?: any;
+	_id?: string | number;
 }
 
 export interface SectionType {
-  id: number;
-  options: Array<{ name: string; _id: string }>;
-  type: {
-    name: string;
-    _id: string;
-  };
-  value: string;
+	id: number;
+	options: Array<{name: string; _id: string}>;
+	type: {
+		name: string;
+		_id: string;
+	};
+	value: string;
 }
 
 export interface FormType {
-  id: string;
-  form: {
-    description: string;
-    name: string;
-    sections: Array<SectionType>;
-  };
+	id: string;
+	form: {
+		description: string;
+		name: string;
+		sections: Array<SectionType>;
+	};
 }
 
 export type TSurvey = {
-  _id: string;
-  name: string;
-  description: string;
-  reward: TReward;
-  dollarRewardValue: number;
-  targetParticipants: number;
-  completedParticipants: number;
-  difficulty: string;
-  category: string;
-  formId: string;
-  form: string;
-  duration: string;
-  status: string;
-  views: number;
-  startDate: string;
-  endDate: string;
-  createdAt: string;
-  updatedAt: string;
+	_id: string;
+	name: string;
+	description: string;
+	reward: TReward;
+	dollarRewardValue: number;
+	targetParticipants: number;
+	completedParticipants: number;
+	difficulty: string;
+	category: string;
+	formId: string;
+	form: string;
+	duration: string;
+	status: string;
+	views: number;
+	startDate: string;
+	endDate: string;
+	createdAt: string;
+	updatedAt: string;
 };
 
 export type TReward = {
-  _id: string;
-  type: string;
-  value: {
-    amount: number;
-    code?: string;
-    maxRedemptions?: number;
-    expiresAt?: string;
-  };
+	_id: string;
+	type: string;
+	value: {
+		amount: number;
+		code?: string;
+		maxRedemptions?: number;
+		expiresAt?: string;
+	};
 };
 
 type TVoucherDetails = {
-  currency: string;
-  validOutlets: string[];
-  maxRedemptions: number;
+	currency: string;
+	validOutlets: string[];
+	maxRedemptions: number;
 };
 
 export type TStoreItem = {
-  voucherDetails: TVoucherDetails;
-  _id: string;
-  name: string;
-  description: string;
-  type: string;
-  pointsCost: number;
-  stock: number;
-  maxRedemptionsPerUser: number;
-  expiresAt: string;
-  imageUrl: string;
-  isActive: boolean;
-  basePricePoints: number;
-  currentPricePoints: number;
-  demandMultiplier: number;
-  isDeleted: boolean;
-  lastPriceUpdate: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+	voucherDetails: TVoucherDetails;
+	_id: string;
+	name: string;
+	description: string;
+	type: string;
+	pointsCost: number;
+	stock: number;
+	maxRedemptionsPerUser: number;
+	expiresAt: string;
+	imageUrl: string;
+	isActive: boolean;
+	basePricePoints: number;
+	currentPricePoints: number;
+	demandMultiplier: number;
+	isDeleted: boolean;
+	lastPriceUpdate: string;
+	createdAt: string;
+	updatedAt: string;
+	__v: number;
 };
 
-export type ProfileType = "ADMIN" | "SUPPORT" | "CLIENT" | "PARTICIPANT";
+export type ProfileType = 'ADMIN' | 'SUPPORT' | 'CLIENT' | 'PARTICIPANT';
 export type UserRole = ProfileType;
 
 export interface TProfile {
-  id: string;
-  userId: string;
-  profileType: ProfileType;
-  name?: string;
-  firstname?: string;
-  surname?: string;
-  profilePic?: string;
-  isHasChildren?: boolean;
-  ifDrinksAlcohol?: boolean;
-  ifSmokes?: boolean;
-  ifExercises?: boolean;
-  weight?: number;
-  occupation?: string;
-  companyName?: string;
-  monthlyIncome?: number;
-  education?: string;
-  ethnicity?: string;
-  hobbies: string[];
-  userInventoryId?: string;
-  isDeleted: boolean;
-  deletedAt?: string;
-  createdAt: string;
-  updatedAt: string;
-  user: User;
+	id: string;
+	userId: string;
+	profileType: ProfileType;
+	name?: string;
+	firstname?: string;
+	surname?: string;
+	profilePic?: string;
+	isHasChildren?: boolean;
+	ifDrinksAlcohol?: boolean;
+	ifSmokes?: boolean;
+	ifExercises?: boolean;
+	weight?: number;
+	occupation?: string;
+	companyName?: string;
+	monthlyIncome?: number;
+	education?: string;
+	ethnicity?: string;
+	hobbies: string[];
+	userInventoryId?: string;
+	isDeleted: boolean;
+	deletedAt?: string;
+	createdAt: string;
+	updatedAt: string;
+	user: User;
 }
 
 export interface TProfileUpdateInput {
-  name?: string;
-  firstname?: string;
-  surname?: string;
-  profilePic?: string;
-  isHasChildren?: boolean;
-  ifDrinksAlcohol?: boolean;
-  ifSmokes?: boolean;
-  ifExercises?: boolean;
-  weight?: number;
-  occupation?: string;
-  companyName?: string;
-  monthlyIncome?: number;
-  education?: string;
-  ethnicity?: string;
-  hobbies?: string[];
+	name?: string;
+	firstname?: string;
+	surname?: string;
+	profilePic?: string;
+	isHasChildren?: boolean;
+	ifDrinksAlcohol?: boolean;
+	ifSmokes?: boolean;
+	ifExercises?: boolean;
+	weight?: number;
+	occupation?: string;
+	companyName?: string;
+	monthlyIncome?: number;
+	education?: string;
+	ethnicity?: string;
+	hobbies?: string[];
 }
 
 export interface User {
-  _id: string;
-  id: string;
-  username: string;
-  email: string;
-  role: UserRole;
-  isEmailVerified: boolean;
-  phoneNumber?: string;
-  isPhoneVerified: boolean;
-  isSocialConnectedUser: boolean;
-  createdAt: string;
-  updatedAt: string;
+	_id: string;
+	id: string;
+	username: string;
+	email: string;
+	role: UserRole;
+	isEmailVerified: boolean;
+	phoneNumber?: string;
+	isPhoneVerified: boolean;
+	isSocialConnectedUser: boolean;
+	status: 'ACTIVE' | 'INACTIVE';
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface UserUpdateInput {
-  username?: string;
-  email?: string;
-  phoneNumber?: string;
-  role?: UserRole;
+	username?: string;
+	email?: string;
+	phoneNumber?: string;
+	role?: UserRole;
 }
 
 export interface UserRegistrationInput {
-  username: string;
-  email: string;
-  password: string;
-  role: UserRole;
-  phoneNumber?: string;
+	username: string;
+	email: string;
+	password: string;
+	role: UserRole;
+	phoneNumber?: string;
 }
 
 export interface UserLoginInput {
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 }
 
 export interface AuthResponse {
-  user: User;
-  token: string;
-  refreshToken: string;
+	user: User;
+	token: string;
+	refreshToken: string;
 }
 
 export interface Form {
-  _id: string;
-  id: string;
-  description: string;
-  name: string;
-  sections: any[];
-  createdBy: string;
-  createdAt: string;
-  updatedAt: string;
+	_id: string;
+	id: string;
+	description: string;
+	name: string;
+	sections: any[];
+	createdBy: string;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export type PaginatedResponse<T> = {
-  docs: T[];
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-  limit: number;
-  nextPage: number | null;
-  page: number;
-  pagingCounter: number;
-  prevPage: number | null;
-  totalDocs: number;
-  totalPages: number;
-}
-
+	docs: T[];
+	hasNextPage: boolean;
+	hasPrevPage: boolean;
+	limit: number;
+	nextPage: number | null;
+	page: number;
+	pagingCounter: number;
+	prevPage: number | null;
+	totalDocs: number;
+	totalPages: number;
+};
