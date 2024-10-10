@@ -3,7 +3,7 @@ export type GigForm = {
     gig: string | any;
 }
 
-export type InputType = 'shortAnswer' | 'longAnswer' | 'email' | 'date' | 'multipleChoice' | 'yesNo' | 'npsRating' | 'fileUpload';
+export type InputType = 'shortAnswer' | 'longAnswer' | 'email' | 'date' | 'multipleChoice' | 'yesNo' | 'npsRating' | 'fileUpload' | 'likertScale';
 
 export interface FormField {
     id: string;
@@ -18,6 +18,7 @@ export interface FormField {
         npsMaxRating?: number; // Default will be 10 for NPS
         allowedFileTypes?: string[];
         maxFileSize?: number;
+        scalePoints?: number;
     };
 }
 

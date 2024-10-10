@@ -1,47 +1,38 @@
-import {useEffect, useState} from 'react';
 import GeneralLayout from '../../layout/GeneralLayout';
-import useWithStatus from '../../hooks/useWithStatus';
 import axiosInstance from '@/hooks/useApiFetcher';
 import {SURVEY_ROUTES} from '@/lib/api-routes';
-import {cn} from '@/lib/utils';
-import {BadgeCent, Ticket} from 'lucide-react';
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
-import {formatDate} from 'date-fns';
-import {CreateSurvey} from '@/components/add/survey';
-import {TSurvey} from '@/utils/types';
 import Link from 'next/link';
-import {CubeIcon, PlusIcon} from '@heroicons/react/24/outline';
-import Flex from '@/components/design-sytem/flex';
-import {H3} from '@/components/design-sytem/typography';
-import {TabsContainer, TabsList, TabsTrigger} from '@/components/tab';
+import {PlusIcon} from '@heroicons/react/24/outline';
 import Box from '@/components/design-sytem/box';
-import {
-	Button,
-	Dialog,
-	IconButton,
-	Text,
-	TextArea,
-	TextField,
-} from '@radix-ui/themes';
+import {Button} from '@radix-ui/themes';
 import GigCard from '@/components/gig/card';
-import Separator from '@/components/design-sytem/separator';
-import SearchBox from '@/components/search/Search';
-import {ChevronRight} from '@/components/icons/chevron.right';
-import {ChevronLeft} from '@/components/icons/chevron.left';
-import SelectWithOptions from '@/components/filter-button';
 import PageWithTableShell from '@/components/shells/table-shell';
 import {useSearchParams} from 'next/navigation';
-import {useQuery} from '@tanstack/react-query';
+import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {useSetPageTitle} from '@/layout/context';
+import {buildApiUrlWithParams} from '@/utils/apiUrl';
+import {useEffect} from 'react';
+import {useSearch} from '@/components/search/use-search';
+import {usePagination} from '@/hooks/use-pagination';
+import {FilterConfig, FilterConfigMap, useFilter} from '@/hooks/use-filter';
 
-const tabs = ['All', 'Pending', 'Approved', 'Archived'];
+const tabs = ['All', 'Pending', 'Running', 'Paused', 'Archived'];
+const tabToGigStatus = (status: string) => {
+	switch (status) {
+		case 'all':
+			return null;
+		case 'pending':
+			return 'DRAFT';
+		case 'running':
+			return 'ACTIVE';
+		case 'paused':
+			return 'PAUSED';
+		case 'archived':
+			return 'CLOSED';
+		default:
+			return null;
+	}
+};
 
 export type RewardPolicy = {
 	_id: string;
@@ -63,13 +54,40 @@ export type SurveyGig = {
 	views: number;
 	rewardPolicy: RewardPolicy;
 	createdAt: string;
+	coverImage: string;
+};
+
+const filterConfig: FilterConfigMap = {
+	status: {
+		type: 'select',
+		label: 'Status',
+		options: [
+			{label: 'Active', value: 'active'},
+			{label: 'Inactive', value: 'inactive'},
+		],
+	},
+	amount: {
+		type: 'number',
+		label: 'Amount',
+	},
 };
 
 function Gig() {
 	useSetPageTitle('Gigs');
 	const query = useSearchParams();
+	const {filters, FilterButton, getFilterQuery} = useFilter(filterConfig);
+
 	const activeTab =
 		query.get('tab') || tabs[0].toLowerCase().replaceAll(' ', '-');
+	const searchQuery = useSearch();
+	const {
+		page,
+		pageSize,
+		next,
+		previous,
+		paginationNavParams,
+		onPaginationNavParamsChange,
+	} = usePagination();
 
 	const {
 		data: surveys,
@@ -77,12 +95,37 @@ function Gig() {
 		error,
 		refetch,
 	} = useQuery({
-		queryKey: ['surveys'],
+		queryKey: [
+			'surveys',
+			activeTab,
+			page,
+			pageSize,
+			searchQuery.value,
+			filters,
+		],
 		queryFn: async () => {
-			const response = await axiosInstance.get(SURVEY_ROUTES.GET_SURVEYS);
+			const url = buildApiUrlWithParams(SURVEY_ROUTES.GET_SURVEYS, {
+				status: tabToGigStatus(activeTab),
+				pageSize: pageSize,
+				page: page,
+				s: searchQuery.value,
+			});
+			const response = await axiosInstance.get(url);
+
 			return response;
 		},
+		placeholderData: keepPreviousData,
 	});
+
+	useEffect(() => {
+		if (surveys) {
+			onPaginationNavParamsChange({
+				...paginationNavParams,
+				hasNextPage: surveys.hasNextPage,
+				hasPreviousPage: surveys.hasPreviousPage,
+			});
+		}
+	}, [surveys]);
 
 	return (
 		<GeneralLayout>
@@ -98,14 +141,18 @@ function Gig() {
 					title="Gigs"
 					activeTab={activeTab}
 					tabs={tabs}
-					total={surveys.totalDocs}
-					currentPage={1}
+					total={surveys.total}
+					currentPage={+page}
 					pageSize={10}
-					fetchSurveys={refetch}>
+					hasNextPage={paginationNavParams.hasNextPage}
+					hasPreviousPage={paginationNavParams.hasPreviousPage}
+					nextPage={next}
+					previousPage={previous}
+					fetch={refetch}>
 					<Box
 						css={{padding: '20px 0'}}
 						className="py-2 space-y-[20px]">
-						{surveys.surveys.map((gig: SurveyGig) => (
+						{surveys.docs.map((gig: SurveyGig) => (
 							<GigCard
 								key={gig._id}
 								_id={gig._id}
@@ -115,6 +162,7 @@ function Gig() {
 								questions={gig.questions?.length ?? 0}
 								responses={gig.responses?.length ?? 0}
 								views={gig.views}
+								coverImage={gig.coverImage}
 							/>
 						))}
 					</Box>

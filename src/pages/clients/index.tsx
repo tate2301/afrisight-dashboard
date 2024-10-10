@@ -1,34 +1,24 @@
-import AlertMessage from '@/components/alerts/AlertMessage';
-import Box from '@/components/design-sytem/box';
-import Button from '@/components/design-sytem/button';
-import {Caption, Paragraph} from '@/components/design-sytem/typography';
 import {CheckFill} from '@/components/icons/check.fill';
 import {EnvelopeBadge} from '@/components/icons/envelope.badge';
 import AddClient, {Client} from '@/components/modals/create-client';
-import Pill from '@/components/pill';
+import {useSearch} from '@/components/search/use-search';
 import {useGetCurrentTabFromQuery} from '@/components/shells';
 import PageWithTableShell from '@/components/shells/table-shell';
-import Spinner from '@/components/spinner/Spinner';
 import {DataTable} from '@/components/ui/datatable';
+import TableLink from '@/components/ui/datatable/Link';
+import {usePagination} from '@/hooks/use-pagination';
 import axiosInstance from '@/hooks/useApiFetcher';
+import {useSetPageTitle} from '@/layout/context';
 import GeneralLayout from '@/layout/GeneralLayout';
+import {USER_ROUTES} from '@/lib/api-routes';
+import {buildApiUrlWithParams} from '@/utils/apiUrl';
 import {formatDate} from '@/utils/strings';
-import {CameraIcon, PlusIcon} from '@heroicons/react/24/outline';
-import {
-	Checkbox,
-	Flex,
-	Text,
-	TextField,
-	Dialog,
-	Avatar,
-} from '@radix-ui/themes';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {Checkbox, Flex, Text, Avatar, Badge} from '@radix-ui/themes';
+import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {ColumnDef} from '@tanstack/react-table';
-import {Field, Form, Formik} from 'formik';
-import {MoreHorizontalIcon} from 'lucide-react';
-import {useRef} from 'react';
+import {useEffect} from 'react';
 
-const tabs = ['All', 'With ongoing Gigs', ''];
+const tabs = ['All'];
 
 const clientsColumns: ColumnDef<Client>[] = [
 	{
@@ -43,35 +33,49 @@ const clientsColumns: ColumnDef<Client>[] = [
 				aria-label="Select all"
 			/>
 		),
+		cell: ({row}) => (
+			<Checkbox
+				checked={row.getIsSelected()}
+				onCheckedChange={(value) => row.toggleSelected(!!value)}
+				aria-label="Select row"
+				className="mx-auto"
+			/>
+		),
+		enableSorting: false,
 	},
 	{
 		id: 'client',
 		accessorKey: 'profilePic',
 		header: 'Client',
-		size: 40,
 		cell: ({row}) => {
 			return (
 				<Flex
 					align={'center'}
 					gap={'4'}>
 					<Avatar
-						size={'4'}
+						size={'1'}
 						radius="full"
 						fallback={row.original.email.substring(0, 1)}
 						src={row.original.profilePic}
 						alt={'client profile'}
 					/>
-					<Box>
-						<Paragraph
-							color={'primary'}
-							weight={'semibold'}>
-							{row.original.fullName}
-						</Paragraph>
-						<Paragraph color={'secondary'}>{row.original.email}</Paragraph>
-					</Box>
+					<TableLink href={`/clients/${row.original._id}`}>
+						<Text>{row.original.fullName}</Text>
+					</TableLink>
 				</Flex>
 			);
 		},
+	},
+	{
+		id: 'email',
+		accessorKey: 'email',
+		header: 'Email',
+		size: 280,
+		cell: ({row}) => (
+			<TableLink href={`mailto:${row.original.email}`}>
+				{row.original.email.toLocaleLowerCase()}
+			</TableLink>
+		),
 	},
 
 	{
@@ -79,7 +83,7 @@ const clientsColumns: ColumnDef<Client>[] = [
 		accessorKey: 'isEmailVerified',
 		header: 'Email Verified',
 		cell: ({row, column}) => (
-			<Pill colorScheme={row.original.isEmailVerified ? 'primary' : 'surface'}>
+			<Badge color={row.original.isEmailVerified ? 'blue' : 'gray'}>
 				{row.original.isEmailVerified ? (
 					<>
 						<CheckFill className="size-5" />
@@ -91,43 +95,44 @@ const clientsColumns: ColumnDef<Client>[] = [
 						Verification email sent
 					</>
 				)}
-			</Pill>
+			</Badge>
 		),
+		size: 280,
 	},
 	{
 		id: 'createdAt',
 		accessorKey: 'createdAt',
 		header: 'Joined',
-	},
-	{
-		id: 'gigs',
-		accessorKey: 'gigs',
-		header: 'Gigs',
-	},
-	{
-		id: 'actions',
-		header: '',
-		cell: ({row}) => (
-			<Flex>
-				<Button
-					variant="ghost"
-					colorScheme={'surface'}
-					size={'icon'}>
-					<MoreHorizontalIcon className="size-5" />
-				</Button>
-			</Flex>
-		),
+		size: 280,
 	},
 ];
 
 export default function Clients() {
+	useSetPageTitle('Clients');
 	const currentTab = useGetCurrentTabFromQuery(tabs);
+	const searchQuery = useSearch();
+	const {
+		page,
+		pageSize,
+		next,
+		previous,
+		paginationNavParams,
+		onPaginationNavParamsChange,
+	} = usePagination();
+
 	const {data, isLoading, isError} = useQuery({
-		queryKey: ['clients'],
+		queryKey: ['clients', searchQuery.value, page, pageSize],
 		queryFn: async () => {
-			const res = await axiosInstance.get('/admin/client');
-			const data = res;
-			data.docs = data.docs.map((doc: any) => ({
+			const url = buildApiUrlWithParams(USER_ROUTES.GET_CLIENTS, {
+				pageSize: pageSize,
+				page: page,
+				s: searchQuery.value,
+				profileType: 'CLIENT',
+			});
+			const response = await axiosInstance.get(url);
+			if (!response.docs) throw new Error('No clients found');
+
+			const clients = response.docs.map((doc: any) => ({
 				_id: doc._id,
 				fullName: `${doc.firstname} ${doc.lastName ?? ''}`,
 				email: doc.user.email,
@@ -137,28 +142,49 @@ export default function Clients() {
 				isEmailVerified: doc.user.isEmailVerified,
 				lastLogin: doc.user.lastLogin,
 			}));
-			return res;
+			return {
+				...response,
+				docs: clients,
+			};
 		},
+		placeholderData: keepPreviousData,
 	});
+
+	useEffect(() => {
+		if (data) {
+			onPaginationNavParamsChange({
+				...paginationNavParams,
+				hasNextPage: data.hasNextPage,
+				hasPreviousPage: data.hasPreviousPage,
+			});
+		}
+	}, [data]);
 
 	return (
 		<GeneralLayout>
-			<PageWithTableShell
-				actions={<AddClient />}
-				title="Clients"
-				activeTab={currentTab}
-				tabs={tabs}
-				total={data?.totalDocs}
-				currentPage={data?.currentPage}
-				pageSize={20}
-				fetchSurveys={() => Promise.resolve()}>
-				{data && (
-					<DataTable
-						columns={clientsColumns}
-						data={data?.docs}
-					/>
-				)}
-			</PageWithTableShell>
+			{!isLoading && !isError && (
+				<PageWithTableShell
+					actions={<AddClient />}
+					title="Clients"
+					activeTab={currentTab}
+					tabs={tabs}
+					total={data.total}
+					currentPage={data.page}
+					hasNextPage={paginationNavParams.hasNextPage}
+					hasPreviousPage={paginationNavParams.hasPreviousPage}
+					nextPage={next}
+					previousPage={previous}
+					pageSize={data.limit}
+					isLoading={isLoading}
+					fetch={() => Promise.resolve()}>
+					{data && (
+						<DataTable
+							columns={clientsColumns}
+							data={data?.docs}
+						/>
+					)}
+				</PageWithTableShell>
+			)}
 		</GeneralLayout>
 	);
 }

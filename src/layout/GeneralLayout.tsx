@@ -24,13 +24,7 @@ function GeneralLayout({children}: Props) {
 					)}>
 					<main className="flex h-screen">
 						<Sidebar />
-						<div className="flex-1 h-screen overflow-y-auto">
-							<header className="flex sticky top-0 h-[48px] z-50">
-								<Navbar />
-							</header>
-							<Separator className="sticky top-[48px] z-50" />
-							{children}
-						</div>
+						<div className="flex-1 h-screen overflow-y-auto">{children}</div>
 					</main>
 				</ErrorBoundary>
 			)}

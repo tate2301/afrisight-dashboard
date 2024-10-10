@@ -89,7 +89,7 @@ export default function PayoutRequests() {
 				total={0}
 				currentPage={1}
 				pageSize={10}
-				fetchSurveys={() => Promise.resolve()}>
+				fetch={() => Promise.resolve()}>
 				<DataTable
 					columns={clientsColumns}
 					data={[]}

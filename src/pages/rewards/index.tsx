@@ -1,46 +1,18 @@
-import Box from '@/components/design-sytem/box';
 import {useGetCurrentTabFromQuery} from '@/components/shells';
 import PageWithTableShell from '@/components/shells/table-shell';
 import {DataTable} from '@/components/ui/datatable';
-import {CameraIcon, PlusIcon} from '@heroicons/react/24/outline';
 import GeneralLayout from '@/layout/GeneralLayout';
-import {
-	Avatar,
-	Card,
-	Checkbox,
-	Dialog,
-	Flex,
-	Switch,
-	Text,
-	TextArea,
-	TextField,
-} from '@radix-ui/themes';
+import {Badge, Checkbox, Flex, Spinner} from '@radix-ui/themes';
 import {ColumnDef} from '@tanstack/react-table';
-import useDisclosure from '@/hooks/useDisclosure';
-import CreateVoucher from '@/components/modals/create-voucher';
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-} from '@/components/ui/command';
-import {useState} from 'react';
-import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover';
-import {Check, ChevronsUpDown} from 'lucide-react';
-import {cn} from '@/lib/utils';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import Button from '@/components/design-sytem/button';
-import {Form, Formik} from 'formik';
-import {formatDate} from '@/utils/strings';
-import {Caption} from '@/components/design-sytem/typography';
-import {Combobox, ComboboxItem} from '@/components/ui/combobox';
-import {HrefIcon} from '@/components/icons/href.icon';
-import {EyeFill} from '@/components/icons/eye.fill';
-import {ArrowRight} from '@/components/icons/arrow.right';
+import {useQuery} from '@tanstack/react-query';
 import AddRewardPolicy from '@/components/modals/create-reward-policy';
+import {useSetPageTitle} from '@/layout/context';
+import {Paragraph} from '@/components/design-sytem/typography';
+import {useSearch} from '@/components/search/use-search';
+import {usePagination} from '@/hooks/use-pagination';
+import {buildApiUrlWithParams} from '@/utils/apiUrl';
+import {useEffect} from 'react';
 
 const tabs = ['All', 'Connected', 'Archived'];
 
@@ -49,8 +21,12 @@ type RewardPolicy = {
 	name: string;
 	numberOfRedemptions: number;
 	amount: number;
+	voucher: boolean;
+	points: number;
+	dollarValue: number;
 	extraRewardType: string;
 	createdAt: string;
+	updatedAt: string;
 };
 
 const clientsColumns: ColumnDef<RewardPolicy>[] = [
@@ -66,6 +42,15 @@ const clientsColumns: ColumnDef<RewardPolicy>[] = [
 				aria-label="Select all"
 			/>
 		),
+		cell: ({row}) => (
+			<Checkbox
+				checked={row.getIsSelected()}
+				onCheckedChange={(value) => row.toggleSelected(!!value)}
+				aria-label="Select row"
+			/>
+		),
+		enableSorting: false,
+		size: 32,
 	},
 	{
 		id: 'name',
@@ -76,68 +61,119 @@ const clientsColumns: ColumnDef<RewardPolicy>[] = [
 		id: 'points',
 		accessorKey: 'pointsValue',
 		header: 'Points',
+		enableColumnFilter: true,
 	},
 
 	{
 		id: 'dollarValue',
 		accessorKey: 'dollarValue',
 		header: 'Amount',
+		cell: ({row}) => <Paragraph>${row.original.dollarValue}</Paragraph>,
 	},
 	{
 		id: 'hasVoucher',
 		accessorKey: 'voucher',
 		header: 'Voucher',
+		cell: ({row}) => (
+			<Badge color={row.original.voucher ? 'green' : 'gray'}>
+				{row.original.voucher ? 'Yes' : 'No'}
+			</Badge>
+		),
 	},
 	{
 		id: 'createdAt',
 		accessorKey: 'createdAt',
 		header: 'Created at',
 	},
-	{
-		id: 'actions',
-		header: 'Actions',
-		cell: ({row}) => null,
-	},
 ];
 
 export default function Rewards() {
+	useSetPageTitle('Reward Policies');
 	const currentTab = useGetCurrentTabFromQuery(tabs);
+	const searchQuery = useSearch();
+	const {
+		page,
+		pageSize,
+		next,
+		previous,
+		paginationNavParams,
+		onPaginationNavParamsChange,
+	} = usePagination();
+
 	const {data, isLoading, isError, refetch} = useQuery({
-		queryKey: ['reward-policies'],
+		queryKey: ['reward-policies', searchQuery.value, page, pageSize],
 		queryFn: async () => {
-			const res = await axiosInstance.get('/gamification/reward-policy');
-			// Transform the response data to match the columns
-			return res.map((item: any) => ({
-				id: item._id,
-				name: item.name,
-				description: item.description,
-				dollarValue: item.dollarValue,
-				pointsValue: item.pointsValue,
-				voucher: !!item.voucher,
-				createdAt: new Date(item.createdAt).toLocaleDateString(),
-				updatedAt: new Date(item.updatedAt).toLocaleDateString(),
+			const url = buildApiUrlWithParams('/gamification/reward-policy', {
+				page,
+				pageSize,
+				search: searchQuery.value,
+			});
+			const response = await axiosInstance.get(url);
+			if (!response.docs) throw new Error('No reward policies found');
+			const reward_policies = response.docs.map((reward_policy: any) => ({
+				_id: reward_policy._id,
+				name: reward_policy.name,
+				description: reward_policy.description,
+				dollarValue: reward_policy.dollarValue,
+				pointsValue: reward_policy.pointsValue,
+				voucher: !!reward_policy.voucher,
+				createdAt: new Date(reward_policy.createdAt).toLocaleDateString(),
 			}));
+
+			return {
+				...response,
+				docs: reward_policies,
+			};
 		},
 	});
 
+	useEffect(() => {
+		if (data) {
+			onPaginationNavParamsChange({
+				...paginationNavParams,
+				hasNextPage: data.hasNextPage,
+				hasPreviousPage: data.hasPreviousPage,
+			});
+		}
+	}, [data]);
+
 	return (
 		<GeneralLayout>
-			<PageWithTableShell
-				actions={<AddRewardPolicy />}
-				title="Reward policies"
-				activeTab={currentTab}
-				tabs={tabs}
-				total={0}
-				currentPage={1}
-				pageSize={10}
-				fetchSurveys={() => Promise.resolve()}>
-				{data && (
-					<DataTable
-						columns={clientsColumns}
-						data={data}
-					/>
-				)}
-			</PageWithTableShell>
+			{isLoading && (
+				<Flex
+					justify="center"
+					align="center"
+					style={{height: '100vh'}}>
+					<Spinner />
+				</Flex>
+			)}
+			{!isLoading && !isError && (
+				<PageWithTableShell
+					actions={
+						<>
+							<AddRewardPolicy />
+						</>
+					}
+					title="Reward policies"
+					activeTab={currentTab}
+					tabs={tabs}
+					total={data.total}
+					currentPage={data.page}
+					hasNextPage={paginationNavParams.hasNextPage}
+					hasPreviousPage={paginationNavParams.hasPreviousPage}
+					nextPage={next}
+					previousPage={previous}
+					pageSize={data.limit}
+					isLoading={isLoading}
+					fetch={() => Promise.resolve()}>
+					{data && (
+						<DataTable
+							columns={clientsColumns}
+							data={data.docs}
+						/>
+					)}
+				</PageWithTableShell>
+			)}
 		</GeneralLayout>
 	);
 }

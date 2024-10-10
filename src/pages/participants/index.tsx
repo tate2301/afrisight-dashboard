@@ -77,19 +77,7 @@ export default function Participants() {
 	const currentTab = useGetCurrentTabFromQuery(tabs);
 	return (
 		<GeneralLayout>
-			<PageWithTableShell
-				title="Participants"
-				activeTab={currentTab}
-				tabs={tabs}
-				total={0}
-				currentPage={1}
-				pageSize={10}
-				fetchSurveys={() => Promise.resolve()}>
-				<DataTable
-					columns={clientsColumns}
-					data={[]}
-				/>
-			</PageWithTableShell>
+			<></>
 		</GeneralLayout>
 	);
 }

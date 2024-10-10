@@ -79,7 +79,7 @@ export function FieldList() {
 				<Paragraph
 					as={'h3'}
 					weight={'bold'}
-					className="text-md font-semibold mb-2 px-4">
+					className="text-md font-medium mb-2 px-4">
 					Add question
 				</Paragraph>
 				<div className="grid grid-cols-2 gap-2 px-4">

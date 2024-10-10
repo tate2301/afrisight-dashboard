@@ -76,6 +76,7 @@ const Sidebar = () => {
 				borderRight: '1px solid $gray2',
 				width: SIDEBAR_WIDTH,
 				gap: 0,
+				backgroundColor: '$gray1',
 			}}>
 			<Flex
 				className="relative items-center"

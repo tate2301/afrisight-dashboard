@@ -49,7 +49,7 @@ const UserManagementInterface = ({id}: {id: string}) => {
 						<Breadcrumbs items={['Users', profile.user._id]} />
 						<div className="flex justify-between items-center mb-8">
 							<div>
-								<h1 className="text-3xl font-bold text-zinc-900">
+								<h1 className="text-3xl font-medium text-zinc-900">
 									{profile.firstname &&
 										profile.firstname + ' ' + profile.surname}{' '}
 									{!profile.firstname && profile.user.username}{' '}
@@ -88,7 +88,7 @@ const UserManagementInterface = ({id}: {id: string}) => {
 					{/* Details sidebar */}
 					<aside className="w-80 p-4">
 						<div className="flex justify-between pb-2 border-b  mb-4 ">
-							<h2 className="font-bold text-lg text-zinc-900">Details</h2>
+							<h2 className="font-medium text-lg text-zinc-900">Details</h2>
 							<button className="flex items-center justify-center size-[28px] rounded-md pressable-shadow">
 								<Pencil size={16} />
 							</button>
@@ -112,7 +112,7 @@ const SectionTitle = ({
 }) => (
 	<div>
 		<div className="flex justify-between items-center mb-2 border-b pb-2">
-			<h3 className="font-bold text-zinc-900 text-lg">{title}</h3>
+			<h3 className="font-medium text-zinc-900 text-lg">{title}</h3>
 			<div className="flex items-center gap-4">{actions}</div>
 		</div>
 		{subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
@@ -262,7 +262,7 @@ const PointsBalanceSection = (props: TProfile) => {
 			/>
 			<div className="mt-2">
 				<div className="flex gap-1 mb-1">
-					<p className="font-semibold text-zinc-900">24</p>
+					<p className="font-medium text-zinc-900">24</p>
 					<p>points</p>
 				</div>
 				<p className="text-sm">User can earn points by participating in gigs</p>
@@ -347,7 +347,7 @@ const DetailItem = ({
 	value: string | ReactNode;
 }) => (
 	<div>
-		<div className="text-zinc-900 font-semibold">{label}</div>
+		<div className="text-zinc-900 font-medium">{label}</div>
 		<div className="">{value}</div>
 	</div>
 );

@@ -94,7 +94,7 @@ const AddUser = ({trigger, callback}: AddModalProp) => {
 			</Dialog.Trigger>
 
 			<Dialog.Content maxWidth="450px">
-				<Dialog.Title>Add team member</Dialog.Title>
+				<Dialog.Title weight={'medium'}>Add team member</Dialog.Title>
 				<Dialog.Description
 					size="2"
 					mb="8">

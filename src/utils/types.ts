@@ -213,3 +213,30 @@ export type PaginatedResponse<T> = {
 	totalDocs: number;
 	totalPages: number;
 };
+
+export type SortDirection = 'asc' | 'desc';
+
+export interface SortState {
+	column: string;
+	direction: SortDirection;
+}
+
+export type FilterOperator =
+	| 'eq'
+	| 'neq'
+	| 'gt'
+	| 'gte'
+	| 'lt'
+	| 'lte'
+	| 'contains'
+	| 'between';
+
+export interface FilterValue {
+	operator: FilterOperator;
+	value: any;
+	additionalValue?: any; // For 'between' operator
+}
+
+export interface FilterState {
+	[key: string]: FilterValue;
+}

@@ -7,9 +7,14 @@ export type GigShellProps = {
 	total: number;
 	currentPage: number;
 	pageSize: number;
+	hasNextPage: boolean;
+	hasPreviousPage: boolean;
+	isLoading?: boolean;
 	children: React.ReactNode;
 	tabs: string[];
-	fetchSurveys: () => Promise<any>;
+	nextPage: () => void;
+	previousPage: () => void;
+	fetch: () => Promise<any>;
 };
 
 export const useGetCurrentTabFromQuery = (tabs: string[]) => {

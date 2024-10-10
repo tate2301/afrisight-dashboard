@@ -7,14 +7,6 @@ import axiosInstance from '@/hooks/useApiFetcher';
 import {SURVEY_ROUTES} from '@/lib/api-routes';
 import {Save} from 'lucide-react';
 import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table';
-import {
 	Badge,
 	Button,
 	Checkbox,
@@ -26,17 +18,19 @@ import {FormBuilder} from '@/forms-builder/components/FormBuilder';
 import {FormProvider, useFormContext} from '@/forms-builder/context';
 import Flex from '@/components/design-sytem/flex';
 import Box from '@/components/design-sytem/box';
-import {
-	ColumnDef,
-	flexRender,
-	getCoreRowModel,
-	useReactTable,
-} from '@tanstack/react-table';
+import {ColumnDef, getCoreRowModel, useReactTable} from '@tanstack/react-table';
 import {useFormik} from 'formik';
-import {Caption, H2, H3, Paragraph} from '@/components/design-sytem/typography';
+import {
+	Caption,
+	H1,
+	H2,
+	H3,
+	Paragraph,
+} from '@/components/design-sytem/typography';
 import Separator from '@/components/design-sytem/separator';
 import apiClient from '@/hooks/useApiFetcher';
 import {
+	keepPreviousData,
 	UseMutateFunction,
 	useMutation,
 	useQuery,
@@ -48,6 +42,7 @@ import {GigClientInfo} from '@/components/gig-form/GigClientInfo';
 import {withFormState} from '@/components/gig-form/withFormState';
 import {GigDateInfo} from '@/components/gig-form/GigDateInfo';
 import {GigRewardPolicy} from '@/components/gig-form/GigRewardPolicy';
+import {DataTable} from '@/components/ui/datatable';
 
 type User = {
 	role: 'CLIENT';
@@ -334,20 +329,32 @@ const NavActions = ({
 			alignItems="center"
 			className="px-4"
 			css={{gap: '8px'}}>
-			<Badge style={{fontWeight: 600}}>{status}</Badge>
+			<Badge
+				style={{fontWeight: '500'}}
+				color={
+					status === 'DRAFT' ? 'blue' : status === 'ACTIVE' ? 'green' : 'red'
+				}>
+				{status}
+			</Badge>
+			<Button
+				color={
+					status === 'DRAFT' ? 'blue' : status === 'ACTIVE' ? 'red' : 'green'
+				}
+				loading={isPublishing}
+				onClick={onPublish}>
+				{status === 'DRAFT'
+					? 'Enable submissions'
+					: status === 'PAUSED'
+						? 'Resume submissions'
+						: 'Pause submissions'}
+			</Button>
 			<Button
 				variant="outline"
-				color="gray"
+				color="blue"
 				loading={isSaving}
 				onClick={onSaveChanges}>
 				<Save className="size-4 mr-2" />
 				Save changes
-			</Button>
-			<Button
-				color={status === 'DRAFT' ? 'blue' : 'red'}
-				loading={isPublishing}
-				onClick={onPublish}>
-				{status === 'DRAFT' ? 'Publish' : 'Pause'}
 			</Button>
 		</Flex>
 	);
@@ -629,12 +636,11 @@ const BehaviorTab = ({_id, mutate, isPending, formik}: TabProps) => {
 		<Tabs.Content value="additional">
 			<Section className="container mx-auto">
 				<form onSubmit={formik.handleSubmit}>
-					<H2
-						weight={'semibold'}
+					<H1
 						color={'primary'}
 						className="mb-6">
 						Gig behaviour and options
-					</H2>
+					</H1>
 					<QuestionOrderingSection formik={formik} />
 					<DifficultySection formik={formik} />
 					<FormTabBottomBar
@@ -729,68 +735,61 @@ const responsesColumns: ColumnDef<Response>[] = [
 			/>
 		),
 		enableSorting: false,
+		size: 40,
 	},
 	{
 		id: 'email',
 		accessorKey: 'email',
 		header: 'Email',
+		size: 400,
 	},
 ];
 
 const ResponsesTab = ({_id}: {_id: string}) => {
 	const [columns, setColumns] = useState(responsesColumns);
+	const {form} = useFormContext();
+
+	const gigResponses = useQuery({
+		queryKey: ['responses', _id],
+		queryFn: async () => {
+			const res = await axiosInstance.get(`/admin/gigs/${_id}/responses`);
+			return res;
+		},
+		enabled: !!_id,
+		placeholderData: keepPreviousData,
+	});
+
+	console.log({gigResponses});
 
 	const table = useReactTable({
 		data: [],
-		columns: responsesColumns,
+		columns: columns,
 		getCoreRowModel: getCoreRowModel(),
 	});
 
+	const questionsAsColumns = useMemo(() => {
+		if (!form) return [];
+		const questions = form.fields ?? [];
+		const columns = questions.map((question) => ({
+			id: question.id,
+			// label: question.label,replaced spaces with underscores
+			accessorKey: question.id,
+			header: question.label,
+		}));
+
+		return columns;
+	}, [form]);
+
+	useEffect(() => {
+		setColumns([...responsesColumns, ...questionsAsColumns]);
+	}, [questionsAsColumns]);
+
 	return (
 		<Tabs.Content value={'responses'}>
-			<Table>
-				<TableHeader>
-					{table.getHeaderGroups().map((headerGroup) => (
-						<TableRow key={headerGroup.id}>
-							{headerGroup.headers.map((header) => {
-								return (
-									<TableHead key={header.id}>
-										{header.isPlaceholder
-											? null
-											: flexRender(
-													header.column.columnDef.header,
-													header.getContext(),
-												)}
-									</TableHead>
-								);
-							})}
-						</TableRow>
-					))}
-				</TableHeader>
-				<TableBody>
-					{table.getRowModel().rows?.length ? (
-						table.getRowModel().rows.map((row) => (
-							<TableRow
-								key={row.id}
-								data-state={row.getIsSelected() && 'selected'}>
-								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id}>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</TableCell>
-								))}
-							</TableRow>
-						))
-					) : (
-						<TableRow>
-							<TableCell
-								colSpan={responsesColumns.length}
-								className="h-24 text-center">
-								No results.
-							</TableCell>
-						</TableRow>
-					)}
-				</TableBody>
-			</Table>
+			<DataTable
+				columns={columns}
+				data={[]}
+			/>
 		</Tabs.Content>
 	);
 };

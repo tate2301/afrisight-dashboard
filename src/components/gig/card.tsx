@@ -9,7 +9,7 @@ import {Badge, Button, IconButton} from '@radix-ui/themes';
 import {ChevronRight} from '../icons/chevron.right';
 import {ArrowRight} from '../icons/arrow.right';
 
-type GigStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'CLOSED';
+type GigStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'CLOSED' | 'COMPLETED';
 
 interface GigProps {
 	_id: string;
@@ -19,6 +19,7 @@ interface GigProps {
 	views: number;
 	createdDate: string;
 	status: GigStatus;
+	coverImage?: string;
 }
 
 const GigCard = ({
@@ -29,6 +30,7 @@ const GigCard = ({
 	createdDate,
 	status,
 	_id,
+	coverImage = '/gig-placeholder.png',
 }: GigProps) => {
 	const isPending = status === 'DRAFT';
 	const isPublished = status === 'ACTIVE';
@@ -40,7 +42,7 @@ const GigCard = ({
 			<Flex className="items-start px-4 gap-8">
 				<div className="w-[100px] h-[100px] relative">
 					<Image
-						src="/gig-placeholder.png"
+						src={coverImage}
 						alt="Gig Image"
 						layout="fill"
 						objectFit="cover"
@@ -59,7 +61,6 @@ const GigCard = ({
 									weight={'semibold'}>
 									{title}
 								</Paragraph>
-								<GigStatus status={status} />
 							</Flex>
 							<div className="text-sm text-gray-500">
 								{questions} questions • {responses} responses • {views} views
@@ -72,16 +73,7 @@ const GigCard = ({
 						</Caption>
 					</div>
 					<Flex className="ml-4 gap-4 flex items-center">
-						{isPending && <Button variant={'ghost'}>Publish Gig</Button>}
-						<Link
-							css={{alignItems: 'center', display: 'flex', gap: 8}}
-							href="#"
-							className="ml-4">
-							View
-							<IconButton variant="ghost">
-								<ArrowRight />
-							</IconButton>
-						</Link>
+						<GigStatus status={status} />
 					</Flex>
 				</Flex>
 			</Flex>
@@ -95,12 +87,14 @@ const GigStatus = ({status}: {status: GigStatus}) => {
 		ACTIVE: icons.check_fill,
 		CLOSED: icons.x_fill,
 		PAUSED: icons.x_fill,
+		COMPLETED: icons.check_fill,
 	};
 	const statusText = {
 		DRAFT: 'Pending approval',
 		ACTIVE: 'Ongoing',
 		CLOSED: 'Closed',
 		PAUSED: 'Paused',
+		COMPLETED: 'Completed',
 	};
 
 	const statusColor = {
@@ -108,6 +102,7 @@ const GigStatus = ({status}: {status: GigStatus}) => {
 		ACTIVE: 'green',
 		CLOSED: 'yellow',
 		PAUSED: 'red',
+		COMPLETED: 'green',
 	};
 
 	const StatusIcon = statusIcons[status];
@@ -116,9 +111,9 @@ const GigStatus = ({status}: {status: GigStatus}) => {
 		<Badge
 			// @ts-ignore
 			color={statusColor[status]}
-			className={`px-2 pr-4 h-[24px] text-sm font-medium rounded-full flex items-center`}>
+			className={`pr-4 h-[24px] text-sm font-medium flex items-center`}>
 			<StatusIcon className="size-4" />
-			{statusText[status]}
+			{statusText[status] ?? ''}
 		</Badge>
 	);
 };

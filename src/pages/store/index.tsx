@@ -19,7 +19,7 @@ export default function Store() {
 				total={0}
 				currentPage={1}
 				pageSize={10}
-				fetchSurveys={() => Promise.resolve()}>
+				fetch={() => Promise.resolve()}>
 				<Grid
 					columns={{initial: '1', sm: '2', md: '3', lg: '4'}}
 					gap={'3'}

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {FormEvent, useContext, useState} from 'react';
 import axios from 'axios';
 import {apiUrl} from '../utils/apiUrl';
 import AlertMessage from '../components/alerts/AlertMessage';
@@ -24,7 +24,8 @@ function Home() {
 	const router = useRouter();
 	const {login} = useAuth();
 
-	const loginToDashboard = async () => {
+	const loginToDashboard = async (e: FormEvent) => {
+		e.preventDefault();
 		setLoading(true);
 		try {
 			const {data} = await axios.post(`${apiUrl}/auth/login/email`, {
@@ -61,8 +62,10 @@ function Home() {
 	return (
 		<div className="w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
 			<CXMappersHeader subtitle="Business Portal" />
-			<div className="p-4 md:p-0 max-w-sm mx-auto w-full flex flex-col space-y-6">
-				<h3 className="text-lg text-zinc-900 font-bold">Sign in</h3>
+			<form
+				onSubmit={loginToDashboard}
+				className="p-4 md:p-0 max-w-sm mx-auto w-full flex flex-col space-y-6">
+				<h3 className="text-lg text-zinc-900 font-medium">Sign in</h3>
 				<div className="flex flex-col space-y-2">
 					<label
 						htmlFor="username"
@@ -111,12 +114,8 @@ function Home() {
 					/>
 				)}
 
-				<Button
-					loading={loading}
-					onClick={loginToDashboard}>
-					Sign in
-				</Button>
-			</div>
+				<Button loading={loading}>Sign in</Button>
+			</form>
 		</div>
 	);
 }
