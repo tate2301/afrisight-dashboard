@@ -12,30 +12,7 @@ export default function Store() {
 	const currentTab = useGetCurrentTabFromQuery(tabs);
 	return (
 		<GeneralLayout>
-			<PageWithTableShell
-				title="In-App Store"
-				activeTab={currentTab}
-				tabs={tabs}
-				total={0}
-				currentPage={1}
-				pageSize={10}
-				fetch={() => Promise.resolve()}>
-				<Grid
-					columns={{initial: '1', sm: '2', md: '3', lg: '4'}}
-					gap={'3'}
-					className="p-4">
-					<StoreItemCard
-						_id="1"
-						title="Item 1"
-						totalSales={100}
-						totalSupply={100}
-						views={100}
-						price={100}
-						createdAt="2024-02-02"
-						status="active"
-					/>
-				</Grid>
-			</PageWithTableShell>
+			<></>
 		</GeneralLayout>
 	);
 }

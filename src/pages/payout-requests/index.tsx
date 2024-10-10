@@ -82,19 +82,7 @@ export default function PayoutRequests() {
 	const currentTab = useGetCurrentTabFromQuery(tabs);
 	return (
 		<GeneralLayout>
-			<PageWithTableShell
-				title="Payout Requests"
-				activeTab={currentTab}
-				tabs={tabs}
-				total={0}
-				currentPage={1}
-				pageSize={10}
-				fetch={() => Promise.resolve()}>
-				<DataTable
-					columns={clientsColumns}
-					data={[]}
-				/>
-			</PageWithTableShell>
+			<></>
 		</GeneralLayout>
 	);
 }
