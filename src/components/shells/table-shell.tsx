@@ -78,15 +78,7 @@ export default function PageWithTableShell({
 							)}
 						</Flex>
 
-						<Flex className="flex-1 justify-end">
-							{actions}
-							<Button
-								size={'2'}
-								color="gray"
-								variant="outline">
-								Export <CloudDownload className="size-4" />
-							</Button>
-						</Flex>
+						<Flex className="flex-1 justify-end">{actions}</Flex>
 					</Flex>
 				</Flex>
 				{isLoading && (

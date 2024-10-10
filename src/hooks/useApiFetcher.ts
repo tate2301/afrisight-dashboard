@@ -1,149 +1,190 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from "axios";
-import { apiUrl } from "../utils/apiUrl";
-import { AUTH_ROUTES } from "@/lib/api-routes";
+import axios, {
+	AxiosInstance,
+	InternalAxiosRequestConfig,
+	AxiosResponse,
+} from 'axios';
+import {apiUrl} from '../utils/apiUrl';
+import {AUTH_ROUTES} from '@/lib/api-routes';
 import {
-  getAccessTokenFromCookies,
-  getRefreshTokenFromCookies,
-  setAccessTokenToCookies,
-  setRefreshTokenToCookies,
-} from "./cookies";
-import { useAuth } from "@/context/AuthContext";
+	getAccessTokenFromCookies,
+	getRefreshTokenFromCookies,
+	setAccessTokenToCookies,
+	setRefreshTokenToCookies,
+} from './cookies';
+import {useAuth} from '@/context/AuthContext';
 
 class ApiClient {
-  private static instance: ApiClient;
-  private axiosInstance: AxiosInstance;
-  private isRefreshing = false;
-  private failedQueue: Array<{
-    resolve: (value?: unknown) => void;
-    reject: (reason?: any) => void;
-  }> = [];
+	private static instance: ApiClient;
+	private axiosInstance: AxiosInstance;
+	private isRefreshing = false;
+	private failedQueue: Array<{
+		resolve: (value?: unknown) => void;
+		reject: (reason?: any) => void;
+	}> = [];
 
-  private constructor() {
-    this.axiosInstance = axios.create({
-      baseURL: apiUrl,
-    });
+	private constructor() {
+		this.axiosInstance = axios.create({
+			baseURL: apiUrl,
+		});
 
-    this.setupInterceptors();
-  }
+		this.setupInterceptors();
+	}
 
-  public static getInstance(): ApiClient {
-    if (!ApiClient.instance) {
-      ApiClient.instance = new ApiClient();
-    }
-    return ApiClient.instance;
-  }
+	public static getInstance(): ApiClient {
+		if (!ApiClient.instance) {
+			ApiClient.instance = new ApiClient();
+		}
+		return ApiClient.instance;
+	}
 
-  private setupInterceptors(): void {
-    this.axiosInstance.interceptors.request.use(
-      this.handleRequest,
-      this.handleRequestError
-    );
+	private setupInterceptors(): void {
+		this.axiosInstance.interceptors.request.use(
+			this.handleRequest,
+			this.handleRequestError,
+		);
 
-    this.axiosInstance.interceptors.response.use(
-      this.handleResponse,
-      this.handleResponseError
-    );
-  }
+		this.axiosInstance.interceptors.response.use(
+			this.handleResponse,
+			this.handleResponseError,
+		);
+	}
 
-  private handleRequest = async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
-    const accessToken = await getAccessTokenFromCookies();
-    if (accessToken) {
-      config.headers = config.headers || {};
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-    }
-    return config;
-  };
+	private handleRequest = async (
+		config: InternalAxiosRequestConfig,
+	): Promise<InternalAxiosRequestConfig> => {
+		const accessToken = await getAccessTokenFromCookies();
+		if (accessToken) {
+			config.headers = config.headers || {};
+			config.headers['Authorization'] = `Bearer ${accessToken}`;
+		}
+		return config;
+	};
 
-  private handleRequestError = (error: any): Promise<never> => {
-    return Promise.reject(error);
-  };
+	private handleRequestError = (error: any): Promise<never> => {
+		return Promise.reject(error);
+	};
 
-  private handleResponse = (response: AxiosResponse): AxiosResponse => {
-    return response;
-  };
+	private handleResponse = (response: AxiosResponse): AxiosResponse => {
+		return response;
+	};
 
-  private handleResponseError = async (error: any): Promise<any> => {
-    const originalRequest = error.config;
+	private handleResponseError = async (error: any): Promise<any> => {
+		const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      if (this.isRefreshing) {
-        return new Promise((resolve, reject) => {
-          this.failedQueue.push({ resolve, reject });
-        }).then((token) => {
-          originalRequest.headers["Authorization"] = `Bearer ${token}`;
-          return this.axiosInstance(originalRequest);
-        }).catch((err) => {
-          return Promise.reject(err);
-        });
-      }
+		if (error.response?.status === 401 && !originalRequest._retry) {
+			if (this.isRefreshing) {
+				return new Promise((resolve, reject) => {
+					this.failedQueue.push({resolve, reject});
+				})
+					.then((token) => {
+						originalRequest.headers['Authorization'] = `Bearer ${token}`;
+						return this.axiosInstance(originalRequest);
+					})
+					.catch((err) => {
+						return Promise.reject(err);
+					});
+			}
 
-      originalRequest._retry = true;
-      this.isRefreshing = true;
+			originalRequest._retry = true;
+			this.isRefreshing = true;
 
-      try {
-        const refreshToken = await getRefreshTokenFromCookies();
-        if (!refreshToken) {
-          throw new Error("No refresh token available");
-        }
+			try {
+				const refreshToken = await getRefreshTokenFromCookies();
+				if (!refreshToken) {
+					throw new Error('No refresh token available');
+				}
 
-        const response = await this.axiosInstance.post(AUTH_ROUTES.REFRESH_TOKEN, {
-          refreshToken,
-        });
+				const response = await this.axiosInstance.post(
+					AUTH_ROUTES.REFRESH_TOKEN,
+					{
+						refreshToken,
+					},
+				);
 
-        const { accessToken, refreshToken: newRefreshToken } = response.data;
+				const {accessToken, refreshToken: newRefreshToken} = response.data;
 
-        await setAccessTokenToCookies(accessToken);
-        await setRefreshTokenToCookies(newRefreshToken);
+				await setAccessTokenToCookies(accessToken);
+				await setRefreshTokenToCookies(newRefreshToken);
 
-        this.axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        this.processQueue(null, accessToken);
-        return this.axiosInstance(originalRequest);
-      } catch (refreshError) {
-        this.processQueue(refreshError, null);
-        await this.handleLogout();
-        return Promise.reject(refreshError);
-      } finally {
-        this.isRefreshing = false;
-      }
-    }
+				this.axiosInstance.defaults.headers.common['Authorization'] =
+					`Bearer ${accessToken}`;
+				this.processQueue(null, accessToken);
+				return this.axiosInstance(originalRequest);
+			} catch (refreshError) {
+				this.processQueue(refreshError, null);
+				await this.handleLogout();
+				return Promise.reject(refreshError);
+			} finally {
+				this.isRefreshing = false;
+			}
+		}
 
-    return Promise.reject(error);
-  };
+		return Promise.reject(error);
+	};
 
-  private async handleLogout(): Promise<void> {
-    await setAccessTokenToCookies("");
-    await setRefreshTokenToCookies("");
-    const { logout } = useAuth();
-    await logout();
-  }
+	private async handleLogout(): Promise<void> {
+		await setAccessTokenToCookies('');
+		await setRefreshTokenToCookies('');
+		const {logout} = useAuth();
+		await logout();
+	}
 
-  private processQueue(error: any, token: string | null = null): void {
-    this.failedQueue.forEach((prom) => {
-      if (error) {
-        prom.reject(error);
-      } else {
-        prom.resolve(token);
-      }
-    });
+	private processQueue(error: any, token: string | null = null): void {
+		this.failedQueue.forEach((prom) => {
+			if (error) {
+				prom.reject(error);
+			} else {
+				prom.resolve(token);
+			}
+		});
 
-    this.failedQueue = [];
-  }
+		this.failedQueue = [];
+	}
 
-  public async get<T = any>(url: string, config?: InternalAxiosRequestConfig): Promise<T> {
-    return this.axiosInstance.get<T>(url, config).then((response) => response.data);
-  }
+	public async getAndReturnHeaders<T = any>(
+		url: string,
+		config?: InternalAxiosRequestConfig,
+	): Promise<AxiosResponse<T, any>> {
+		return this.axiosInstance.get<T>(url, config).then((response) => response);
+	}
 
-  public async post<T = any>(url: string, data?: any, config?: InternalAxiosRequestConfig): Promise<T> {
-    return this.axiosInstance.post<T>(url, data, config).then((response) => response.data);
-  }
+	public async get<T = any>(
+		url: string,
+		config?: InternalAxiosRequestConfig,
+	): Promise<T> {
+		return this.axiosInstance
+			.get<T>(url, config)
+			.then((response) => response.data);
+	}
 
-  public async put<T = any>(url: string, data?: any, config?: InternalAxiosRequestConfig): Promise<T> {
-    return this.axiosInstance.put<T>(url, data, config).then((response) => response.data);
-  }
+	public async post<T = any>(
+		url: string,
+		data?: any,
+		config?: InternalAxiosRequestConfig,
+	): Promise<T> {
+		return this.axiosInstance
+			.post<T>(url, data, config)
+			.then((response) => response.data);
+	}
 
-  public async delete<T = any>(url: string, config?: InternalAxiosRequestConfig): Promise<T> {
-    return this.axiosInstance.delete<T>(url, config).then((response) => response.data);
-  }
+	public async put<T = any>(
+		url: string,
+		data?: any,
+		config?: InternalAxiosRequestConfig,
+	): Promise<T> {
+		return this.axiosInstance
+			.put<T>(url, data, config)
+			.then((response) => response.data);
+	}
+
+	public async delete<T = any>(
+		url: string,
+		config?: InternalAxiosRequestConfig,
+	): Promise<T> {
+		return this.axiosInstance
+			.delete<T>(url, config)
+			.then((response) => response.data);
+	}
 }
 
 const apiClient = ApiClient.getInstance();

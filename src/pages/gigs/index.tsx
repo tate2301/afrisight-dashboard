@@ -10,11 +10,12 @@ import PageWithTableShell from '@/components/shells/table-shell';
 import {useSearchParams} from 'next/navigation';
 import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {useSetPageTitle} from '@/layout/context';
-import {buildApiUrlWithParams} from '@/utils/apiUrl';
+import {apiUrl, buildApiUrlWithParams} from '@/utils/apiUrl';
 import {useEffect} from 'react';
 import {useSearch} from '@/components/search/use-search';
 import {usePagination} from '@/hooks/use-pagination';
 import {FilterConfig, FilterConfigMap, useFilter} from '@/hooks/use-filter';
+import {CloudDownloadIcon} from 'lucide-react';
 
 const tabs = ['All', 'Pending', 'Running', 'Paused', 'Archived'];
 const tabToGigStatus = (status: string) => {
@@ -127,16 +128,55 @@ function Gig() {
 		}
 	}, [surveys]);
 
+	const downloadExportedFile = async () => {
+		const url = buildApiUrlWithParams('/survey/export', {});
+		const response = await axiosInstance.getAndReturnHeaders(
+			url,
+			// @ts-ignore
+			{
+				responseType: 'blob',
+			},
+		);
+
+		const blob = new Blob([response.data], {
+			type: response.headers['content-type'],
+		});
+
+		const contentDisposition = response.headers['content-disposition'];
+		let fileName = 'export.csv';
+		if (contentDisposition) {
+			const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/i);
+			if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+		}
+
+		// Create a link element and trigger the download
+		const link = document.createElement('a');
+		link.href = window.URL.createObjectURL(blob);
+		link.download = fileName;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	};
+
 	return (
 		<GeneralLayout>
 			{!isLoading && !error && (
 				<PageWithTableShell
 					actions={
-						<Link href={'/gigs/create_gig'}>
-							<Button>
-								<PlusIcon className="size-4" /> Create gig
+						<>
+							<Link href={'/gigs/create_gig'}>
+								<Button>
+									<PlusIcon className="size-4" /> Create gig
+								</Button>
+							</Link>
+							<Button
+								size={'2'}
+								onClick={downloadExportedFile}
+								color="gray"
+								variant="outline">
+								Export <CloudDownloadIcon className="size-4" />
 							</Button>
-						</Link>
+						</>
 					}
 					title="Gigs"
 					activeTab={activeTab}
