@@ -6,7 +6,7 @@ import {PlusIcon} from '@heroicons/react/24/outline';
 import Box from '@/components/design-sytem/box';
 import {Button} from '@radix-ui/themes';
 import GigCard from '@/components/gig/card';
-import PageWithTableShell from '@/components/shells/table-shell';
+import TablePageHeader from '@/components/shells/TablePageHeader';
 import {useSearchParams} from 'next/navigation';
 import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {useSetPageTitle} from '@/layout/context';
@@ -16,6 +16,7 @@ import {useSearch} from '@/components/search/use-search';
 import {usePagination} from '@/hooks/use-pagination';
 import {FilterConfig, FilterConfigMap, useFilter} from '@/hooks/use-filter';
 import {CloudDownloadIcon} from 'lucide-react';
+import Separator from '@/components/design-sytem/separator';
 
 const tabs = ['All', 'Pending', 'Running', 'Paused', 'Archived'];
 const tabToGigStatus = (status: string) => {
@@ -161,34 +162,40 @@ function Gig() {
 	return (
 		<GeneralLayout>
 			{!isLoading && !error && (
-				<PageWithTableShell
-					actions={
-						<>
-							<Link href={'/gigs/create_gig'}>
-								<Button>
-									<PlusIcon className="size-4" /> Create gig
-								</Button>
-							</Link>
-							<Button
-								size={'2'}
-								onClick={downloadExportedFile}
-								color="gray"
-								variant="outline">
-								Export <CloudDownloadIcon className="size-4" />
-							</Button>
-						</>
-					}
-					title="Gigs"
-					activeTab={activeTab}
-					tabs={tabs}
-					total={surveys.total}
-					currentPage={+page}
-					pageSize={10}
-					hasNextPage={paginationNavParams.hasNextPage}
-					hasPreviousPage={paginationNavParams.hasPreviousPage}
-					nextPage={next}
-					previousPage={previous}
-					fetch={refetch}>
+				<>
+					<Box className="sticky top-0 z-10 bg-white">
+						<TablePageHeader
+							actions={
+								<>
+									<Button
+										size={'2'}
+										onClick={downloadExportedFile}
+										color="gray"
+										variant="soft"
+										radius={'full'}>
+										<CloudDownloadIcon className="size-4" /> Export
+									</Button>
+									<Link href={'/gigs/create_gig'}>
+										<Button radius={'full'}>
+											<PlusIcon className="size-4" /> Create gig
+										</Button>
+									</Link>
+								</>
+							}
+							title="Gigs"
+							activeTab={activeTab}
+							tabs={tabs}
+							total={surveys.total}
+							currentPage={+page}
+							pageSize={10}
+							hasNextPage={paginationNavParams.hasNextPage}
+							hasPreviousPage={paginationNavParams.hasPreviousPage}
+							nextPage={next}
+							previousPage={previous}
+							fetch={refetch}
+						/>
+						<Separator />
+					</Box>
 					<Box
 						css={{padding: '20px 0'}}
 						className="py-2 space-y-[20px]">
@@ -206,7 +213,7 @@ function Gig() {
 							/>
 						))}
 					</Box>
-				</PageWithTableShell>
+				</>
 			)}
 		</GeneralLayout>
 	);

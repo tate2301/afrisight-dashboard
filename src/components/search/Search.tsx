@@ -2,6 +2,7 @@ import {MagnifyingGlassIcon} from '@heroicons/react/24/outline';
 import React, {useState, useEffect} from 'react';
 import Box from '../design-sytem/box';
 import {Search as SearchIcon} from '@/components/icons/search';
+import {TextField} from '@radix-ui/themes';
 
 type SearchProps = {
 	value: string;
@@ -41,22 +42,24 @@ function SearchBox({value, onChange}: SearchProps) {
 	}, [debouncedSearchQuery]);
 
 	return (
-		<Box className="flex flex-row items-center border border-zinc-400/20 group group-focus-within:border-zinc-400/30 text-sm rounded-lg space-x-2 h-[32px] w-96 relative">
+		<label className="flex flex-row items-center text-sm space-x-2 h-[32px] w-96 relative">
 			<SearchIcon
-				className="text-zinc-400 absolute left-2 size-5"
+				className="text-zinc-400 absolute left-4 size-5"
 				style={{
 					top: '50%',
 					transform: 'translateY(-50%)',
 				}}
 			/>
-			<input
+			<TextField.Root
+				variant="soft"
+				color="gray"
 				type="text"
 				onChange={handleSearchChange}
 				value={searchQuery}
-				className="border-none outline-none flex-1 py-2 pl-8 text-zinc-700 bg-transparent placeholder:font-medium"
+				className="flex-1 py-2 pl-8 placeholder:font-medium"
 				placeholder="Search"
 			/>
-		</Box>
+		</label>
 	);
 }
 

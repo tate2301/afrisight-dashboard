@@ -22,9 +22,11 @@ function GeneralLayout({children}: Props) {
 							<Button onClick={() => resetErrorBoundary()}>Try again</Button>
 						</div>
 					)}>
-					<main className="flex h-screen">
+					<main className="flex">
 						<Sidebar />
-						<div className="flex-1 h-screen overflow-y-auto">{children}</div>
+						<div className="flex-1 h-screen relative flex flex-col overflow-y-auto">
+							{children}
+						</div>
 					</main>
 				</ErrorBoundary>
 			)}

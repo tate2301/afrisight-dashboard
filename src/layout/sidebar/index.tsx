@@ -1,28 +1,41 @@
-import {cn} from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import {
 	Building,
 	FileText,
 	Gift,
 	Home,
 	Inbox,
+	LogOutIcon,
 	PersonStanding,
 	Store,
 	Users,
+	Settings,
+	HelpCircle,
 } from 'lucide-react';
-import {usePathname} from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Box from '../../components/design-sytem/box';
-import {useRouter} from 'next/router';
-import {NAVBAR_HEIGHT, SIDEBAR_WIDTH} from '../constants';
+import { useRouter } from 'next/router';
+import { NAVBAR_HEIGHT, SIDEBAR_WIDTH } from '../constants';
 import Image from 'next/image';
 import Flex from '@/components/design-sytem/flex';
-import {Paragraph} from '@/components/design-sytem/typography';
+import { Caption, Paragraph } from '@/components/design-sytem/typography';
 import Separator from '@/components/design-sytem/separator';
 import styled from '@/components/design-sytem/theme';
 import Link from 'next/link';
-import Button from '@/components/design-sytem/button';
-import {PlusIcon, PlusSmallIcon} from '@heroicons/react/24/outline';
-import {TeamMember} from '@/components/icons/team.member';
+import { PlusIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
+import { TeamMember } from '@/components/icons/team.member';
 import AddUser from '@/components/modals/create-user';
+import { Avatar, Button, Text, DropdownMenu } from '@radix-ui/themes';
+import { useAuth } from '@/context/AuthContext';
+import { AddTeamMember } from '@/components/icons/team.member.add';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
+
+interface UserProfile {
+	firstName?: string;
+	lastName?: string;
+	email: string;
+	profilePicture?: string;
+}
 
 const sidebarNavItems: SidebarNavItemProps[] = [
 	// {
@@ -68,10 +81,13 @@ const sidebarNavItems: SidebarNavItemProps[] = [
 ];
 
 const Sidebar = () => {
+	const { userProfile, isAuthenticated, logout } = useAuth();
+	console.log({ userProfile, isAuthenticated });
+	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
 			direction={'column'}
-			className="bg-zinc-50 sticky top-0 h-screen"
+			className="bg-zinc-50 sticky top-0 h-screen flex-shrink-0"
 			css={{
 				borderRight: '1px solid $gray2',
 				width: SIDEBAR_WIDTH,
@@ -79,47 +95,98 @@ const Sidebar = () => {
 				backgroundColor: '$gray1',
 			}}>
 			<Flex
-				className="relative items-center"
-				css={{height: NAVBAR_HEIGHT}}>
-				<Image
-					src={'/cx_mappers_logo.svg'}
-					width={44}
-					height={44}
-					alt="CX Mappers Logo"
-					className="mr-2"
-				/>
-				<Paragraph
-					weight={'bold'}
-					color={'primary'}
-					className="tracking-tight">
-					CX Mappers
-				</Paragraph>
+				className="relative items-center p-2 px-1 space-x-2 bg-white shadow-sm m-2 rounded-xl"
+				css={{ height: NAVBAR_HEIGHT }}>
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						<Flex className="items-center space-x-2 cursor-pointer w-full">
+							<Avatar
+								fallback={(userProfile?.user.email[0] ?? '').toUpperCase()}
+								src={userProfile?.profilePicture}
+								alt="profile"
+								radius="large"
+								className="shadow-sm border border-white"
+							/>
+							<Box className="flex-1">
+								<Paragraph
+									weight={'bold'}
+									color={'primary'}
+									className="tracking-tight">
+									{fullName.trim() ? fullName : 'CX Mappers Admin'}
+								</Paragraph>
+								<Caption
+									weight={'bold'}
+									color={'tertiary'}
+									className="tracking-tight">
+									{userProfile?.user.email}
+								</Caption>
+							</Box>
+							<Button variant="ghost" color="gray" >
+								<ChevronDownIcon className="w-4 h-4" />
+							</Button>
+						</Flex>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content className='w-64 p-0'>
+						<DropdownMenu.Item>
+							<Link href="/settings">
+								<Flex alignItems="center">
+									<Settings className="w-4 h-4 mr-2" />
+									Settings
+								</Flex>
+							</Link>
+						</DropdownMenu.Item>
+						<DropdownMenu.Item>
+							<Link href="/help">
+								<Flex alignItems="center">
+									<HelpCircle className="w-4 h-4 mr-2" />
+									Get Help
+								</Flex>
+							</Link>
+						</DropdownMenu.Item>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item color="red" onClick={logout}>
+							<Flex alignItems="center">
+								<LogOutIcon className="w-4 h-4 mr-2" />
+								Sign Out
+							</Flex>
+						</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			</Flex>
-			<Separator />
-			<ul className="flex flex-col gap-1 p-2 flex-1">
-				{sidebarNavItems.map((item, index) => (
-					<SidebarNavItem
-						key={index}
-						{...item}
-						Icon={item.Icon}
-					/>
-				))}
-			</ul>
 			<Flex
 				direction={'column'}
 				className="p-2 space-y-2">
 				<AddUser
 					trigger={
 						<Button
-							colorScheme={'surface'}
-							variant={'outline'}
-							css={{backgroundColor: '$white'}}>
-							<TeamMember className="size-5 mr-2" />
-							Add a team member
+							color={'gray'}
+							variant={'soft'}
+							radius="full">
+							<AddTeamMember className="size-5 mr-2" />
+							Invite an administrator
 						</Button>
 					}
 				/>
 			</Flex>
+			<Separator />
+			<Box className="mt-4">
+				<div className="px-4 py-2 text-sm font-medium text-gray-500">
+					<Text
+						size={'1'}
+						className="uppercase">
+						Platform NAVIGATION
+					</Text>
+				</div>
+				<ul className="flex flex-col gap-1 p-2 flex-1">
+					{sidebarNavItems.map((item, index) => (
+						<SidebarNavItem
+							key={index}
+							{...item}
+							Icon={item.Icon}
+						/>
+					))}
+				</ul>
+			</Box>
 		</Flex>
 	);
 };
@@ -142,7 +209,7 @@ type SidebarNavItemProps = {
 	text: string;
 	href: string;
 };
-const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
+const SidebarNavItem = ({ Icon, text, href }: SidebarNavItemProps) => {
 	const router = useRouter();
 	const pathname = router.pathname;
 	const active = pathname.includes(href);
@@ -152,7 +219,7 @@ const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
 			<ListItem
 				className={cn(
 					'rounded-md hover:bg-zinc-400/20',
-					active && 'bg-zinc-400/20 hover:bg-zinc-100',
+					active && 'bg-white hover:bg-white shadow-sm',
 				)}>
 				<Icon className="w-4 h-4 mr-2" />
 				{text}

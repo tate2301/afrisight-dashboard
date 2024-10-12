@@ -1,0 +1,42 @@
+html {
+	font-family: 'Inter', sans-serif;
+	font-size: 16px; /* Set a reasonable base font size */
+	line-height: 1.5; /* Adjust line-height for better readability */
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhance font rendering */
+body {
+	font-kerning: normal;
+	font-feature-settings: 'kern', 'liga', 'clig', 'calt'; /* Enable font ligatures and kerning */
+	letter-spacing: 0.02em; /* Add slight spacing to improve readability */
+}
+
+/* Improve heading and larger text readability */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 800; /* Bold weight for headings */
+	letter-spacing: 0.01em; /* Slight spacing for headings */
+	line-height: 1.2;
+	margin: 1.5rem 0 0.5rem;
+}
+
+/* Ensure smaller text is still legible */
+small,
+.small-text {
+	font-size: 0.875rem; /* Make small text readable */
+	letter-spacing: 0.015em;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+	html {
+		font-size: 15px; /* Slightly reduce font size for mobile devices */
+	}
+}

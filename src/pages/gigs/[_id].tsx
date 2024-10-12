@@ -13,6 +13,7 @@ import {
 	RadioCards,
 	Section,
 	Tabs,
+	Text,
 } from '@radix-ui/themes';
 import {FormBuilder} from '@/forms-builder/components/FormBuilder';
 import {FormProvider, useFormContext} from '@/forms-builder/context';
@@ -37,12 +38,15 @@ import {
 	useQueryClient,
 } from '@tanstack/react-query';
 import Spinner from '@/components/ui/spinner';
-import {ClientsCombobox, ErrorMessage, TextInput} from './create_gig';
 import {GigClientInfo} from '@/components/gig-form/GigClientInfo';
 import {withFormState} from '@/components/gig-form/withFormState';
 import {GigDateInfo} from '@/components/gig-form/GigDateInfo';
 import {GigRewardPolicy} from '@/components/gig-form/GigRewardPolicy';
 import {DataTable} from '@/components/ui/datatable';
+import {TABLE_ACTIONS_HEIGHT} from '@/components/shells/TablePageHeader';
+import {ClientsCombobox} from './create-gig-components/ClientsCombobox';
+import {ErrorMessage, TextInput} from './create-gig-components/extras';
+import TableLink from '@/components/ui/datatable/Link';
 
 type User = {
 	role: 'CLIENT';
@@ -745,50 +749,94 @@ const responsesColumns: ColumnDef<Response>[] = [
 	},
 ];
 
+interface IResponse {
+	fieldType: 'string' | 'number' | 'date' | 'image' | 'file';
+	value: any;
+	question: string;
+}
+
+const isLink = (value: string) =>
+	value.startsWith('http') || value.startsWith('file:');
+
+const isEmail = (value: string) => value.includes('@');
+
 const ResponsesTab = ({_id}: {_id: string}) => {
-	const [columns, setColumns] = useState(responsesColumns);
+	const [columns, setColumns] =
+		useState<ColumnDef<any, any>[]>(responsesColumns);
 	const {form} = useFormContext();
 
 	const gigResponses = useQuery({
 		queryKey: ['responses', _id],
 		queryFn: async () => {
 			const res = await axiosInstance.get(`/admin/gigs/${_id}/responses`);
-			return res;
+			return res.docs;
 		},
 		enabled: !!_id,
 		placeholderData: keepPreviousData,
 	});
 
-	console.log({gigResponses});
-
-	const table = useReactTable({
-		data: [],
-		columns: columns,
-		getCoreRowModel: getCoreRowModel(),
-	});
-
 	const questionsAsColumns = useMemo(() => {
 		if (!form) return [];
 		const questions = form.fields ?? [];
-		const columns = questions.map((question) => ({
-			id: question.id,
-			// label: question.label,replaced spaces with underscores
+		console.log('Form Questions:', questions);
+		return questions.map((question) => ({
 			accessorKey: question.id,
-			header: question.label,
-		}));
+			header: () => <Text className="line-clamp-1">{question.label}</Text>,
+			cell: ({row}: any) => {
+				const value = row.original[question.id] ?? '-';
 
-		return columns;
+				if (isLink(value) || isEmail(value)) {
+					return (
+						<TableLink
+							style={{display: '-webkit-box'}}
+							className="line-clamp-1 text-wrap truncate text-ellipsis inline-flex lowercase"
+							href={isEmail(value) ? `mailto:${value}` : value}>
+							{value}
+						</TableLink>
+					);
+				}
+
+				if (!isNaN(parseInt(value))) {
+					return <Text className={'text-right w-full'}>{value}</Text>;
+				}
+
+				return value;
+			},
+			size: 320,
+		}));
 	}, [form]);
 
 	useEffect(() => {
-		setColumns([...responsesColumns, ...questionsAsColumns]);
+		const newColumns = [...responsesColumns, ...questionsAsColumns];
+		setColumns(newColumns);
 	}, [questionsAsColumns]);
+
+	const data = useMemo(() => {
+		const docs = gigResponses?.data ?? [];
+		console.log({docs});
+		return docs.map((doc: any) => {
+			const baseData = {
+				_id: doc._id,
+				email: doc.email,
+				createdAt: doc.createdAt,
+			};
+			const responses = doc.responses.reduce((acc: any, response: any) => {
+				acc[response.question] = response.value;
+				return acc;
+			}, {});
+			return {...baseData, ...responses};
+		});
+	}, [gigResponses]);
 
 	return (
 		<Tabs.Content value={'responses'}>
 			<DataTable
+				top={0}
 				columns={columns}
-				data={[]}
+				data={data}
+				selectedItems={[]}
+				onSelect={() => {}}
+				tableActions={<></>}
 			/>
 		</Tabs.Content>
 	);

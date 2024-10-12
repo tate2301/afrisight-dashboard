@@ -1,5 +1,5 @@
 import {useGetCurrentTabFromQuery} from '@/components/shells';
-import PageWithTableShell from '@/components/shells/table-shell';
+import TablePageHeader from '@/components/shells/TablePageHeader';
 import {DataTable} from '@/components/ui/datatable';
 import GeneralLayout from '@/layout/GeneralLayout';
 import {Badge, Checkbox, Flex, Spinner} from '@radix-ui/themes';
@@ -148,7 +148,7 @@ export default function Rewards() {
 				</Flex>
 			)}
 			{!isLoading && !isError && (
-				<PageWithTableShell
+				<TablePageHeader
 					actions={
 						<>
 							<AddRewardPolicy />
@@ -172,7 +172,7 @@ export default function Rewards() {
 							data={data.docs}
 						/>
 					)}
-				</PageWithTableShell>
+				</TablePageHeader>
 			)}
 		</GeneralLayout>
 	);

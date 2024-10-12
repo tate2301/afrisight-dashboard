@@ -7,6 +7,12 @@ import { AUTH_ROUTES } from '@/lib/api-routes';
 interface UserProfile {
     id: string;
     email: string;
+    user: {
+        email: string;
+    }
+    profilePicture: string;
+    firstname: string;
+    surname: string
     // Add other user profile fields as needed
 }
 

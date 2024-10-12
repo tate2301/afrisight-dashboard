@@ -3,7 +3,7 @@ import {XFill} from '@/components/icons/x.fill';
 import AddUser from '@/components/modals/create-user';
 import {useSearch} from '@/components/search/use-search';
 import {useGetCurrentTabFromQuery} from '@/components/shells';
-import PageWithTableShell from '@/components/shells/table-shell';
+import TablePageHeader from '@/components/shells/TablePageHeader';
 import {DataTable} from '@/components/ui/datatable';
 import TableLink from '@/components/ui/datatable/Link';
 import {usePagination} from '@/hooks/use-pagination';
@@ -13,10 +13,16 @@ import GeneralLayout from '@/layout/GeneralLayout';
 import {USER_ROUTES} from '@/lib/api-routes';
 import {buildApiUrlWithParams} from '@/utils/apiUrl';
 import {formatDate} from '@/utils/strings';
-import {Avatar, Badge, Box, Checkbox, Flex, Text} from '@radix-ui/themes';
+import {
+	ArchiveBoxIcon,
+	CloudArrowDownIcon,
+	TrashIcon,
+} from '@heroicons/react/24/solid';
+import {Avatar, Badge, Button, Checkbox, Flex, Text} from '@radix-ui/themes';
 import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {ColumnDef} from '@tanstack/react-table';
-import {useEffect} from 'react';
+import {LucideCloudDownload} from 'lucide-react';
+import {useEffect, useState} from 'react';
 
 const tabs = ['All'];
 const tabToAccountStatus = (status: string) => {
@@ -86,6 +92,7 @@ const teamMembersColumns: ColumnDef<TeamMember>[] = [
 				</TableLink>
 			</Flex>
 		),
+		size: 320,
 	},
 	{
 		id: 'email',
@@ -96,12 +103,19 @@ const teamMembersColumns: ColumnDef<TeamMember>[] = [
 				{row.original.email.toLocaleLowerCase()}
 			</TableLink>
 		),
+		size: 320,
 	},
 	{
 		id: 'role',
 		accessorKey: 'role',
 		header: 'Role',
-		cell: () => <Badge color="gray">Administrator</Badge>,
+		cell: () => (
+			<Badge
+				variant="outline"
+				color="gray">
+				Administrator
+			</Badge>
+		),
 	},
 	{
 		id: 'lastLogin',
@@ -114,9 +128,8 @@ const teamMembersColumns: ColumnDef<TeamMember>[] = [
 		header: 'Status',
 		cell: ({row}) => (
 			<Badge
-				color={
-					row.original.status.toLowerCase() === 'active' ? 'green' : 'red'
-				}>
+				color={row.original.status.toLowerCase() === 'active' ? 'green' : 'red'}
+				variant="outline">
 				{row.original.status.toLowerCase() === 'active' ? (
 					<CheckFill className="size-4" />
 				) : (
@@ -182,6 +195,13 @@ export default function Users() {
 		placeholderData: keepPreviousData,
 	});
 
+	const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
+	const handleSelectRows = (selected: TeamMember[]) => {
+		console.log({selected});
+		setSelectedUsers(selected.map((user) => user._id));
+	};
+
 	useEffect(() => {
 		if (data) {
 			onPaginationNavParamsChange({
@@ -194,6 +214,12 @@ export default function Users() {
 
 	const PageActions = () => (
 		<>
+			<Button
+				color="gray"
+				variant="soft"
+				radius="full">
+				<LucideCloudDownload className="size-5" /> Export
+			</Button>
 			<AddUser />
 		</>
 	);
@@ -201,25 +227,52 @@ export default function Users() {
 	return (
 		<GeneralLayout>
 			{!isLoading && !error && (
-				<PageWithTableShell
-					actions={<PageActions />}
-					title="Administrators"
-					activeTab={currentTab}
-					tabs={tabs}
-					total={data.total}
-					currentPage={data.page}
-					hasNextPage={paginationNavParams.hasNextPage}
-					hasPreviousPage={paginationNavParams.hasPreviousPage}
-					nextPage={next}
-					previousPage={previous}
-					pageSize={data.limit}
-					isLoading={isLoading}
-					fetch={() => Promise.resolve()}>
-					<DataTable
-						columns={teamMembersColumns}
-						data={data.docs || []}
-					/>
-				</PageWithTableShell>
+				<DataTable
+					columns={teamMembersColumns}
+					data={data.docs || []}
+					selectedItems={selectedUsers}
+					onSelect={handleSelectRows}
+					tableActions={
+						<>
+							<Button
+								className="bg-zinc-800 text-white"
+								radius="full"
+								variant="soft">
+								<ArchiveBoxIcon className="size-4" />
+								Archive
+							</Button>
+							<Button
+								radius="full"
+								className="bg-zinc-800 text-white"
+								variant="soft">
+								<CloudArrowDownIcon className="size-5" />
+								Export
+							</Button>
+							<Button
+								radius="full"
+								className="bg-red-600 text-white">
+								<TrashIcon className="size-4" />
+								Delete
+							</Button>
+						</>
+					}
+					header={
+						<TablePageHeader
+							actions={<PageActions />}
+							title="Administrators"
+							activeTab={currentTab}
+							tabs={tabs}
+							isLoading={isLoading}
+							currentPage={data.page}
+							hasNextPage={paginationNavParams.hasNextPage}
+							hasPreviousPage={paginationNavParams.hasPreviousPage}
+							nextPage={next}
+							previousPage={previous}
+							total={data.total}
+							pageSize={data.limit}
+							fetch={() => Promise.resolve()}></TablePageHeader>
+					}
+				/>
 			)}
 		</GeneralLayout>
 	);

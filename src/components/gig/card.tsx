@@ -35,6 +35,7 @@ const GigCard = ({
 	const isPending = status === 'DRAFT';
 	const isPublished = status === 'ACTIVE';
 	const isArchived = status === 'PAUSED';
+	coverImage = coverImage === 'null' ? '/gig-placeholder.png' : coverImage;
 	return (
 		<Link
 			href={`/gigs/${_id}`}
@@ -42,7 +43,7 @@ const GigCard = ({
 			<Flex className="items-start px-4 gap-8">
 				<div className="w-[100px] h-[100px] relative">
 					<Image
-						src={coverImage}
+						src={coverImage ? coverImage : '/gig-placeholder.png'}
 						alt="Gig Image"
 						layout="fill"
 						objectFit="cover"

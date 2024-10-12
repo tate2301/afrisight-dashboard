@@ -3,7 +3,7 @@ import {EnvelopeBadge} from '@/components/icons/envelope.badge';
 import AddClient, {Client} from '@/components/modals/create-client';
 import {useSearch} from '@/components/search/use-search';
 import {useGetCurrentTabFromQuery} from '@/components/shells';
-import PageWithTableShell from '@/components/shells/table-shell';
+import TablePageHeader from '@/components/shells/TablePageHeader';
 import {DataTable} from '@/components/ui/datatable';
 import TableLink from '@/components/ui/datatable/Link';
 import {usePagination} from '@/hooks/use-pagination';
@@ -163,7 +163,7 @@ export default function Clients() {
 	return (
 		<GeneralLayout>
 			{!isLoading && !isError && (
-				<PageWithTableShell
+				<TablePageHeader
 					actions={<AddClient />}
 					title="Clients"
 					activeTab={currentTab}
@@ -183,7 +183,7 @@ export default function Clients() {
 							data={data?.docs}
 						/>
 					)}
-				</PageWithTableShell>
+				</TablePageHeader>
 			)}
 		</GeneralLayout>
 	);

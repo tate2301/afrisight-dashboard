@@ -1,5 +1,5 @@
 import {useGetCurrentTabFromQuery} from '@/components/shells';
-import PageWithTableShell from '@/components/shells/table-shell';
+import TablePageHeader from '@/components/shells/TablePageHeader';
 import {DataTable} from '@/components/ui/datatable';
 import GeneralLayout from '@/layout/GeneralLayout';
 import {Button, Checkbox, Flex} from '@radix-ui/themes';

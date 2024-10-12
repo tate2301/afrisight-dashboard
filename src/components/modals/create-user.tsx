@@ -19,6 +19,7 @@ import {AUTH_ROUTES} from '@/lib/api-routes';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {TeamMember} from '../icons/team.member';
+import {AddTeamMember} from '../icons/team.member.add';
 
 const Text = styled(Paragraph, {});
 
@@ -87,14 +88,14 @@ const AddUser = ({trigger, callback}: AddModalProp) => {
 				{trigger ? (
 					trigger
 				) : (
-					<Button>
-						<TeamMember className="size-5" /> Add team member
+					<Button radius="full">
+						<AddTeamMember className="size-5" /> Invite new administrator
 					</Button>
 				)}
 			</Dialog.Trigger>
 
 			<Dialog.Content maxWidth="450px">
-				<Dialog.Title weight={'medium'}>Add team member</Dialog.Title>
+				<Dialog.Title weight={'medium'}>Invite new administrator</Dialog.Title>
 				<Dialog.Description
 					size="2"
 					mb="8">
@@ -219,7 +220,7 @@ const AddUser = ({trigger, callback}: AddModalProp) => {
 									<Spinner /> Adding...
 								</>
 							) : (
-								'Add team member'
+								'Add new administrator'
 							)}
 						</Button>
 					</Flex>
