@@ -1,36 +1,37 @@
 import axiosInstance from '@/hooks/useApiFetcher';
 
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {Combobox, ComboboxItem} from '../ui/combobox';
-import {CommandItem} from '../ui/command';
-import {Check} from 'lucide-react';
-import {cn} from '@/lib/utils';
-import {Button, Flex, Text, TextField} from '@radix-ui/themes';
-import {Caption, Paragraph} from '../design-sytem/typography';
-import {formatDate} from '@/utils/strings';
-import {Dialog, Card} from '@radix-ui/themes';
-import {Form, Formik} from 'formik';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Combobox, ComboboxItem } from '../ui/combobox';
+import { CommandItem } from '../ui/command';
+import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button, Flex, Text, TextField } from '@radix-ui/themes';
+import { Caption, Paragraph } from '../design-sytem/typography';
+import { formatDate } from '@/utils/strings';
+import { Dialog, Card } from '@radix-ui/themes';
+import { Form, Formik } from 'formik';
 import Box from '../design-sytem/box';
 import CreateVoucher from './create-voucher';
 import useDisclosure from '@/hooks/useDisclosure';
-import {PlusIcon} from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import Spinner from '../spinner/Spinner';
-import {useRef} from 'react';
-import {AddModalProp} from './create-client';
+import { useRef } from 'react';
+import { AddModalProp } from './create-client';
+import { PlusCircleIcon } from '@heroicons/react/24/solid';
 type VoucherItem = {
 	_id: string;
 	name: string;
 	expiresAt: string;
 };
 
-const AddRewardPolicy = ({callback, trigger}: AddModalProp) => {
+const AddRewardPolicy = ({ callback, trigger }: AddModalProp) => {
 	const {
 		isOpen: isVoucherFormOpen,
 		onOpen: openVoucherForm,
 		onClose: closeVoucherForm,
 	} = useDisclosure();
 	const closeRef = useRef<HTMLButtonElement>(null);
-	const {data, isLoading, isError, refetch} = useQuery({
+	const { data, isLoading, isError, refetch } = useQuery({
 		queryKey: ['vouchers'],
 		queryFn: async () => {
 			const res = await axiosInstance.get('/gamification/voucher');
@@ -61,7 +62,7 @@ const AddRewardPolicy = ({callback, trigger}: AddModalProp) => {
 			if (callback) {
 				callback(data._id);
 			}
-			queryClient.invalidateQueries({queryKey: ['reward-policies']});
+			queryClient.invalidateQueries({ queryKey: ['reward-policies'] });
 			closeRef.current?.click();
 		},
 		onError: (error) => {
@@ -73,7 +74,7 @@ const AddRewardPolicy = ({callback, trigger}: AddModalProp) => {
 		createRewardPolicyMutation.mutate(values);
 	};
 
-	const createVoucherCallback = () => {};
+	const createVoucherCallback = () => { };
 
 	const renderVoucherItem = (
 		item: ComboboxItem<VoucherItem>,
@@ -108,7 +109,9 @@ const AddRewardPolicy = ({callback, trigger}: AddModalProp) => {
 				{trigger ? (
 					trigger
 				) : (
-					<Button className="w-auto">Add reward policy</Button>
+					<Button className="w-auto">
+						<PlusIcon className='size-5' />
+						Add reward policy</Button>
 				)}
 			</Dialog.Trigger>
 
@@ -209,7 +212,7 @@ const AddRewardPolicy = ({callback, trigger}: AddModalProp) => {
 										<Combobox<VoucherItem>
 											value={values.voucher}
 											onChange={(value) =>
-												handleChange({target: {name: 'voucher', value}})
+												handleChange({ target: { name: 'voucher', value } })
 											}
 											items={vouchers}
 											renderItem={renderVoucherItem}

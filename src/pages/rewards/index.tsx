@@ -1,18 +1,18 @@
-import {useGetCurrentTabFromQuery} from '@/components/shells';
+import { useGetCurrentTabFromQuery } from '@/components/shells';
 import TablePageHeader from '@/components/shells/TablePageHeader';
-import {DataTable} from '@/components/ui/datatable';
+import { DataTable } from '@/components/ui/datatable';
 import GeneralLayout from '@/layout/GeneralLayout';
-import {Badge, Checkbox, Flex, Spinner} from '@radix-ui/themes';
-import {ColumnDef} from '@tanstack/react-table';
+import { Badge, Checkbox, Flex, Spinner } from '@radix-ui/themes';
+import { ColumnDef } from '@tanstack/react-table';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {useQuery} from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import AddRewardPolicy from '@/components/modals/create-reward-policy';
-import {useSetPageTitle} from '@/layout/context';
-import {Paragraph} from '@/components/design-sytem/typography';
-import {useSearch} from '@/components/search/use-search';
-import {usePagination} from '@/hooks/use-pagination';
-import {buildApiUrlWithParams} from '@/utils/apiUrl';
-import {useEffect} from 'react';
+import { useSetPageTitle } from '@/layout/context';
+import { Paragraph } from '@/components/design-sytem/typography';
+import { useSearch } from '@/components/search/use-search';
+import { usePagination } from '@/hooks/use-pagination';
+import { buildApiUrlWithParams } from '@/utils/apiUrl';
+import { useEffect } from 'react';
 
 const tabs = ['All', 'Connected', 'Archived'];
 
@@ -32,7 +32,7 @@ type RewardPolicy = {
 const clientsColumns: ColumnDef<RewardPolicy>[] = [
 	{
 		id: 'select',
-		header: ({table}) => (
+		header: ({ table }) => (
 			<Checkbox
 				checked={
 					table.getIsAllPageRowsSelected() ||
@@ -42,7 +42,7 @@ const clientsColumns: ColumnDef<RewardPolicy>[] = [
 				aria-label="Select all"
 			/>
 		),
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Checkbox
 				checked={row.getIsSelected()}
 				onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -68,13 +68,13 @@ const clientsColumns: ColumnDef<RewardPolicy>[] = [
 		id: 'dollarValue',
 		accessorKey: 'dollarValue',
 		header: 'Amount',
-		cell: ({row}) => <Paragraph>${row.original.dollarValue}</Paragraph>,
+		cell: ({ row }) => <Paragraph>${row.original.dollarValue}</Paragraph>,
 	},
 	{
 		id: 'hasVoucher',
 		accessorKey: 'voucher',
 		header: 'Voucher',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Badge color={row.original.voucher ? 'green' : 'gray'}>
 				{row.original.voucher ? 'Yes' : 'No'}
 			</Badge>
@@ -100,7 +100,7 @@ export default function Rewards() {
 		onPaginationNavParamsChange,
 	} = usePagination();
 
-	const {data, isLoading, isError, refetch} = useQuery({
+	const { data, isLoading, isError, refetch } = useQuery({
 		queryKey: ['reward-policies', searchQuery.value, page, pageSize],
 		queryFn: async () => {
 			const url = buildApiUrlWithParams('/gamification/reward-policy', {
@@ -143,36 +143,38 @@ export default function Rewards() {
 				<Flex
 					justify="center"
 					align="center"
-					style={{height: '100vh'}}>
+					style={{ height: '100vh' }}>
 					<Spinner />
 				</Flex>
 			)}
 			{!isLoading && !isError && (
-				<TablePageHeader
-					actions={
-						<>
-							<AddRewardPolicy />
-						</>
+
+				<DataTable
+					columns={clientsColumns}
+					data={data.docs}
+					selectedItems={[]}
+					tableActions={<></>}
+					header={
+						<TablePageHeader
+							actions={
+								<>
+									<AddRewardPolicy />
+								</>
+							}
+							title="Reward policies"
+							activeTab={currentTab}
+							tabs={tabs}
+							total={data.total}
+							currentPage={data.page}
+							hasNextPage={paginationNavParams.hasNextPage}
+							hasPreviousPage={paginationNavParams.hasPreviousPage}
+							nextPage={next}
+							previousPage={previous}
+							pageSize={data.limit}
+							isLoading={isLoading}
+							fetch={() => Promise.resolve()} />
 					}
-					title="Reward policies"
-					activeTab={currentTab}
-					tabs={tabs}
-					total={data.total}
-					currentPage={data.page}
-					hasNextPage={paginationNavParams.hasNextPage}
-					hasPreviousPage={paginationNavParams.hasPreviousPage}
-					nextPage={next}
-					previousPage={previous}
-					pageSize={data.limit}
-					isLoading={isLoading}
-					fetch={() => Promise.resolve()}>
-					{data && (
-						<DataTable
-							columns={clientsColumns}
-							data={data.docs}
-						/>
-					)}
-				</TablePageHeader>
+				/>
 			)}
 		</GeneralLayout>
 	);

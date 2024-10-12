@@ -1,29 +1,29 @@
-import {CheckFill} from '@/components/icons/check.fill';
-import {EnvelopeBadge} from '@/components/icons/envelope.badge';
-import AddClient, {Client} from '@/components/modals/create-client';
-import {useSearch} from '@/components/search/use-search';
-import {useGetCurrentTabFromQuery} from '@/components/shells';
+import { CheckFill } from '@/components/icons/check.fill';
+import { EnvelopeBadge } from '@/components/icons/envelope.badge';
+import AddClient, { Client } from '@/components/modals/create-client';
+import { useSearch } from '@/components/search/use-search';
+import { useGetCurrentTabFromQuery } from '@/components/shells';
 import TablePageHeader from '@/components/shells/TablePageHeader';
-import {DataTable} from '@/components/ui/datatable';
+import { DataTable } from '@/components/ui/datatable';
 import TableLink from '@/components/ui/datatable/Link';
-import {usePagination} from '@/hooks/use-pagination';
+import { usePagination } from '@/hooks/use-pagination';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {useSetPageTitle} from '@/layout/context';
+import { useSetPageTitle } from '@/layout/context';
 import GeneralLayout from '@/layout/GeneralLayout';
-import {USER_ROUTES} from '@/lib/api-routes';
-import {buildApiUrlWithParams} from '@/utils/apiUrl';
-import {formatDate} from '@/utils/strings';
-import {Checkbox, Flex, Text, Avatar, Badge} from '@radix-ui/themes';
-import {keepPreviousData, useQuery} from '@tanstack/react-query';
-import {ColumnDef} from '@tanstack/react-table';
-import {useEffect} from 'react';
+import { USER_ROUTES } from '@/lib/api-routes';
+import { buildApiUrlWithParams } from '@/utils/apiUrl';
+import { formatDate } from '@/utils/strings';
+import { Checkbox, Flex, Text, Avatar, Badge } from '@radix-ui/themes';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { ColumnDef } from '@tanstack/react-table';
+import { useEffect } from 'react';
 
 const tabs = ['All'];
 
 const clientsColumns: ColumnDef<Client>[] = [
 	{
 		id: 'select',
-		header: ({table}) => (
+		header: ({ table }) => (
 			<Checkbox
 				checked={
 					table.getIsAllPageRowsSelected() ||
@@ -33,7 +33,7 @@ const clientsColumns: ColumnDef<Client>[] = [
 				aria-label="Select all"
 			/>
 		),
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Checkbox
 				checked={row.getIsSelected()}
 				onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -47,7 +47,7 @@ const clientsColumns: ColumnDef<Client>[] = [
 		id: 'client',
 		accessorKey: 'profilePic',
 		header: 'Client',
-		cell: ({row}) => {
+		cell: ({ row }) => {
 			return (
 				<Flex
 					align={'center'}
@@ -71,7 +71,7 @@ const clientsColumns: ColumnDef<Client>[] = [
 		accessorKey: 'email',
 		header: 'Email',
 		size: 280,
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<TableLink href={`mailto:${row.original.email}`}>
 				{row.original.email.toLocaleLowerCase()}
 			</TableLink>
@@ -82,7 +82,7 @@ const clientsColumns: ColumnDef<Client>[] = [
 		id: 'isEmailVerified',
 		accessorKey: 'isEmailVerified',
 		header: 'Email Verified',
-		cell: ({row, column}) => (
+		cell: ({ row, column }) => (
 			<Badge color={row.original.isEmailVerified ? 'blue' : 'gray'}>
 				{row.original.isEmailVerified ? (
 					<>
@@ -120,7 +120,7 @@ export default function Clients() {
 		onPaginationNavParamsChange,
 	} = usePagination();
 
-	const {data, isLoading, isError} = useQuery({
+	const { data, isLoading, isError } = useQuery({
 		queryKey: ['clients', searchQuery.value, page, pageSize],
 		queryFn: async () => {
 			const url = buildApiUrlWithParams(USER_ROUTES.GET_CLIENTS, {
@@ -163,27 +163,28 @@ export default function Clients() {
 	return (
 		<GeneralLayout>
 			{!isLoading && !isError && (
-				<TablePageHeader
-					actions={<AddClient />}
-					title="Clients"
-					activeTab={currentTab}
-					tabs={tabs}
-					total={data.total}
-					currentPage={data.page}
-					hasNextPage={paginationNavParams.hasNextPage}
-					hasPreviousPage={paginationNavParams.hasPreviousPage}
-					nextPage={next}
-					previousPage={previous}
-					pageSize={data.limit}
-					isLoading={isLoading}
-					fetch={() => Promise.resolve()}>
-					{data && (
-						<DataTable
-							columns={clientsColumns}
-							data={data?.docs}
-						/>
-					)}
-				</TablePageHeader>
+
+				<DataTable
+					selectedItems={[]}
+					tableActions={<></>}
+					columns={clientsColumns}
+					data={data?.docs}
+					header={
+						<TablePageHeader
+							actions={<AddClient />}
+							title="Clients"
+							activeTab={currentTab}
+							tabs={tabs}
+							total={data.total}
+							currentPage={data.page}
+							hasNextPage={paginationNavParams.hasNextPage}
+							hasPreviousPage={paginationNavParams.hasPreviousPage}
+							nextPage={next}
+							previousPage={previous}
+							pageSize={data.limit}
+							isLoading={isLoading}
+							fetch={() => Promise.resolve()} />}
+				/>
 			)}
 		</GeneralLayout>
 	);

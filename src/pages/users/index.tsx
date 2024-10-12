@@ -1,28 +1,28 @@
-import {CheckFill} from '@/components/icons/check.fill';
-import {XFill} from '@/components/icons/x.fill';
+import { CheckFill } from '@/components/icons/check.fill';
+import { XFill } from '@/components/icons/x.fill';
 import AddUser from '@/components/modals/create-user';
-import {useSearch} from '@/components/search/use-search';
-import {useGetCurrentTabFromQuery} from '@/components/shells';
+import { useSearch } from '@/components/search/use-search';
+import { useGetCurrentTabFromQuery } from '@/components/shells';
 import TablePageHeader from '@/components/shells/TablePageHeader';
-import {DataTable} from '@/components/ui/datatable';
+import { DataTable } from '@/components/ui/datatable';
 import TableLink from '@/components/ui/datatable/Link';
-import {usePagination} from '@/hooks/use-pagination';
+import { usePagination } from '@/hooks/use-pagination';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {useSetPageTitle} from '@/layout/context';
+import { useSetPageTitle } from '@/layout/context';
 import GeneralLayout from '@/layout/GeneralLayout';
-import {USER_ROUTES} from '@/lib/api-routes';
-import {buildApiUrlWithParams} from '@/utils/apiUrl';
-import {formatDate} from '@/utils/strings';
+import { USER_ROUTES } from '@/lib/api-routes';
+import { buildApiUrlWithParams } from '@/utils/apiUrl';
+import { formatDate } from '@/utils/strings';
 import {
 	ArchiveBoxIcon,
 	CloudArrowDownIcon,
 	TrashIcon,
 } from '@heroicons/react/24/solid';
-import {Avatar, Badge, Button, Checkbox, Flex, Text} from '@radix-ui/themes';
-import {keepPreviousData, useQuery} from '@tanstack/react-query';
-import {ColumnDef} from '@tanstack/react-table';
-import {LucideCloudDownload} from 'lucide-react';
-import {useEffect, useState} from 'react';
+import { Avatar, Badge, Button, Checkbox, Flex, Text } from '@radix-ui/themes';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { ColumnDef } from '@tanstack/react-table';
+import { LucideCloudDownload } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const tabs = ['All'];
 const tabToAccountStatus = (status: string) => {
@@ -51,7 +51,7 @@ export type TeamMember = {
 const teamMembersColumns: ColumnDef<TeamMember>[] = [
 	{
 		id: 'select',
-		header: ({table}) => (
+		header: ({ table }) => (
 			<Checkbox
 				checked={
 					table.getIsAllPageRowsSelected() ||
@@ -61,7 +61,7 @@ const teamMembersColumns: ColumnDef<TeamMember>[] = [
 				aria-label="Select all"
 			/>
 		),
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Checkbox
 				checked={row.getIsSelected()}
 				onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -74,7 +74,7 @@ const teamMembersColumns: ColumnDef<TeamMember>[] = [
 		id: 'fullName',
 		accessorKey: 'fullName',
 		header: 'Full Name',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Flex
 				align={'center'}
 				gap={'4'}>
@@ -98,7 +98,7 @@ const teamMembersColumns: ColumnDef<TeamMember>[] = [
 		id: 'email',
 		accessorKey: 'email',
 		header: 'Email',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<TableLink href={`mailto:${row.original.email}`}>
 				{row.original.email.toLocaleLowerCase()}
 			</TableLink>
@@ -126,7 +126,7 @@ const teamMembersColumns: ColumnDef<TeamMember>[] = [
 		id: 'status',
 		accessorKey: 'status',
 		header: 'Status',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Badge
 				color={row.original.status.toLowerCase() === 'active' ? 'green' : 'red'}
 				variant="outline">
@@ -189,7 +189,7 @@ export default function Users() {
 		};
 	};
 
-	const {data, isLoading, error, refetch} = useQuery({
+	const { data, isLoading, error, refetch } = useQuery({
 		queryKey: ['users', searchQuery.value, page, pageSize, currentTab],
 		queryFn: () => getUsers(page),
 		placeholderData: keepPreviousData,
@@ -198,7 +198,7 @@ export default function Users() {
 	const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
 	const handleSelectRows = (selected: TeamMember[]) => {
-		console.log({selected});
+		console.log({ selected });
 		setSelectedUsers(selected.map((user) => user._id));
 	};
 
@@ -223,6 +223,7 @@ export default function Users() {
 			<AddUser />
 		</>
 	);
+
 
 	return (
 		<GeneralLayout>

@@ -1,9 +1,7 @@
-import { Paragraph } from '../design-sytem/typography';
-import Separator from '../design-sytem/separator';
+import { Caption, Paragraph } from '../design-sytem/typography';
 import SearchBox from '../search/Search';
 import Flex from '../design-sytem/flex';
-import { Button, Popover, Spinner, Switch, TabNav } from '@radix-ui/themes';
-import SelectWithOptions from '../filter-button';
+import { Button, Spinner, TabNav } from '@radix-ui/themes';
 import { ChevronRight } from '../icons/chevron.right';
 import { ChevronLeft } from '../icons/chevron.left';
 import { FilterColumnConfig, GigShellProps } from '.';
@@ -11,11 +9,6 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import Box from '../design-sytem/box';
 import { useSearch } from '../search/use-search';
-import { ChevronDown, CloudDownload, Columns, FilterIcon } from 'lucide-react';
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { ViewColumnsIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ColumnVisibilityToggle } from './ColumnToggle';
 import { FilterBuilder } from './FilterBuilder';
 
@@ -107,12 +100,12 @@ export default function TablePageHeader({
 				</Flex>
 
 				<Flex className="flex-1 justify-end items-center space-x-8">
-					<Paragraph
+					<Caption
 						className="inline-flex gap-1 mr-4 font-medium"
-						color={'secondary'}>
+						color={'tertiary'}>
 						{(currentPage - 1) * pageSize + 1} -{' '}
 						{(currentPage - 1) * pageSize + pageSize} of {total}
-					</Paragraph>
+					</Caption>
 					<Flex style={{ gap: 8 }}>
 						<Button
 							onClick={previousPage}
