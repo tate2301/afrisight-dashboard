@@ -32,7 +32,7 @@ export const GigBehavior = ({formik}: GigBehaviorProps) => (
 				defaultValue="preserve">
 				<RadioCards.Item
 					value="preserve"
-					className={cn('flex flex-col items-start', styles.radio)}>
+					className={cn('flex flex-col items-start')}>
 					<Paragraph color={'secondary'}>
 						<ListOrdered className="size-5" />
 					</Paragraph>

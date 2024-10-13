@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import Box from '../design-sytem/box';
 import {Search as SearchIcon} from '@/components/icons/search';
 import {TextField} from '@radix-ui/themes';
+import {SearchField} from '../ui/aria-components/SearchField';
 
 type SearchProps = {
 	value: string;
@@ -31,10 +32,9 @@ function SearchBox({value, onChange}: SearchProps) {
 	}, 300);
 
 	// Handle search input change
-	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const query = e.target.value;
-		setSearchQuery(query);
-		debouncedSetSearchQuery(query);
+	const handleSearchChange = (value: string) => {
+		setSearchQuery(value);
+		debouncedSetSearchQuery(value);
 	};
 
 	useEffect(() => {
@@ -50,14 +50,10 @@ function SearchBox({value, onChange}: SearchProps) {
 					transform: 'translateY(-50%)',
 				}}
 			/>
-			<TextField.Root
-				variant="soft"
-				color="gray"
-				type="text"
-				onChange={handleSearchChange}
+
+			<SearchField
 				value={searchQuery}
-				className="flex-1 py-2 pl-8 placeholder:font-medium"
-				placeholder="Search"
+				onChange={handleSearchChange}
 			/>
 		</label>
 	);

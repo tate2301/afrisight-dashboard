@@ -28,7 +28,9 @@ export function createCustomFormData<T extends Record<string, any>>(
 			} else if (typeof value === 'object' && value !== null) {
 				formData.append(key, JSON.stringify(value));
 			} else {
-				formData.append(key, String(value));
+				if (value !== null) {
+					formData.append(key, String(value));
+				}
 			}
 		}
 	});
@@ -36,7 +38,7 @@ export function createCustomFormData<T extends Record<string, any>>(
 	return formData as CustomFormData<Partial<T>>;
 }
 
-const createTypedObjectFromFormData = <T extends Record<string, any>>(
+export const createTypedObjectFromFormData = <T extends Record<string, any>>(
 	formData: CustomFormData<T>,
 ): Partial<T> => {
 	const data: Partial<T> = {};

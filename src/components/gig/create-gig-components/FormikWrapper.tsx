@@ -13,9 +13,9 @@ const validationSchema = Yup.object({
 
 export const validationSchemas = {
 	basicInformation: Yup.object({
-		title: Yup.string().required('Title is required'),
+		name: Yup.string().required('Title is required'),
 		description: Yup.string().required('Description is required'),
-		closingDate: Yup.date().required('Closing date is required'),
+		endDate: Yup.date().required('Closing date is required'),
 		duration: Yup.number().required('Duration estimation is required'),
 	}),
 	behaviorAndExperience: Yup.object({
@@ -53,8 +53,7 @@ export type TBaseGig = Partial<
 		rewardPolicy?: string;
 		coverImage: File | null;
 		client: string;
-		title: string;
-		closingDate: string;
+		endDate: string;
 		location: string;
 		questionOrdering: 'preserve' | 'shuffle';
 		difficulty: 'easy' | 'medium' | 'hard';
@@ -71,10 +70,11 @@ export type TBaseGig = Partial<
 
 export const _initialValues = {
 	basicInformation: (gig: Partial<TBaseGig>) => ({
-		title: gig.name,
+		name: gig.name,
 		description: gig.description,
-		closingDate: gig.endDate,
+		endDate: gig.endDate,
 		coverImage: null,
+		duration: gig.duration ?? 5,
 	}),
 	behaviorAndExperience: (gig: Partial<TBaseGig>) => ({
 		difficulty: gig.difficulty ?? 'easy',

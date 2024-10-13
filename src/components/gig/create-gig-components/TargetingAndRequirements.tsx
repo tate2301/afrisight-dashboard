@@ -52,18 +52,20 @@ export const TargetingAndRequirements = ({
 						type="number"
 						name="targetAgeRange.min"
 						value={formik.values.targetAgeRange?.min || ''}
-						onChange={formik.handleChange}
+						onChange={(value: string) =>
+							formik.setFieldValue('targetAgeRange.min', value)
+						}
 						onBlur={formik.handleBlur}
-						placeholder="Min Age"
 						className="flex-1"
 					/>
 					<TextInput
 						type="number"
 						name="targetAgeRange.max"
 						value={formik.values.targetAgeRange?.max || ''}
-						onChange={formik.handleChange}
+						onChange={(value: string) =>
+							formik.setFieldValue('targetAgeRange.max', value)
+						}
 						onBlur={formik.handleBlur}
-						placeholder="Max Age"
 						className="flex-1"
 					/>
 				</Flex>
@@ -115,18 +117,20 @@ export const TargetingAndRequirements = ({
 						type="number"
 						name="incomeRange.min"
 						value={formik.values.incomeRange?.min || ''}
-						onChange={formik.handleChange}
+						onChange={(value: string) =>
+							formik.setFieldValue('incomeRange.min', value)
+						}
 						onBlur={formik.handleBlur}
-						placeholder="Min Income"
 						className="flex-1"
 					/>
 					<TextInput
 						type="number"
 						name="incomeRange.max"
 						value={formik.values.incomeRange?.max || ''}
-						onChange={formik.handleChange}
+						onChange={(value: string) =>
+							formik.setFieldValue('incomeRange.min', value)
+						}
 						onBlur={formik.handleBlur}
-						placeholder="Max Income"
 						className="flex-1"
 					/>
 				</Flex>

@@ -566,7 +566,7 @@ export const GigBasicInfo: React.FC<GigBasicInfoProps> = ({
 				<TextInput
 					name="name"
 					value={values.name}
-					onChange={handleChange}
+					onChange={(value) => setFieldValue('name', value)}
 					onBlur={handleBlur}
 				/>
 				{touched.name && errors.name && (
@@ -587,7 +587,7 @@ export const GigBasicInfo: React.FC<GigBasicInfoProps> = ({
 				<TextInput
 					name="description"
 					value={values.description}
-					onChange={handleChange}
+					onChange={(value) => setFieldValue('description', value)}
 					onBlur={handleBlur}
 				/>
 				{touched.description && errors.description && (

@@ -107,6 +107,7 @@ export const CategoryAndTags = ({formik}: CategoryAndTagsProps) => {
 
 			<Box className="space-y-4">
 				<Paragraph weight="semibold">Tags</Paragraph>
+
 				<Flex
 					wrap="wrap"
 					gap="2">
@@ -120,19 +121,19 @@ export const CategoryAndTags = ({formik}: CategoryAndTagsProps) => {
 						</Badge>
 					))}
 					<TextInput
+						label="Custom tags"
+						description="Press Enter to add a tag"
 						value={tagInput}
-						onChange={(e) => setTagInput(e.target.value)}
-						onKeyPress={(e) => {
+						onChange={(value: string) => setTagInput(value)}
+						onKeyDown={(e) => {
 							if (e.key === 'Enter' && tagInput.trim()) {
 								e.preventDefault();
 								handleAddTag(tagInput.trim());
 							}
 						}}
-						placeholder="Add a tag..."
 						className="w-full"
 					/>
 				</Flex>
-				<Caption color="secondary">Press Enter to add a tag</Caption>
 				<Flex
 					wrap="wrap"
 					gap="2"

@@ -3,6 +3,13 @@ import {Box} from '@radix-ui/themes';
 import {CameraIcon} from '@heroicons/react/24/outline';
 import {ErrorMessage, TextInput} from './extras';
 import {useEffect, useState} from 'react';
+import {DatePicker} from '@/components/ui/aria-components/DatePicker';
+import {
+	CalendarDate,
+	getLocalTimeZone,
+	parseAbsolute,
+	parseDate,
+} from '@internationalized/date';
 
 type GigDetailsProps = {
 	formik: any;
@@ -20,6 +27,10 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 			}
 		}
 	}, [formik.values.coverImage]);
+
+	const endDate = formik.values.endDate
+		? new Date(formik.values.endDate)
+		: new Date();
 	return (
 		<>
 			<label className="space-y-2">
@@ -28,13 +39,13 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 				</Paragraph>
 				<TextInput
 					className="mb-2"
-					name="title"
-					value={formik.values.title}
-					onChange={formik.handleChange}
+					name="name"
+					value={formik.values.name}
+					onChange={(value) => formik.setFieldValue('name', value)}
 					onBlur={formik.handleBlur}
 				/>
-				{formik.touched.title && formik.errors.title && (
-					<ErrorMessage>{formik.errors.title}</ErrorMessage>
+				{formik.touched.name && formik.errors.name && (
+					<ErrorMessage>{formik.errors.name}</ErrorMessage>
 				)}
 				<Caption color="secondary">
 					Pay attention to the title and make sure it aligns with the goals of
@@ -49,32 +60,29 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 					className="mb-2"
 					name="description"
 					value={formik.values.description}
-					onChange={formik.handleChange}
+					onChange={(value) => formik.setFieldValue('description', value)}
 					onBlur={formik.handleBlur}
 				/>
 				{formik.touched.description && formik.errors.description && (
 					<ErrorMessage>{formik.errors.description}</ErrorMessage>
 				)}
 			</label>
-			<label className="space-y-2">
-				<Paragraph weight="semibold">
-					Closing date <span className="text-red-500">*</span>
-				</Paragraph>
-				<TextInput
-					className="mb-2"
-					name="closingDate"
-					type="date"
-					value={formik.values.closingDate}
-					onChange={formik.handleChange}
-					onBlur={formik.handleBlur}
-				/>
-				{formik.touched.closingDate && formik.errors.closingDate && (
-					<ErrorMessage>{formik.errors.closingDate}</ErrorMessage>
-				)}
-				<Caption color="secondary">
-					The closing date is the last date by which the gig can be completed.
-				</Caption>
-			</label>
+			<DatePicker
+				label="End date"
+				description="The closing date is the last date by which the gig can be completed."
+				className="mb-2"
+				errorMessage={formik.errors.endDate}
+				aria-label="End date"
+				name="endDate"
+				onBlur={formik.handleBlur}
+				value={parseDate(endDate.toISOString().split('T')[0])}
+				onChange={(value) =>
+					formik.setFieldValue(
+						'endDate',
+						value.add({days: 1}).toDate(getLocalTimeZone()).toString(),
+					)
+				}
+			/>
 			<label className="space-y-2">
 				<Paragraph weight="semibold">
 					Estimated duration <span className="text-red-500">*</span>
@@ -84,10 +92,10 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 					name="duration"
 					type="number"
 					value={formik.values.duration}
-					onChange={formik.handleChange}
+					onChange={(value) => formik.setFieldValue('duration', value)}
 					onBlur={formik.handleBlur}
 				/>
-				{formik.touched.closingDate && formik.errors.duration && (
+				{formik.touched.endDate && formik.errors.duration && (
 					<ErrorMessage>{formik.errors.duration}</ErrorMessage>
 				)}
 				<Caption color="secondary">
