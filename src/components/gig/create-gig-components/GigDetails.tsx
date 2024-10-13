@@ -10,6 +10,7 @@ import {
 	parseAbsolute,
 	parseDate,
 } from '@internationalized/date';
+import {NumberField} from '@/components/ui/aria-components/NumberField';
 
 type GigDetailsProps = {
 	formik: any;
@@ -83,25 +84,16 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 					)
 				}
 			/>
-			<label className="space-y-2">
-				<Paragraph weight="semibold">
-					Estimated duration <span className="text-red-500">*</span>
-				</Paragraph>
-				<TextInput
-					className="mb-2"
-					name="duration"
-					type="number"
-					value={formik.values.duration}
-					onChange={(value) => formik.setFieldValue('duration', value)}
-					onBlur={formik.handleBlur}
-				/>
-				{formik.touched.endDate && formik.errors.duration && (
-					<ErrorMessage>{formik.errors.duration}</ErrorMessage>
-				)}
-				<Caption color="secondary">
-					The estimated time it takes to complete this gig.
-				</Caption>
-			</label>
+			<NumberField
+				label="Estimated duration (minutes)"
+				description="The estimated time it takes to complete this gig."
+				errorMessage={formik.errors.duration}
+				isRequired
+				className="mb-2"
+				value={formik.values.duration}
+				onChange={(value) => formik.setFieldValue('duration', value)}
+				onBlur={formik.handleBlur}
+			/>
 			<label className="space-y-2">
 				<Paragraph weight="semibold">Cover image</Paragraph>
 				<Box

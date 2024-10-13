@@ -15,7 +15,8 @@ import {Paragraph} from '@/components/design-sytem/typography';
 import Box from '@/components/design-sytem/box';
 import styled from '@/components/design-sytem/theme';
 import Separator from '@/components/design-sytem/separator';
-import {Button, IconButton} from '@radix-ui/themes';
+import {Button, IconButton, Text} from '@radix-ui/themes';
+import {cn} from '@/lib/utils';
 
 const fieldTypes = [
 	{
@@ -76,13 +77,15 @@ export function FieldList() {
 	return (
 		<div>
 			<div className="mb-4">
-				<Paragraph
-					as={'h3'}
-					weight={'bold'}
-					className="text-md font-medium mb-2 px-4">
-					Add question
-				</Paragraph>
-				<div className="grid grid-cols-2 gap-2 px-4">
+				<Box className="mb-2">
+					<Text
+						size={'3'}
+						weight={'bold'}
+						className="text-md font-medium mb-2 px-4">
+						Add question
+					</Text>
+				</Box>
+				<div className="flex flex-col gap-2 px-4">
 					{fieldTypes.map((fieldType) => (
 						<Button
 							key={fieldType.type}
@@ -156,23 +159,28 @@ const FieldListItem = ({
 	<Li
 		onClick={onSelect}
 		className="relative group">
-		<Button
-			variant={isSelected ? 'solid' : 'soft'}
-			color={isSelected ? 'blue' : 'gray'}
-			size="2"
-			className="flex-1 items-center gap-2 justify-start">
-			{fieldTypes.find((type) => type.type === field.type)?.icon}
-			{field.label}
-		</Button>
-		<IconButton
+		<button
+			className={cn(
+				'flex-1 flex items-center justify-start py-2 px-3 gap-4 text-zinc-600 rounded-xl h-[40px] bg-zinc-50',
+				isSelected && 'bg-indigo-600 text-white',
+			)}>
+			<span>{fieldTypes.find((type) => type.type === field.type)?.icon}</span>
+			<Text
+				size="2"
+				weight={'medium'}
+				className="line-clamp-1 w-full flex-1 text-left">
+				{field.label}
+			</Text>
+		</button>
+		<DeleteButton
 			variant="ghost"
 			color="red"
 			onClick={(e) => {
 				e.stopPropagation();
 				onDelete();
 			}}
-			className="group-hover:opacity-100 absolute right-2 opacity-0 group-hover:opacity-100 bg-white pressable-shadow">
+			className="absolute right-4 opacity-0 group-hover:opacity-100 bg-white pressable-shadow">
 			<Trash2Icon className="size-4" />
-		</IconButton>
+		</DeleteButton>
 	</Li>
 );

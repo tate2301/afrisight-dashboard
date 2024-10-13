@@ -3,6 +3,7 @@ import {CreateGigHeader} from '@/components/gig/layout/CreateGigHeader';
 import {CreateGigSidebar} from '@/components/gig/layout/CreateGigSidebar';
 import {H2} from '../design-sytem/typography';
 import {useEffect} from 'react';
+import {UseMutationResult} from '@tanstack/react-query';
 
 interface Stage {
 	title: string;
@@ -17,6 +18,7 @@ interface MultistageFormContainerProps {
 	stages: Stage[];
 	currentIndex: number;
 	children: React.ReactNode;
+	cancel: UseMutationResult<void, Error, void, unknown>;
 }
 
 export function MultistageFormContainer({
@@ -27,12 +29,14 @@ export function MultistageFormContainer({
 	stages,
 	currentIndex,
 	children,
+	cancel,
 }: MultistageFormContainerProps) {
 	return (
 		<>
 			<CreateGigHeader
 				title={documentTitle}
 				status={status}
+				cancel={cancel}
 			/>
 			<Flex className="w-full h-[calc(100vh-48px)] bg-zinc-50 overflow-y-auto">
 				<CreateGigSidebar

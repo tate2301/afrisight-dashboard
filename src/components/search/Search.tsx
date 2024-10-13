@@ -42,20 +42,10 @@ function SearchBox({value, onChange}: SearchProps) {
 	}, [debouncedSearchQuery]);
 
 	return (
-		<label className="flex flex-row items-center text-sm space-x-2 h-[32px] w-96 relative">
-			<SearchIcon
-				className="text-zinc-400 absolute left-4 size-5"
-				style={{
-					top: '50%',
-					transform: 'translateY(-50%)',
-				}}
-			/>
-
-			<SearchField
-				value={searchQuery}
-				onChange={handleSearchChange}
-			/>
-		</label>
+		<SearchField
+			value={searchQuery}
+			onChange={handleSearchChange}
+		/>
 	);
 }
 

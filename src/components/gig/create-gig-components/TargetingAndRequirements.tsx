@@ -1,6 +1,7 @@
 import {Paragraph, Caption} from '@/components/design-sytem/typography';
 import {Box, Flex, Select, Checkbox} from '@radix-ui/themes';
 import {ErrorMessage, TextInput} from './extras';
+import {NumberField} from '@/components/ui/aria-components/NumberField';
 
 type TargetingAndRequirementsProps = {
 	formik: any;
@@ -48,21 +49,19 @@ export const TargetingAndRequirements = ({
 				<Flex
 					gap="3"
 					className="w-full">
-					<TextInput
-						type="number"
-						name="targetAgeRange.min"
+					<NumberField
+						label="Min"
 						value={formik.values.targetAgeRange?.min || ''}
-						onChange={(value: string) =>
+						onChange={(value: number) =>
 							formik.setFieldValue('targetAgeRange.min', value)
 						}
 						onBlur={formik.handleBlur}
 						className="flex-1"
 					/>
-					<TextInput
-						type="number"
-						name="targetAgeRange.max"
+					<NumberField
+						label="Max"
 						value={formik.values.targetAgeRange?.max || ''}
-						onChange={(value: string) =>
+						onChange={(value: number) =>
 							formik.setFieldValue('targetAgeRange.max', value)
 						}
 						onBlur={formik.handleBlur}
@@ -113,21 +112,19 @@ export const TargetingAndRequirements = ({
 			<Box className="space-y-2">
 				<Paragraph weight="semibold">Income Range</Paragraph>
 				<Flex gap="3">
-					<TextInput
-						type="number"
-						name="incomeRange.min"
+					<NumberField
+						label="Min"
 						value={formik.values.incomeRange?.min || ''}
-						onChange={(value: string) =>
+						onChange={(value: number) =>
 							formik.setFieldValue('incomeRange.min', value)
 						}
 						onBlur={formik.handleBlur}
 						className="flex-1"
 					/>
-					<TextInput
-						type="number"
-						name="incomeRange.max"
+					<NumberField
+						label="Max"
 						value={formik.values.incomeRange?.max || ''}
-						onChange={(value: string) =>
+						onChange={(value: number) =>
 							formik.setFieldValue('incomeRange.min', value)
 						}
 						onBlur={formik.handleBlur}

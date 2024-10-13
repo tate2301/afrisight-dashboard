@@ -19,7 +19,7 @@ import {FormBuilder} from '@/forms-builder/components/FormBuilder';
 import {FormProvider, useFormContext} from '@/forms-builder/context';
 import Flex from '@/components/design-sytem/flex';
 import Box from '@/components/design-sytem/box';
-import {ColumnDef, getCoreRowModel, useReactTable} from '@tanstack/react-table';
+import {ColumnDef} from '@tanstack/react-table';
 import {useFormik} from 'formik';
 import {
 	Caption,
@@ -38,12 +38,7 @@ import {
 	useQueryClient,
 } from '@tanstack/react-query';
 import Spinner from '@/components/ui/spinner';
-import {GigClientInfo} from '@/components/gig-form/GigClientInfo';
-import {withFormState} from '@/components/gig-form/withFormState';
-import {GigDateInfo} from '@/components/gig-form/GigDateInfo';
-import {GigRewardPolicy} from '@/components/gig-form/GigRewardPolicy';
 import {DataTable} from '@/components/ui/datatable';
-import {TABLE_ACTIONS_HEIGHT} from '@/components/shells/TablePageHeader';
 import {ClientsCombobox} from '../../components/gig/create-gig-components/ClientsCombobox';
 import {
 	ErrorMessage,
@@ -51,6 +46,8 @@ import {
 } from '../../components/gig/create-gig-components/extras';
 import TableLink from '@/components/ui/datatable/Link';
 import {Gig} from '@/utils/types';
+import {RewardPolicySelection} from '@/components/gig/create-gig-components/RewardPolicySelection';
+import useDisclosure from '@/hooks/useDisclosure';
 
 type User = {
 	role: 'CLIENT';
@@ -91,6 +88,7 @@ type TabProps = {
 	mutate: UseMutateFunction<void, Error, FormState, unknown>;
 	isPending: boolean;
 	formik: any;
+	gig: Gig;
 };
 type BehaviorTabValues = Pick<FormState, 'questionOrdering' | 'difficulty'>;
 type RewardPolicyValues = Pick<FormState, 'rewardPolicy'>;
@@ -255,6 +253,7 @@ function GigPresenter(props: {
 							{survey && (
 								<BasicInfoTab
 									formik={formik}
+									gig={survey}
 									{...survey}
 									mutate={mutate}
 									isPending={isPending}
@@ -262,6 +261,7 @@ function GigPresenter(props: {
 							)}
 							<BehaviorTab
 								_id={id as string}
+								gig={survey}
 								formik={formik}
 								mutate={mutate}
 								isPending={isPending}
@@ -269,6 +269,7 @@ function GigPresenter(props: {
 							<Tabs.Content value="reward-policy">
 								<RewardPolicyTab
 									_id={id as string}
+									gig={survey}
 									formik={formik}
 									mutate={mutate}
 									isPending={isPending}
@@ -369,47 +370,32 @@ const FormTabBottomBar = ({
 
 /** Forms */
 
-const ClientInfo = withFormState(({formik}: {formik: any}) => (
-	<form onSubmit={formik.handleSubmit}>
-		<GigClientInfo
-			values={formik.values}
-			errors={formik.errors}
-			touched={formik.touched}
-			setFieldValue={formik.setFieldValue}
-		/>
-		{/* <GigBasicInfo
-      values={formik.values}
-      errors={formik.errors}
-      touched={formik.touched}
-      handleChange={formik.handleChange}
-      handleBlur={formik.handleBlur}
-    /> */}
-		<Button
-			type="submit"
-			disabled={!formik.isValid || formik.isSubmitting}>
-			Save Changes
-		</Button>
-	</form>
-));
+const RewardPolicy = ({formik, gig}: {formik: any; gig: Gig}) => {
+	const {onOpen: openAddRewardPolicyModal} = useDisclosure();
 
-const DateInfo = ({formik}: {formik: any}) => (
-	<GigDateInfo
-		values={formik.values}
-		errors={formik.errors}
-		touched={formik.touched}
-		handleChange={formik.handleChange}
-		handleBlur={formik.handleBlur}
-	/>
-);
-
-const RewardPolicy = ({formik}: {formik: any}) => {
-	console.log({formik});
+	const rewardPoliciesQuery = useQuery({
+		queryKey: ['reward-policies'],
+		queryFn: async () => {
+			const res = await axiosInstance.get('/gamification/reward-policy');
+			return res.docs.map((policy: any) => ({
+				data: {
+					name: policy.name,
+					dollarValue: policy.dollarValue,
+					pointsValue: policy.pointsValue,
+					voucher: policy.voucher,
+					createdAt: policy.createdAt,
+					_id: policy._id,
+				},
+				label: policy.name,
+				value: policy._id,
+			}));
+		},
+	});
 	return (
-		<GigRewardPolicy
-			values={formik.values}
-			errors={formik.errors}
-			touched={formik.touched}
-			setFieldValue={formik.setFieldValue}
+		<RewardPolicySelection
+			rewardPoliciesQuery={rewardPoliciesQuery}
+			formik={formik}
+			openAddRewardPolicyModal={openAddRewardPolicyModal}
 		/>
 	);
 };
@@ -643,6 +629,7 @@ const BehaviorTab = ({_id, mutate, isPending, formik}: TabProps) => {
 const RewardPolicyTab = ({
 	isPending,
 	formik,
+	gig,
 }: TabProps & RewardPolicyValues) => {
 	return (
 		<Tabs.Content value="reward-policy">
@@ -654,7 +641,10 @@ const RewardPolicyTab = ({
 						className="mb-6">
 						Reward Policy
 					</H3>
-					<RewardPolicy formik={formik} />
+					<RewardPolicy
+						gig={gig}
+						formik={formik}
+					/>
 					<FormTabBottomBar
 						dirty={formik.dirty}
 						loading={isPending}

@@ -1,34 +1,25 @@
 import {cn} from '@/lib/utils';
-import {
-	Building,
-	FileText,
-	Gift,
-	Home,
-	Inbox,
-	LogOutIcon,
-	PersonStanding,
-	Store,
-	Users,
-	Settings,
-	HelpCircle,
-} from 'lucide-react';
-import {usePathname} from 'next/navigation';
+import {LogOutIcon, Settings, HelpCircle} from 'lucide-react';
 import Box from '../../components/design-sytem/box';
 import {useRouter} from 'next/router';
 import {NAVBAR_HEIGHT, SIDEBAR_WIDTH} from '../constants';
-import Image from 'next/image';
 import Flex from '@/components/design-sytem/flex';
 import {Caption, Paragraph} from '@/components/design-sytem/typography';
 import Separator from '@/components/design-sytem/separator';
 import styled from '@/components/design-sytem/theme';
 import Link from 'next/link';
-import {PlusIcon, PlusSmallIcon} from '@heroicons/react/24/outline';
-import {TeamMember} from '@/components/icons/team.member';
 import AddUser from '@/components/modals/create-user';
 import {Avatar, Button, Text, DropdownMenu} from '@radix-ui/themes';
 import {useAuth} from '@/context/AuthContext';
 import {AddTeamMember} from '@/components/icons/team.member.add';
-import {ChevronDownIcon} from '@heroicons/react/24/solid';
+import {
+	BuildingStorefrontIcon,
+	ChevronDownIcon,
+	GiftTopIcon,
+	Square2StackIcon,
+	Square3Stack3DIcon,
+	UserCircleIcon,
+} from '@heroicons/react/24/solid';
 import {ChevronRight} from '@/components/icons/chevron.right';
 
 interface UserProfile {
@@ -45,22 +36,22 @@ const sidebarNavItems: SidebarNavItemProps[] = [
 	//     href: "/home"
 	// },
 	{
-		Icon: FileText,
+		Icon: Square3Stack3DIcon,
 		text: 'Gigs',
 		href: '/gigs',
 	},
 	{
-		Icon: Users,
+		Icon: UserCircleIcon,
 		text: 'Administrators',
 		href: '/users',
 	},
 	{
-		Icon: Building,
+		Icon: BuildingStorefrontIcon,
 		text: 'Clients',
 		href: '/clients',
 	},
 	{
-		Icon: Gift,
+		Icon: GiftTopIcon,
 		text: 'Rewards',
 		href: '/rewards',
 	},
@@ -81,6 +72,74 @@ const sidebarNavItems: SidebarNavItemProps[] = [
 	// }
 ];
 
+const WorkspaceCard = () => {
+	const {userProfile, isAuthenticated, logout} = useAuth();
+	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
+	return (
+		<Flex
+			className="relative items-center p-2 px-1 space-x-2 bg-white elevated-shadow m-2 rounded-xl"
+			css={{height: NAVBAR_HEIGHT}}>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger>
+					<Flex className="items-center space-x-2 cursor-pointer w-full">
+						<Avatar
+							fallback={(userProfile?.user.email[0] ?? '').toUpperCase()}
+							src={userProfile?.profilePicture}
+							alt="profile"
+							radius="large"
+							className="shadow-sm border border-white"
+						/>
+						<Box className="flex-1">
+							<Paragraph
+								weight={'bold'}
+								color={'primary'}
+								className="tracking-tight">
+								{fullName.trim() ? fullName : 'CX Mappers Admin'}
+							</Paragraph>
+							<Caption
+								weight={'bold'}
+								color={'tertiary'}
+								className="tracking-tight">
+								{userProfile?.user.email}
+							</Caption>
+						</Box>
+						<button className="p-2">
+							<ChevronDownIcon className="w-4 h-4" />
+						</button>
+					</Flex>
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content className="w-64 p-0">
+					<DropdownMenu.Item>
+						<Link href="/settings">
+							<Flex alignItems="center">
+								<Settings className="w-4 h-4 mr-2" />
+								Settings
+							</Flex>
+						</Link>
+					</DropdownMenu.Item>
+					<DropdownMenu.Item>
+						<Link href="/help">
+							<Flex alignItems="center">
+								<HelpCircle className="w-4 h-4 mr-2" />
+								Get Help
+							</Flex>
+						</Link>
+					</DropdownMenu.Item>
+					<DropdownMenu.Separator />
+					<DropdownMenu.Item
+						color="red"
+						onClick={logout}>
+						<Flex alignItems="center">
+							<LogOutIcon className="w-4 h-4 mr-2" />
+							Sign Out
+						</Flex>
+					</DropdownMenu.Item>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+		</Flex>
+	);
+};
+
 const Sidebar = () => {
 	const {userProfile, isAuthenticated, logout} = useAuth();
 	console.log({userProfile, isAuthenticated});
@@ -88,75 +147,13 @@ const Sidebar = () => {
 	return (
 		<Flex
 			direction={'column'}
-			className="bg-zinc-50 sticky top-0 h-screen flex-shrink-0"
+			className="bg-zinc-100 sticky top-0 h-screen flex-shrink-0"
 			css={{
 				borderRight: '1px solid $gray2',
 				width: SIDEBAR_WIDTH,
 				gap: 0,
 			}}>
-			<Flex
-				className="relative items-center p-2 px-1 space-x-2 bg-white shadow-sm border border-zinc-400/30 m-2 rounded-xl"
-				css={{height: NAVBAR_HEIGHT}}>
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger>
-						<Flex className="items-center space-x-2 cursor-pointer w-full">
-							<Avatar
-								fallback={(userProfile?.user.email[0] ?? '').toUpperCase()}
-								src={userProfile?.profilePicture}
-								alt="profile"
-								radius="large"
-								className="shadow-sm border border-white"
-							/>
-							<Box className="flex-1">
-								<Paragraph
-									weight={'bold'}
-									color={'primary'}
-									className="tracking-tight">
-									{fullName.trim() ? fullName : 'CX Mappers Admin'}
-								</Paragraph>
-								<Caption
-									weight={'bold'}
-									color={'tertiary'}
-									className="tracking-tight">
-									{userProfile?.user.email}
-								</Caption>
-							</Box>
-							<Button
-								variant="ghost"
-								color="gray">
-								<ChevronDownIcon className="w-4 h-4" />
-							</Button>
-						</Flex>
-					</DropdownMenu.Trigger>
-					<DropdownMenu.Content className="w-64 p-0">
-						<DropdownMenu.Item>
-							<Link href="/settings">
-								<Flex alignItems="center">
-									<Settings className="w-4 h-4 mr-2" />
-									Settings
-								</Flex>
-							</Link>
-						</DropdownMenu.Item>
-						<DropdownMenu.Item>
-							<Link href="/help">
-								<Flex alignItems="center">
-									<HelpCircle className="w-4 h-4 mr-2" />
-									Get Help
-								</Flex>
-							</Link>
-						</DropdownMenu.Item>
-						<DropdownMenu.Separator />
-						<DropdownMenu.Item
-							color="red"
-							onClick={logout}>
-							<Flex alignItems="center">
-								<LogOutIcon className="w-4 h-4 mr-2" />
-								Sign Out
-							</Flex>
-						</DropdownMenu.Item>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
-			</Flex>
+			<WorkspaceCard />
 			<Flex
 				direction={'column'}
 				className="p-2 space-y-2">
@@ -219,13 +216,13 @@ const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
 	const active = pathname.includes(href);
 
 	return (
-		<Link href={href}>
+		<a href={href}>
 			<ListItem
 				className={cn(
 					'rounded-md hover:bg-zinc-400/20',
-					active && 'bg-zinc-100 hover:bg-white',
+					active && 'bg-zinc-400/15 hover:bg-white',
 				)}>
-				<Icon className="w-4 h-4 mr-2" />
+				<Icon className="w-4 h-4 mr-4" />
 				{text}
 				{active && (
 					<Caption
@@ -235,7 +232,7 @@ const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
 					</Caption>
 				)}
 			</ListItem>
-		</Link>
+		</a>
 	);
 };
 

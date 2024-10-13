@@ -63,6 +63,13 @@ export const createTypedObjectFromFormData = <T extends Record<string, any>>(
 const useGig = (id: string, initialData: PartialGig = {}) => {
 	const [storedGig, setStoredGig] = useState<PartialGig>(initialData);
 
+	const deleteMutation = useMutation({
+		mutationKey: [id],
+		mutationFn: async () => {
+			await axiosInstance.delete(SURVEY_ROUTES.DELETE_SURVEY(id));
+		},
+	});
+
 	const gigMutation = useMutation({
 		mutationKey: [id],
 		mutationFn: async (
@@ -113,6 +120,7 @@ const useGig = (id: string, initialData: PartialGig = {}) => {
 			...gigMutation,
 			mutate,
 		},
+		cancel: deleteMutation,
 	};
 };
 

@@ -21,7 +21,7 @@ import {useGigFormNavigation} from '@/components/gig/hooks/useCreateGigPaginatio
 const CreateGig = () => {
 	const router = useRouter();
 	const {_id} = router.query as {_id: string};
-	const {data, query, mutation} = useGig(_id);
+	const {data, cancel, mutation} = useGig(_id);
 	const {saveAndContinue} = useGigFormNavigation(stages, 0);
 
 	const onSubmit = async (formData: CustomFormData<PartialGig>) => {
@@ -39,7 +39,8 @@ const CreateGig = () => {
 				...stage,
 				href: `${_id}/${stage.href}`,
 			}))}
-			currentIndex={0}>
+			currentIndex={0}
+			cancel={cancel}>
 			{data && (
 				<FormikWrapper
 					initialValues={_initialValues.basicInformation(data)}

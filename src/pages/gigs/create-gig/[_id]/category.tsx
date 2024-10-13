@@ -22,7 +22,7 @@ import Separator from '@/components/design-sytem/separator';
 const CreateGig = () => {
 	const router = useRouter();
 	const {_id} = router.query as {_id: string};
-	const {data, mutation} = useGig(_id);
+	const {data, mutation, cancel} = useGig(_id);
 	const {saveAndContinue} = useGigFormNavigation(stages, 3);
 
 	const onSubmit = async (formData: CustomFormData<PartialGig>) => {
@@ -40,7 +40,8 @@ const CreateGig = () => {
 				...stage,
 				href: `${_id}/${stage.href}`,
 			}))}
-			currentIndex={3}>
+			currentIndex={3}
+			cancel={cancel}>
 			{data && (
 				<FormikWrapper
 					initialValues={_initialValues.category(data)}
