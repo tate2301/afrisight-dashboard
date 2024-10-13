@@ -14,7 +14,3 @@
 	border-bottom-width: 1px;
 	border-right-width: 1px;
 }
-
-.datatable td:first-child {
-	border-left-width: 1px;
-}

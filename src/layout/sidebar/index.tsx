@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import {cn} from '@/lib/utils';
 import {
 	Building,
 	FileText,
@@ -12,23 +12,24 @@ import {
 	Settings,
 	HelpCircle,
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import {usePathname} from 'next/navigation';
 import Box from '../../components/design-sytem/box';
-import { useRouter } from 'next/router';
-import { NAVBAR_HEIGHT, SIDEBAR_WIDTH } from '../constants';
+import {useRouter} from 'next/router';
+import {NAVBAR_HEIGHT, SIDEBAR_WIDTH} from '../constants';
 import Image from 'next/image';
 import Flex from '@/components/design-sytem/flex';
-import { Caption, Paragraph } from '@/components/design-sytem/typography';
+import {Caption, Paragraph} from '@/components/design-sytem/typography';
 import Separator from '@/components/design-sytem/separator';
 import styled from '@/components/design-sytem/theme';
 import Link from 'next/link';
-import { PlusIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
-import { TeamMember } from '@/components/icons/team.member';
+import {PlusIcon, PlusSmallIcon} from '@heroicons/react/24/outline';
+import {TeamMember} from '@/components/icons/team.member';
 import AddUser from '@/components/modals/create-user';
-import { Avatar, Button, Text, DropdownMenu } from '@radix-ui/themes';
-import { useAuth } from '@/context/AuthContext';
-import { AddTeamMember } from '@/components/icons/team.member.add';
-import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import {Avatar, Button, Text, DropdownMenu} from '@radix-ui/themes';
+import {useAuth} from '@/context/AuthContext';
+import {AddTeamMember} from '@/components/icons/team.member.add';
+import {ChevronDownIcon} from '@heroicons/react/24/solid';
+import {ChevronRight} from '@/components/icons/chevron.right';
 
 interface UserProfile {
 	firstName?: string;
@@ -81,8 +82,8 @@ const sidebarNavItems: SidebarNavItemProps[] = [
 ];
 
 const Sidebar = () => {
-	const { userProfile, isAuthenticated, logout } = useAuth();
-	console.log({ userProfile, isAuthenticated });
+	const {userProfile, isAuthenticated, logout} = useAuth();
+	console.log({userProfile, isAuthenticated});
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
@@ -92,11 +93,10 @@ const Sidebar = () => {
 				borderRight: '1px solid $gray2',
 				width: SIDEBAR_WIDTH,
 				gap: 0,
-				backgroundColor: '$gray1',
 			}}>
 			<Flex
-				className="relative items-center p-2 px-1 space-x-2 bg-white shadow-sm m-2 rounded-xl"
-				css={{ height: NAVBAR_HEIGHT }}>
+				className="relative items-center p-2 px-1 space-x-2 bg-white shadow-sm border border-zinc-400/30 m-2 rounded-xl"
+				css={{height: NAVBAR_HEIGHT}}>
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
 						<Flex className="items-center space-x-2 cursor-pointer w-full">
@@ -121,12 +121,14 @@ const Sidebar = () => {
 									{userProfile?.user.email}
 								</Caption>
 							</Box>
-							<Button variant="ghost" color="gray" >
+							<Button
+								variant="ghost"
+								color="gray">
 								<ChevronDownIcon className="w-4 h-4" />
 							</Button>
 						</Flex>
 					</DropdownMenu.Trigger>
-					<DropdownMenu.Content className='w-64 p-0'>
+					<DropdownMenu.Content className="w-64 p-0">
 						<DropdownMenu.Item>
 							<Link href="/settings">
 								<Flex alignItems="center">
@@ -144,7 +146,9 @@ const Sidebar = () => {
 							</Link>
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator />
-						<DropdownMenu.Item color="red" onClick={logout}>
+						<DropdownMenu.Item
+							color="red"
+							onClick={logout}>
 							<Flex alignItems="center">
 								<LogOutIcon className="w-4 h-4 mr-2" />
 								Sign Out
@@ -194,7 +198,7 @@ const Sidebar = () => {
 const ListItem = styled('li', {
 	display: 'flex',
 	alignItems: 'center',
-	padding: '$1 $3',
+	padding: '$2 $3',
 	borderRadius: '8px',
 	fontWeight: '500',
 	fontSize: '14px',
@@ -209,7 +213,7 @@ type SidebarNavItemProps = {
 	text: string;
 	href: string;
 };
-const SidebarNavItem = ({ Icon, text, href }: SidebarNavItemProps) => {
+const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
 	const router = useRouter();
 	const pathname = router.pathname;
 	const active = pathname.includes(href);
@@ -219,10 +223,17 @@ const SidebarNavItem = ({ Icon, text, href }: SidebarNavItemProps) => {
 			<ListItem
 				className={cn(
 					'rounded-md hover:bg-zinc-400/20',
-					active && 'bg-white hover:bg-white shadow-sm',
+					active && 'bg-zinc-100 hover:bg-white',
 				)}>
 				<Icon className="w-4 h-4 mr-2" />
 				{text}
+				{active && (
+					<Caption
+						color="tertiary"
+						className="ml-auto">
+						<ChevronRight className="size-4" />
+					</Caption>
+				)}
 			</ListItem>
 		</Link>
 	);

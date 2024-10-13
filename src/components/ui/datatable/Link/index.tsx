@@ -2,6 +2,7 @@ import Link, {LinkProps} from 'next/link';
 import {ReactNode} from 'react';
 import TableLinkStyles from './link.module.css';
 import {cn} from '@/lib/utils';
+import {Text} from '@radix-ui/themes';
 
 const TableLink = ({
 	children,
@@ -14,7 +15,11 @@ const TableLink = ({
 			{...rest}
 			style={style}
 			className={cn(TableLinkStyles.link, className)}>
-			{children}
+			<Text
+				className="link-text"
+				size="2">
+				{children}
+			</Text>
 		</Link>
 	);
 };

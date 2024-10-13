@@ -44,9 +44,13 @@ import {GigDateInfo} from '@/components/gig-form/GigDateInfo';
 import {GigRewardPolicy} from '@/components/gig-form/GigRewardPolicy';
 import {DataTable} from '@/components/ui/datatable';
 import {TABLE_ACTIONS_HEIGHT} from '@/components/shells/TablePageHeader';
-import {ClientsCombobox} from './create-gig-components/ClientsCombobox';
-import {ErrorMessage, TextInput} from './create-gig-components/extras';
+import {ClientsCombobox} from '../../components/gig/create-gig-components/ClientsCombobox';
+import {
+	ErrorMessage,
+	TextInput,
+} from '../../components/gig/create-gig-components/extras';
 import TableLink from '@/components/ui/datatable/Link';
+import {Gig} from '@/utils/types';
 
 type User = {
 	role: 'CLIENT';
@@ -75,30 +79,6 @@ type RewardPolicy = {
 	description: string;
 	dollarValue: number;
 	pointsValue: number;
-};
-
-type Gig = {
-	name: string;
-	description: string;
-	coverImage: string;
-	difficulty: 'easy' | 'medium' | 'hard';
-	dollarRewardValue: number;
-	duration: string;
-	startDate: string;
-	endDate: string;
-	status: 'DRAFT' | 'ACTIVE' | 'COMPLETED';
-	targetParticipants: number;
-	completedParticipants: number;
-	views: number;
-	rewardPolicy: RewardPolicy;
-	createdAt: string;
-	updatedAt: string;
-	questionOrdering: 'preserve' | 'shuffle';
-	category: string;
-	client: string;
-	form: string;
-	_id: string;
-	__v: number;
 };
 
 const PATCH_GIG = (id: string) => `/survey/${id}`;
@@ -139,7 +119,7 @@ interface FormBuilderHeaderProps {
 	isSaving: boolean;
 }
 
-type FormState = Omit<Gig, 'rewardPolicy'> & {rewardPolicy: string};
+type FormState = Partial<Omit<Gig, 'rewardPolicy'> & {rewardPolicy?: string}>;
 
 export default function GigPage() {
 	const router = useRouter();
@@ -236,8 +216,11 @@ function GigPresenter(props: {
 	const {_id: id} = survey;
 
 	const formik = useFormik({
-		initialValues: {...survey, rewardPolicy: survey.rewardPolicy._id},
-		onSubmit: (values) => mutate(values),
+		initialValues: {
+			...survey,
+			rewardPolicy: survey.rewardPolicy?._id,
+		} as Partial<Omit<Gig, 'rewardPolicy'> & {rewardPolicy?: string}>,
+		onSubmit: (values: FormState) => mutate(values),
 	});
 
 	return (
@@ -289,7 +272,7 @@ function GigPresenter(props: {
 									formik={formik}
 									mutate={mutate}
 									isPending={isPending}
-									rewardPolicy={survey.rewardPolicy._id}
+									rewardPolicy={survey.rewardPolicy?._id}
 								/>
 							</Tabs.Content>
 						</Tabs.Root>

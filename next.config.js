@@ -11,6 +11,10 @@ const nextConfig = {
 				protocol: 'https',
 				hostname: 'loremflickr.com',
 			},
+			{
+				protocol: 'https',
+				hostname: 'res.cloudinary.com',
+			},
 		],
 	},
 };
@@ -20,6 +24,7 @@ module.exports = nextConfig;
 // Injected content via Sentry wizard below
 
 const {withSentryConfig} = require('@sentry/nextjs');
+const {hostname} = require('os');
 
 module.exports = withSentryConfig(module.exports, {
 	// For all available options, see:

@@ -1,0 +1,69 @@
+.item {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	position: relative;
+}
+
+.item::before {
+	content: '';
+	height: 24px;
+	width: 24px;
+	border-radius: 50%;
+	border: 2px solid #eee;
+}
+
+.item span {
+	position: relative;
+	padding-bottom: 2px;
+}
+
+.item svg {
+	transition: color 200ms;
+	color: var(--colors-primary);
+}
+
+.item span::after {
+	transition: background 200ms;
+	content: '';
+	display: block;
+	width: 100%;
+	height: 1.5px;
+	border-radius: 2px;
+	background: rgb(238, 239, 241);
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	border-radius: 1px;
+}
+
+.item:not(:last-child)::after {
+	content: '';
+	position: absolute;
+	top: 28px;
+	left: 11px;
+	height: 20px;
+	width: 2px;
+	background-color: #eee;
+	border-radius: 8px;
+}
+
+.item:is([data-active='true'])::before {
+	border-color: var(--colors-primary);
+}
+
+.item:is([data-completed='true'])::before {
+	background-color: var(--colors-white);
+	position: absolute;
+	border: none;
+	z-index: 0;
+}
+
+.item[data-active='true'] span {
+	color: var(--colors-primary) !important;
+}
+
+.item:not([data-active='true']) {
+	cursor: pointer;
+	transition: all 0.2s ease;
+}

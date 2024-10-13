@@ -1,3 +1,5 @@
+import {RewardPolicy} from '@/pages/gigs';
+
 export interface UserInfoTypes {
 	id: number;
 	username: string;
@@ -240,3 +242,34 @@ export interface FilterValue {
 export interface FilterState {
 	[key: string]: FilterValue;
 }
+
+export type Gig = {
+	name: string;
+	description: string;
+	coverImage: string;
+	difficulty: 'easy' | 'medium' | 'hard';
+	dollarRewardValue: number;
+	duration: number;
+	startDate: string;
+	endDate: string;
+	status: 'DRAFT' | 'ACTIVE' | 'COMPLETED';
+	targetParticipants: number;
+	completedParticipants: number;
+	views: number;
+	rewardPolicy?: RewardPolicy;
+	createdAt: string;
+	updatedAt: string;
+	questionOrdering: 'preserve' | 'shuffle';
+	category: string;
+	client: string;
+	form: string;
+	location: string;
+	tags: string[];
+	targetAgeRange: {min: number; max: number};
+	targetGender: 'Male' | 'Female' | 'Other' | 'All';
+	languageRequirements: string[];
+	educationLevel: string;
+	incomeRange: {min: number; max: number};
+	_id: string;
+	__v: number;
+};

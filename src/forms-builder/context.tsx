@@ -35,7 +35,6 @@ export function FormProvider({
 	onFormChange,
 }: FormProviderProps) {
 	const hydrateForm = (form: string): Form => JSON.parse(form);
-	const initialFormSetRef = useRef(false);
 
 	const [form, setForm] = useState<Form>(() => {
 		if (initialForm) {

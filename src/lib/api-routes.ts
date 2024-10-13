@@ -26,9 +26,11 @@ export const GAMIFICATION_ROUTES = {
 
 export const SURVEY_ROUTES = {
 	CREATE_SURVEY: '/survey',
+	SAVE_SURVEY: (id: string) => `/survey/${id}`,
 	GET_SURVEYS: '/survey',
 	GET_SURVEY_BY_ID: (id: string) => `/survey/${id}`,
 	GET_RESPONSES_BY_SURVEY_ID: (id: string) => `/survey/${id}/response`,
+	CATEGORIES: '/survey/categories',
 };
 
 export const FORM_ROUTES = {

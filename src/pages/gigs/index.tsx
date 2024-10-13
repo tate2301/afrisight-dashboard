@@ -1,22 +1,22 @@
 import GeneralLayout from '../../layout/GeneralLayout';
 import axiosInstance from '@/hooks/useApiFetcher';
 import {SURVEY_ROUTES} from '@/lib/api-routes';
-import Link from 'next/link';
 import {PlusIcon} from '@heroicons/react/24/outline';
 import Box from '@/components/design-sytem/box';
 import {Button} from '@radix-ui/themes';
 import GigCard from '@/components/gig/card';
 import TablePageHeader from '@/components/shells/TablePageHeader';
 import {useSearchParams} from 'next/navigation';
-import {keepPreviousData, useQuery} from '@tanstack/react-query';
+import {keepPreviousData, useMutation, useQuery} from '@tanstack/react-query';
 import {useSetPageTitle} from '@/layout/context';
-import {apiUrl, buildApiUrlWithParams} from '@/utils/apiUrl';
+import {buildApiUrlWithParams} from '@/utils/apiUrl';
 import {useEffect} from 'react';
 import {useSearch} from '@/components/search/use-search';
 import {usePagination} from '@/hooks/use-pagination';
-import {FilterConfig, FilterConfigMap, useFilter} from '@/hooks/use-filter';
+import {FilterConfigMap, useFilter} from '@/hooks/use-filter';
 import {CloudDownloadIcon} from 'lucide-react';
 import Separator from '@/components/design-sytem/separator';
+import {useRouter} from 'next/router';
 
 const tabs = ['All', 'Pending', 'Running', 'Paused', 'Archived'];
 const tabToGigStatus = (status: string) => {
@@ -77,6 +77,7 @@ const filterConfig: FilterConfigMap = {
 function Gig() {
 	useSetPageTitle('Gigs');
 	const query = useSearchParams();
+	const router = useRouter();
 	const {filters, FilterButton, getFilterQuery} = useFilter(filterConfig);
 
 	const activeTab =
@@ -117,6 +118,14 @@ function Gig() {
 			return response;
 		},
 		placeholderData: keepPreviousData,
+	});
+
+	const createGigMutation = useMutation({
+		mutationKey: ['gigs'],
+		mutationFn: async () => {
+			const {_id} = await axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY);
+			router.push(`/gigs/create-gig/${_id}`);
+		},
 	});
 
 	useEffect(() => {
@@ -175,11 +184,12 @@ function Gig() {
 										radius={'full'}>
 										<CloudDownloadIcon className="size-4" /> Export
 									</Button>
-									<Link href={'/gigs/create_gig'}>
-										<Button radius={'full'}>
-											<PlusIcon className="size-4" /> Create gig
-										</Button>
-									</Link>
+									<Button
+										onClick={() => createGigMutation.mutate()}
+										loading={createGigMutation.isPending}
+										radius={'full'}>
+										<PlusIcon className="size-4" /> Create gig
+									</Button>
 								</>
 							}
 							title="Gigs"

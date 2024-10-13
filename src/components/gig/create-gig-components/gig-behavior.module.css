@@ -1,0 +1,21 @@
+.radio[data-state='checked'] {
+	background-color: #fff;
+	box-shadow: var(--select-shadow);
+}
+
+.radio::before {
+	content: '';
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	border-color: #eee;
+	border-width: 2px;
+	border-style: solid;
+	position: relative;
+	transition: color 200ms;
+}
+
+.radio[data-state='checked']::before {
+	border-color: var(--accent-indicator);
+	border-width: 4px;
+}

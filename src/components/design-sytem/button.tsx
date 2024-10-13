@@ -5,7 +5,7 @@ const Button = styled('button', {
 	display: 'inline-flex',
 	alignItems: 'center',
 	justifyContent: 'center',
-	borderRadius: '12px',
+	borderRadius: '8px',
 	fontWeight: '500',
 	fontSize: '14px',
 	transition: 'all 0.2s ease',
