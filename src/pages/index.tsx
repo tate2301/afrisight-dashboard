@@ -64,7 +64,7 @@ function Home() {
 			<CXMappersHeader subtitle="Business Portal" />
 			<form
 				onSubmit={loginToDashboard}
-				className="p-4 md:p-0 max-w-lg mx-auto w-full flex flex-col space-y-6 bg-white rounded-xl overflow-hidden">
+				className="md:p-0 max-w-md mx-auto w-full flex flex-col space-y-6 bg-white rounded-xl overflow-hidden">
 				<div className="inline-flex items-center gap-2 p-4 bg-[#FAFAFA]">
 					<span className="material-symbols-rounded">corporate_fare</span>
 					<h3 className="text-zinc-900 font-medium">Sign in to your account</h3>
@@ -87,7 +87,7 @@ function Home() {
 					<div className="flex flex-col space-y-2">
 						<label
 							htmlFor="password"
-							className="text-sm font-medium text-zinc-500">
+							className="text-sm font-medium text-zinc-500 focus:border-[#007C7C]">
 							Password
 						</label>
 						<TextField.Root
@@ -102,7 +102,11 @@ function Home() {
 						<Link
 							href="/forgot-password"
 							className="font-medium text-indigo-600">
-							<Button variant="ghost">Forgot password?</Button>
+							<Button
+								variant="ghost"
+								className="font-semibold">
+								Forgot password?
+							</Button>
 						</Link>
 					</div>
 					{err && (
