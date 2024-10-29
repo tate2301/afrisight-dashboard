@@ -182,7 +182,7 @@ type QuickActionCardProps = {
 
 const QuickActionCard = ({title, caption, button}: QuickActionCardProps) => {
 	return (
-		<div className="bg-white rounded-xl p-4 bg-zinc-100 rounded-2xl w-64">
+		<div className="p-4 bg-zinc-100 rounded-2xl w-64">
 			<Paragraph
 				as="h3"
 				weight={'semibold'}

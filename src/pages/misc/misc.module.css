@@ -1,0 +1,104 @@
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	background-color: var(--light-background);
+	padding: 1.5rem;
+}
+
+.card {
+	background-color: var(--card-bg);
+	border-radius: 10px; /* Slightly more rounded for a softer feel */
+	max-width: 512px; /* Reduced max width for a tighter layout */
+	width: 100%;
+}
+
+.header {
+	color: var(--primary-text);
+	font-size: 2rem; /* Reduced to improve visual balance */
+	margin-bottom: 1.2rem; /* Adjusted spacing for consistency */
+	font-weight: 600; /* Lighter font weight for better readability in light mode */
+	padding: 1rem;
+}
+
+.inputGroup {
+	margin-bottom: 1.5rem;
+	padding: 1rem;
+}
+
+.label {
+	display: block;
+	margin-bottom: 0.5rem;
+	color: #666666; /* Darker Ash Gray for better contrast on light background */
+	font-weight: 500;
+}
+
+.input {
+	width: 100%;
+	padding: 0.9rem; /* Increased padding for better touch targets */
+	font-size: 1rem;
+	border: 1px solid var(--input-border);
+	border-radius: 8px;
+	transition: border-color 0.3s ease;
+}
+
+.input:focus {
+	outline: none;
+	border-color: var(--focus-border);
+	box-shadow: 0 0 0 3px rgba(255, 194, 56, 0.3);
+}
+
+.actions {
+	margin-top: 1rem; /* Reduced margin for compact spacing */
+}
+
+.button {
+	width: calc(100%-1rem);
+	padding: 1rem; /* Increased padding for a more comfortable button */
+	background-color: var(--primary-button-bg);
+	color: var(--button-text-color);
+	font-size: 1rem; /* Increased button font size for emphasis */
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 600;
+	transition:
+		background-color 0.3s ease,
+		transform 0.1s ease,
+		box-shadow 0.3s ease;
+	margin: 1rem;
+}
+
+.button:hover {
+	background-color: var(--hover-bg);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Softer shadow effect for button hover */
+}
+
+.button:active {
+	transform: scale(0.98);
+}
+
+.button:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(255, 194, 56, 0.3);
+}
+
+.links {
+	margin-top: 1.5rem;
+	text-align: center;
+	padding: 1rem;
+}
+
+.link {
+	display: block;
+	margin-bottom: 0.5rem;
+	color: var(--link-color);
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.link:hover {
+	color: var(--link-hover-color);
+}

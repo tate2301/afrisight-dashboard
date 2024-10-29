@@ -60,61 +60,76 @@ function Home() {
 	};
 
 	return (
-		<div className="w-full items-center justify-center content-center min-h-screen space-y-6 bg-white">
+		<div className="w-full items-center justify-center content-center min-h-screen space-y-6 bg-[#F5F5F5]">
 			<CXMappersHeader subtitle="Business Portal" />
 			<form
 				onSubmit={loginToDashboard}
-				className="p-4 md:p-0 max-w-sm mx-auto w-full flex flex-col space-y-6">
-				<h3 className="text-lg text-zinc-900 font-medium">Sign in</h3>
-				<div className="flex flex-col space-y-2">
-					<label
-						htmlFor="username"
-						className="text-sm font-medium text-zinc-500">
-						Email
-					</label>
-					<TextField.Root
-						type="email"
-						placeholder="username"
-						variant="soft"
-						value={username}
-						onChange={(e) => setUsername(e.target.value)}
-					/>
+				className="p-4 md:p-0 max-w-lg mx-auto w-full flex flex-col space-y-6 bg-white rounded-xl overflow-hidden">
+				<div className="inline-flex items-center gap-2 p-4 bg-[#FAFAFA]">
+					<span className="material-symbols-rounded">corporate_fare</span>
+					<h3 className="text-zinc-900 font-medium">Sign in to your account</h3>
 				</div>
-				<div className="flex flex-col space-y-2">
-					<label
-						htmlFor="password"
-						className="text-sm font-medium text-zinc-500">
-						Password
-					</label>
-					<TextField.Root
-						type="password"
-						variant="soft"
-						placeholder="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-					/>
-				</div>
-				<div className="flex justify-end">
-					<Link
-						href="/forgot-password"
-						className="font-medium text-indigo-600">
-						<Button variant="ghost">Forgot password?</Button>
-					</Link>
-				</div>
-				{err && (
-					<AlertMessage
-						type="error"
-						text={err.toString()}
-					/>
-				)}
-				{msg && (
-					<AlertMessage
-						type="success"
-						text={msg.toString()}
-					/>
-				)}
+				<div className="p-4 space-y-6">
+					<div className="flex flex-col space-y-2">
+						<label
+							htmlFor="username"
+							className="text-sm font-medium text-zinc-500">
+							Email
+						</label>
+						<TextField.Root
+							type="email"
+							placeholder="username"
+							variant="soft"
+							value={username}
+							onChange={(e) => setUsername(e.target.value)}
+						/>
+					</div>
+					<div className="flex flex-col space-y-2">
+						<label
+							htmlFor="password"
+							className="text-sm font-medium text-zinc-500">
+							Password
+						</label>
+						<TextField.Root
+							type="password"
+							variant="soft"
+							placeholder="password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+					</div>
+					<div className="flex justify-end">
+						<Link
+							href="/forgot-password"
+							className="font-medium text-indigo-600">
+							<Button variant="ghost">Forgot password?</Button>
+						</Link>
+					</div>
+					{err && (
+						<AlertMessage
+							type="error"
+							text={err.toString()}
+						/>
+					)}
+					{msg && (
+						<AlertMessage
+							type="success"
+							text={msg.toString()}
+						/>
+					)}
 
-				<Button loading={loading}>Sign in</Button>
+					<Button
+						style={{
+							backgroundColor: '#007C7C',
+							color: '#fff',
+							height: '40px',
+							fontWeight: 600,
+							width: '100%',
+						}}
+						loading={loading}>
+						Sign in
+					</Button>
+				</div>
 			</form>
 		</div>
 	);
