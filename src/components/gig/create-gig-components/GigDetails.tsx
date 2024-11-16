@@ -57,11 +57,11 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 				<Paragraph weight="semibold">
 					Description <span className="text-red-500">*</span>
 				</Paragraph>
-				<TextInput
-					className="mb-2"
+				<textarea
+					className="mb-2 border-2 rounded w-full p-2"
 					name="description"
 					value={formik.values.description}
-					onChange={(value) => formik.setFieldValue('description', value)}
+					onChange={(e) => formik.setFieldValue('description', e.target.value)}
 					onBlur={formik.handleBlur}
 				/>
 				{formik.touched.description && formik.errors.description && (
