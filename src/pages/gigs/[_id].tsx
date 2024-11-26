@@ -1,11 +1,11 @@
-import {useRouter} from 'next/router';
-import {Suspense, useCallback, useEffect, useMemo, useState} from 'react';
-import {Card, CardContent, CardHeader} from '@/components/ui/card';
-import {Skeleton} from '@/components/ui/skeleton';
+import { useRouter } from 'next/router';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import GeneralLayout from '@/layout/GeneralLayout';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {SURVEY_ROUTES} from '@/lib/api-routes';
-import {Save} from 'lucide-react';
+import { SURVEY_ROUTES } from '@/lib/api-routes';
+import { Save } from 'lucide-react';
 import {
 	Badge,
 	Button,
@@ -15,12 +15,12 @@ import {
 	Tabs,
 	Text,
 } from '@radix-ui/themes';
-import {FormBuilder} from '@/forms-builder/components/FormBuilder';
-import {FormProvider, useFormContext} from '@/forms-builder/context';
+import { FormBuilder } from '@/forms-builder/components/FormBuilder';
+import { FormProvider, useFormContext } from '@/forms-builder/context';
 import Flex from '@/components/design-sytem/flex';
 import Box from '@/components/design-sytem/box';
-import {ColumnDef} from '@tanstack/react-table';
-import {useFormik} from 'formik';
+import { ColumnDef } from '@tanstack/react-table';
+import { useFormik } from 'formik';
 import {
 	Caption,
 	H1,
@@ -38,15 +38,15 @@ import {
 	useQueryClient,
 } from '@tanstack/react-query';
 import Spinner from '@/components/ui/spinner';
-import {DataTable} from '@/components/ui/datatable';
-import {ClientsCombobox} from '../../components/gig/create-gig-components/ClientsCombobox';
+import { DataTable } from '@/components/ui/datatable';
+import { ClientsCombobox } from '../../components/gig/create-gig-components/ClientsCombobox';
 import {
 	ErrorMessage,
 	TextInput,
 } from '../../components/gig/create-gig-components/extras';
 import TableLink from '@/components/ui/datatable/Link';
-import {Gig} from '@/utils/types';
-import {RewardPolicySelection} from '@/components/gig/create-gig-components/RewardPolicySelection';
+import { Gig } from '@/utils/types';
+import { RewardPolicySelection } from '@/components/gig/create-gig-components/RewardPolicySelection';
 import useDisclosure from '@/hooks/useDisclosure';
 
 type User = {
@@ -117,12 +117,12 @@ interface FormBuilderHeaderProps {
 	isSaving: boolean;
 }
 
-type FormState = Partial<Omit<Gig, 'rewardPolicy'> & {rewardPolicy?: string}>;
+type FormState = Partial<Omit<Gig, 'rewardPolicy'> & { rewardPolicy?: string }>;
 
 export default function GigPage() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const {_id: id} = router.query;
+	const { _id: id } = router.query;
 	const queryKey = `gig-${id}`;
 
 	const fetchGigData = async (id: string) => {
@@ -143,12 +143,12 @@ export default function GigPage() {
 
 	const survey: Gig | undefined = useMemo(() => gig?.data ?? undefined, [gig]);
 
-	const {mutate, isPending} = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationFn: async (values: FormState) => {
 			await patchGig(id as string, values);
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({queryKey: [queryKey]});
+			queryClient.invalidateQueries({ queryKey: [queryKey] });
 		},
 	});
 
@@ -157,7 +157,7 @@ export default function GigPage() {
 			await apiClient.post(`/survey/${id as string}/publish/toggle`);
 		},
 		onSuccess: async () => {
-			await queryClient.invalidateQueries({queryKey: [queryKey]});
+			await queryClient.invalidateQueries({ queryKey: [queryKey] });
 		},
 	});
 
@@ -166,7 +166,7 @@ export default function GigPage() {
 			if (!survey) return;
 
 			if (survey) {
-				const values = {...(survey as Gig), form: form} as unknown as FormState;
+				const values = { ...(survey as Gig), form: form } as unknown as FormState;
 				mutate(values);
 			}
 		},
@@ -210,14 +210,14 @@ function GigPresenter(props: {
 	publishGig: (form: any) => void;
 	isPublishing: boolean;
 }) {
-	const {survey, mutate, isPending, saveGigChanges, publishGig} = props;
-	const {_id: id} = survey;
+	const { survey, mutate, isPending, saveGigChanges, publishGig } = props;
+	const { _id: id } = survey;
 
 	const formik = useFormik({
 		initialValues: {
 			...survey,
 			rewardPolicy: survey.rewardPolicy?._id,
-		} as Partial<Omit<Gig, 'rewardPolicy'> & {rewardPolicy?: string}>,
+		} as Partial<Omit<Gig, 'rewardPolicy'> & { rewardPolicy?: string }>,
 		onSubmit: (values: FormState) => mutate(values),
 	});
 
@@ -229,11 +229,37 @@ function GigPresenter(props: {
 						<Tabs.Root defaultValue="responses">
 							<Tabs.List className="flex justify-between gap-2 sticky top-0 h-[48px] z-[2000] bg-white">
 								<Flex className="h-full items-end">
-									<Tabs.Trigger value="responses">Responses</Tabs.Trigger>
-									<Tabs.Trigger value="questions">Questions</Tabs.Trigger>
-									{/* <Tabs.Trigger value="basic-info">Settings</Tabs.Trigger>
-                  <Tabs.Trigger value="additional">Additional information</Tabs.Trigger>
-                  <Tabs.Trigger value="reward-policy">Reward Policy</Tabs.Trigger> */}
+									<Tabs.Trigger value="pending">
+										{' '}
+										<span className="material-symbols-rounded mr-2 text-base">
+											pending_actions
+										</span>
+										Pending Responses
+									</Tabs.Trigger>
+									<Tabs.Trigger value="responses">
+										<span className="material-symbols-rounded mr-2 text-base">
+											check_circle
+										</span>
+										Approved Responses
+									</Tabs.Trigger>
+									<Tabs.Trigger value="stats">
+										<span className="material-symbols-rounded mr-2 text-base">
+											query_stats
+										</span>
+										Stats
+									</Tabs.Trigger>
+									<Tabs.Trigger value="questions">
+										<span className="material-symbols-rounded mr-2 text-base">
+											indeterminate_question_box
+										</span>
+										Questions
+									</Tabs.Trigger>
+									<Tabs.Trigger value="settings">
+										<span className="material-symbols-rounded mr-2 text-base">
+											settings
+										</span>
+										Settings
+									</Tabs.Trigger>
 								</Flex>
 								<NavActions
 									save={saveGigChanges}
@@ -309,16 +335,16 @@ const NavActions = ({
 	isPublishing,
 	status,
 }: FormBuilderHeaderProps) => {
-	const {form, exportForm} = useFormContext();
+	const { form, exportForm } = useFormContext();
 	const onSaveChanges = () => save(exportForm());
 	const onPublish = () => publish(form);
 	return (
 		<Flex
 			alignItems="center"
 			className="px-4"
-			css={{gap: '8px'}}>
+			css={{ gap: '8px' }}>
 			<Badge
-				style={{fontWeight: '500'}}
+				style={{ fontWeight: '500' }}
 				color={
 					status === 'DRAFT' ? 'blue' : status === 'ACTIVE' ? 'green' : 'red'
 				}>
@@ -357,7 +383,7 @@ const FormTabBottomBar = ({
 }) => (
 	<>
 		<Separator className="my-6" />
-		<Flex css={{marginTop: 20}}>
+		<Flex css={{ marginTop: 20 }}>
 			<Button
 				type={'submit'}
 				disabled={!dirty || loading}
@@ -370,8 +396,8 @@ const FormTabBottomBar = ({
 
 /** Forms */
 
-const RewardPolicy = ({formik, gig}: {formik: any; gig: Gig}) => {
-	const {onOpen: openAddRewardPolicyModal} = useDisclosure();
+const RewardPolicy = ({ formik, gig }: { formik: any; gig: Gig }) => {
+	const { onOpen: openAddRewardPolicyModal } = useDisclosure();
 
 	const rewardPoliciesQuery = useQuery({
 		queryKey: ['reward-policies'],
@@ -400,10 +426,10 @@ const RewardPolicy = ({formik, gig}: {formik: any; gig: Gig}) => {
 	);
 };
 
-const QuestionOrderingSection = ({formik}: {formik: any}) => (
+const QuestionOrderingSection = ({ formik }: { formik: any }) => (
 	<Box
 		className="mb-6"
-		css={{maxWidth: 800}}>
+		css={{ maxWidth: 800 }}>
 		<Paragraph
 			weight={'bold'}
 			color={'primary'}>
@@ -417,7 +443,7 @@ const QuestionOrderingSection = ({formik}: {formik: any}) => (
 			value={formik.values.questionOrdering}
 			onValueChange={(value) => formik.setFieldValue('questionOrdering', value)}
 			defaultValue="preserve"
-			columns={{initial: '1', sm: '3'}}>
+			columns={{ initial: '1', sm: '3' }}>
 			<RadioCards.Item value="preserve">
 				<Flex direction="column">
 					<Paragraph
@@ -446,8 +472,8 @@ const QuestionOrderingSection = ({formik}: {formik: any}) => (
 	</Box>
 );
 
-const DifficultySection = ({formik}: {formik: any}) => (
-	<Box css={{maxWidth: 800}}>
+const DifficultySection = ({ formik }: { formik: any }) => (
+	<Box css={{ maxWidth: 800 }}>
 		<Paragraph
 			weight={'bold'}
 			color={'primary'}>
@@ -461,7 +487,7 @@ const DifficultySection = ({formik}: {formik: any}) => (
 			value={formik.values.difficulty}
 			onValueChange={(value) => formik.setFieldValue('difficulty', value)}
 			defaultValue="easy"
-			columns={{initial: '1', sm: '3'}}>
+			columns={{ initial: '1', sm: '3' }}>
 			<RadioCards.Item value="easy">
 				<Flex direction="column">
 					<Paragraph
@@ -537,7 +563,7 @@ export const GigBasicInfo: React.FC<GigBasicInfoProps> = ({
 				</Paragraph>
 				<ClientsCombobox
 					value={values.client}
-					form={{setFieldValue}}
+					form={{ setFieldValue }}
 					data={clientsQuery.data ?? []}
 				/>
 				{touched.client && errors.client && (
@@ -593,7 +619,7 @@ const QuestionsTab = ({
 	name,
 	description,
 	form,
-}: {_id: string} & Pick<Gig, 'description' | 'name' | 'form'>) => {
+}: { _id: string } & Pick<Gig, 'description' | 'name' | 'form'>) => {
 	return (
 		<Tabs.Content value="questions">
 			<FormBuilder
@@ -604,7 +630,7 @@ const QuestionsTab = ({
 		</Tabs.Content>
 	);
 };
-const BehaviorTab = ({_id, mutate, isPending, formik}: TabProps) => {
+const BehaviorTab = ({ _id, mutate, isPending, formik }: TabProps) => {
 	return (
 		<Tabs.Content value="additional">
 			<Section className="container mx-auto">
@@ -694,7 +720,7 @@ const BasicInfoTab = ({
 const responsesColumns: ColumnDef<Response>[] = [
 	{
 		id: 'select',
-		header: ({table}) => (
+		header: ({ table }) => (
 			<Checkbox
 				checked={
 					table.getIsAllPageRowsSelected() ||
@@ -704,7 +730,7 @@ const responsesColumns: ColumnDef<Response>[] = [
 				aria-label="Select all"
 			/>
 		),
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Checkbox
 				checked={row.getIsSelected()}
 				onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -733,10 +759,10 @@ const isLink = (value: string) =>
 
 const isEmail = (value: string) => value.includes('@');
 
-const ResponsesTab = ({_id}: {_id: string}) => {
+const ResponsesTab = ({ _id }: { _id: string }) => {
 	const [columns, setColumns] =
 		useState<ColumnDef<any, any>[]>(responsesColumns);
-	const {form} = useFormContext();
+	const { form } = useFormContext();
 
 	const gigResponses = useQuery({
 		queryKey: ['responses', _id],
@@ -755,13 +781,13 @@ const ResponsesTab = ({_id}: {_id: string}) => {
 		return questions.map((question) => ({
 			accessorKey: question.id,
 			header: () => <Text className="line-clamp-1">{question.label}</Text>,
-			cell: ({row}: any) => {
+			cell: ({ row }: any) => {
 				const value = row.original[question.id] ?? '-';
 
 				if (isLink(value) || isEmail(value)) {
 					return (
 						<TableLink
-							style={{display: '-webkit-box'}}
+							style={{ display: '-webkit-box' }}
 							className="line-clamp-1 text-wrap truncate text-ellipsis inline-flex lowercase"
 							href={isEmail(value) ? `mailto:${value}` : value}>
 							{value}
@@ -786,7 +812,7 @@ const ResponsesTab = ({_id}: {_id: string}) => {
 
 	const data = useMemo(() => {
 		const docs = gigResponses?.data ?? [];
-		console.log({docs});
+		console.log({ docs });
 		return docs.map((doc: any) => {
 			const baseData = {
 				_id: doc._id,
@@ -797,7 +823,7 @@ const ResponsesTab = ({_id}: {_id: string}) => {
 				acc[response.question] = response.value;
 				return acc;
 			}, {});
-			return {...baseData, ...responses};
+			return { ...baseData, ...responses };
 		});
 	}, [gigResponses]);
 
@@ -808,7 +834,7 @@ const ResponsesTab = ({_id}: {_id: string}) => {
 				columns={columns}
 				data={data}
 				selectedItems={[]}
-				onSelect={() => {}}
+				onSelect={() => { }}
 				tableActions={<></>}
 			/>
 		</Tabs.Content>

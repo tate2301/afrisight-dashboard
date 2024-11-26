@@ -1,17 +1,17 @@
-import {cn} from '@/lib/utils';
-import {LogOutIcon, Settings, HelpCircle} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { LogOutIcon, Settings, HelpCircle } from 'lucide-react';
 import Box from '../../components/design-sytem/box';
-import {useRouter} from 'next/router';
-import {NAVBAR_HEIGHT, SIDEBAR_WIDTH} from '../constants';
+import { useRouter } from 'next/router';
+import { NAVBAR_HEIGHT, SIDEBAR_WIDTH } from '../constants';
 import Flex from '@/components/design-sytem/flex';
-import {Caption, Paragraph} from '@/components/design-sytem/typography';
+import { Caption, Paragraph } from '@/components/design-sytem/typography';
 import Separator from '@/components/design-sytem/separator';
 import styled from '@/components/design-sytem/theme';
 import Link from 'next/link';
 import AddUser from '@/components/modals/create-user';
-import {Avatar, Button, Text, DropdownMenu} from '@radix-ui/themes';
-import {useAuth} from '@/context/AuthContext';
-import {AddTeamMember} from '@/components/icons/team.member.add';
+import { Avatar, Button, Text, DropdownMenu } from '@radix-ui/themes';
+import { useAuth } from '@/context/AuthContext';
+import { AddTeamMember } from '@/components/icons/team.member.add';
 import {
 	BuildingStorefrontIcon,
 	ChevronDownIcon,
@@ -20,7 +20,161 @@ import {
 	Square3Stack3DIcon,
 	UserCircleIcon,
 } from '@heroicons/react/24/solid';
-import {ChevronRight} from '@/components/icons/chevron.right';
+import { ChevronRight } from '@/components/icons/chevron.right';
+
+import * as React from "react"
+import {
+	AudioWaveform,
+	BookOpen,
+	Bot,
+	Command,
+	Frame,
+	GalleryVerticalEnd,
+	Map,
+	PieChart,
+	Settings2,
+	SquareTerminal,
+} from "lucide-react"
+import { NavMain } from "./nav-main"
+import { NavProjects } from "./nav-projects"
+import { NavUser } from "./nav-user"
+import { TeamSwitcher } from "./app-switcher"
+import {
+	Sidebar,
+	SidebarContent,
+	SidebarFooter,
+	SidebarHeader,
+	SidebarRail,
+} from "@/components/ui/sidebar"
+// This is sample data.
+const data = {
+	user: {
+		name: "shadcn",
+		email: "m@example.com",
+		avatar: "/avatars/shadcn.jpg",
+	},
+	teams: [
+		{
+			name: "Acme Inc",
+			logo: GalleryVerticalEnd,
+			plan: "Enterprise",
+		},
+		{
+			name: "Acme Corp.",
+			logo: AudioWaveform,
+			plan: "Startup",
+		},
+		{
+			name: "Evil Corp.",
+			logo: Command,
+			plan: "Free",
+		},
+	],
+	navMain: [
+		{
+			title: "Playground",
+			url: "#",
+			icon: SquareTerminal,
+			isActive: true,
+			items: [
+				{
+					title: "History",
+					url: "#",
+				},
+				{
+					title: "Starred",
+					url: "#",
+				},
+				{
+					title: "Settings",
+					url: "#",
+				},
+			],
+		},
+		{
+			title: "Models",
+			url: "#",
+			icon: Bot,
+			items: [
+				{
+					title: "Genesis",
+					url: "#",
+				},
+				{
+					title: "Explorer",
+					url: "#",
+				},
+				{
+					title: "Quantum",
+					url: "#",
+				},
+			],
+		},
+		{
+			title: "Documentation",
+			url: "#",
+			icon: BookOpen,
+			items: [
+				{
+					title: "Introduction",
+					url: "#",
+				},
+				{
+					title: "Get Started",
+					url: "#",
+				},
+				{
+					title: "Tutorials",
+					url: "#",
+				},
+				{
+					title: "Changelog",
+					url: "#",
+				},
+			],
+		},
+		{
+			title: "Settings",
+			url: "#",
+			icon: Settings2,
+			items: [
+				{
+					title: "General",
+					url: "#",
+				},
+				{
+					title: "Team",
+					url: "#",
+				},
+				{
+					title: "Billing",
+					url: "#",
+				},
+				{
+					title: "Limits",
+					url: "#",
+				},
+			],
+		},
+	],
+	projects: [
+		{
+			name: "Design Engineering",
+			url: "#",
+			icon: Frame,
+		},
+		{
+			name: "Sales & Marketing",
+			url: "#",
+			icon: PieChart,
+		},
+		{
+			name: "Travel",
+			url: "#",
+			icon: Map,
+		},
+	],
+}
 
 interface UserProfile {
 	firstName?: string;
@@ -73,12 +227,12 @@ const sidebarNavItems: SidebarNavItemProps[] = [
 ];
 
 const WorkspaceCard = () => {
-	const {userProfile, isAuthenticated, logout} = useAuth();
+	const { userProfile, isAuthenticated, logout } = useAuth();
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
 			className="relative items-center p-2 px-1 space-x-2 bg-white elevated-shadow m-2 rounded-xl"
-			css={{height: NAVBAR_HEIGHT}}>
+			css={{ height: NAVBAR_HEIGHT }}>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<Flex className="items-center space-x-2 cursor-pointer w-full">
@@ -140,9 +294,9 @@ const WorkspaceCard = () => {
 	);
 };
 
-const Sidebar = () => {
-	const {userProfile, isAuthenticated, logout} = useAuth();
-	console.log({userProfile, isAuthenticated});
+const _AppSidebar = () => {
+	const { userProfile, isAuthenticated, logout } = useAuth();
+	console.log({ userProfile, isAuthenticated });
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
@@ -210,30 +364,52 @@ type SidebarNavItemProps = {
 	text: string;
 	href: string;
 };
-const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
+const SidebarNavItem = ({ Icon, text, href }: SidebarNavItemProps) => {
 	const router = useRouter();
 	const pathname = router.pathname;
 	const active = pathname.includes(href);
 
 	return (
-		<a href={href}>
-			<ListItem
-				className={cn(
-					'rounded-md hover:bg-zinc-400/20',
-					active && 'bg-zinc-400/15 hover:bg-white',
-				)}>
-				<Icon className="w-4 h-4 mr-4" />
-				{text}
-				{active && (
-					<Caption
-						color="tertiary"
-						className="ml-auto">
-						<ChevronRight className="size-4" />
-					</Caption>
-				)}
-			</ListItem>
-		</a>
+		<Link
+			href={href}
+			legacyBehavior>
+			<a>
+				<ListItem
+					className={cn(
+						'rounded-md hover:bg-zinc-400/20',
+						active && 'bg-zinc-400/15 hover:bg-white',
+					)}>
+					<Icon className="w-4 h-4 mr-4" />
+					{text}
+					{active && (
+						<Caption
+							color="tertiary"
+							className="ml-auto">
+							<ChevronRight className="size-4" />
+						</Caption>
+					)}
+				</ListItem>
+			</a>
+		</Link>
 	);
 };
 
-export default Sidebar;
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	return (
+		<Sidebar collapsible="icon" {...props}>
+			<SidebarHeader>
+				<TeamSwitcher teams={data.teams} />
+			</SidebarHeader>
+			<SidebarContent>
+				<NavMain items={data.navMain} />
+				<NavProjects projects={data.projects} />
+			</SidebarContent>
+			<SidebarFooter>
+				<NavUser user={data.user} />
+			</SidebarFooter>
+			<SidebarRail />
+		</Sidebar>
+	)
+}
+
+export default AppSidebar;

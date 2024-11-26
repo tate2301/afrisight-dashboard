@@ -1,29 +1,29 @@
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import Navbar from './navbar';
-import Sidebar from '@/layout/sidebar';
+import AppSidebar from '@/layout/sidebar';
 import Separator from '@/components/design-sytem/separator';
-import {QueryErrorResetBoundary} from '@tanstack/react-query';
-import {ErrorBoundary} from 'react-error-boundary';
-import {Button} from '@radix-ui/themes';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Button } from '@radix-ui/themes';
 
 interface Props {
 	children: ReactNode;
 }
 
-function GeneralLayout({children}: Props) {
+function GeneralLayout({ children }: Props) {
 	return (
 		<QueryErrorResetBoundary>
-			{({reset}) => (
+			{({ reset }) => (
 				<ErrorBoundary
 					onReset={reset}
-					fallbackRender={({resetErrorBoundary}) => (
+					fallbackRender={({ resetErrorBoundary }) => (
 						<div>
 							There was an error!
 							<Button onClick={() => resetErrorBoundary()}>Try again</Button>
 						</div>
 					)}>
 					<main className="flex">
-						<Sidebar />
+						<AppSidebar />
 						<div className="flex-1 h-screen relative flex flex-col overflow-y-auto">
 							{children}
 						</div>
