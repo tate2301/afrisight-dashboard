@@ -1,4 +1,4 @@
-import {ChevronDown} from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import React from 'react';
 import {
 	Select as AriaSelect,
@@ -9,11 +9,11 @@ import {
 	SelectValue,
 	ValidationResult,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {Description, FieldError, Label} from './Field';
-import {DropdownItem, DropdownSection, DropdownSectionProps} from './ListBox';
-import {Popover} from './Popover';
-import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { Description, FieldError, Label } from './Field';
+import { DropdownItem, DropdownSection, DropdownSectionProps } from './ListBox';
+import { Popover } from './Popover';
+import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
 
 const styles = tv({
 	extend: focusRing,
@@ -53,7 +53,7 @@ export function Select<T extends object>({
 			)}>
 			{label && <Label>{label}</Label>}
 			<Button className={styles}>
-				<SelectValue className="flex-1 text-sm placeholder-shown:italic" />
+				<SelectValue className="flex-1 text-[13px] placeholder-shown:italic" />
 				<ChevronDown
 					aria-hidden
 					className="w-4 h-4 text-gray-600 dark:text-zinc-400 forced-colors:text-[ButtonText] group-disabled:text-gray-200 dark:group-disabled:text-zinc-600 forced-colors:group-disabled:text-[GrayText]"

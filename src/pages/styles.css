@@ -5,7 +5,6 @@
 @import url('./typography.css');
 
 :root {
-	--font-family: 'Inter', sans-serif; /* Font inspired by MercuryOS */
 	--light-background: #f5f5f5; /* Light Ash Gray - background for light mode */ /* Ash Gray - background */ /* Cream - background base */
 	--primary-text: #333333; /* Charcoal - primary text */
 	--secondary-text: #808080; /* Ash Gray - secondary text */
@@ -17,6 +16,7 @@
 	--focus-border: #ffc238; /* Soft Yellow - focus state */
 	--link-color: #ff9000; /* Soft Yellow - links */
 	--link-hover-color: #ff6c00; /* Deeper Soft Yellow for link hover */
+	--font-family: 'Suisse', sans-serif;
 }
 
 .radix-themes {
@@ -72,7 +72,7 @@
 }
 
 body {
-	font-family: 'Inter', sans-serif; /* Font inspired by MercuryOS */
+	font-family: var(--font-family); /* Font inspired by MercuryOS */
 	font-size: 14px;
 	line-height: 1.25rem;
 	overflow-y: hidden;
@@ -112,11 +112,12 @@ body {
 	box-shadow:
 		0 1px 2px rgba(0, 0, 0, 0.02),
 		0 1px 3px rgba(0, 0, 0, 0.06),
+		0 4px 8px rgba(0, 0, 0, 0.06),
 		0 0 0 1px rgba(64, 68, 82, 0.08);
 }
 
 .tag {
-	@apply font-medium h-[20px] rounded-md flex items-center px-2 pressable-shadow text-sm;
+	@apply font-medium h-[20px] rounded-md flex items-center px-2 pressable-shadow text-[13px];
 }
 
 .button {

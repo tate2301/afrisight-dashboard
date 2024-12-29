@@ -1,7 +1,6 @@
-import {useEffect, useState} from 'react';
-import {Popover, PopoverContent, PopoverTrigger} from './popover';
-import Button from '../design-sytem/button';
-import {UpDown} from '../icons/up.down';
+import { useEffect, useState } from 'react';
+import { Popover, PopoverContent, PopoverTrigger } from './popover';
+import { UpDown } from '../icons/up.down';
 import {
 	Command,
 	CommandList,
@@ -10,8 +9,9 @@ import {
 	CommandGroup,
 	CommandItem,
 } from './command';
-import {cn} from '@/lib/utils';
-import {CheckFill} from '../icons/check.fill';
+import { cn } from '@/lib/utils';
+import { CheckFill } from '../icons/check.fill';
+import { Button } from './aria-components/Button';
 
 export interface ComboboxItem<T> {
 	value: string;
@@ -62,34 +62,27 @@ export function Combobox<T>({
 			open={open}
 			onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
-				<Button
-					variant="outline"
-					colorScheme={'surface'}
+				<button
 					role="combobox"
 					aria-expanded={open}
-					css={{
-						justifyContent: 'space-between',
-						'&:hover': {
-							boxShadow: 'var(--pressable-shadow)',
-						},
-					}}
-					className="w-full justify-between text-left hover:pressable-shadow">
-					<span>
+
+					className="w-auto min-w-[320px] pressable-shadow rounded-lg h-[32px] flex !justify-between items-center text-left hover:pressable-shadow px-4 pr-2">
+					<p>
 						{value
 							? items.find((item) => item.value === value)?.label
 							: placeholder}
-					</span>
+					</p>
 					<UpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-				</Button>
+				</button>
 			</PopoverTrigger>
 			<PopoverContent className="w-96 p-0">
 				<Command>
 					<CommandInput
 						placeholder={`Search ${placeholder.toLowerCase()}...`}
 					/>
-					<CommandList className="p-1">
+					<CommandList>
 						<CommandEmpty>{emptyMessage}</CommandEmpty>
-						<CommandGroup>
+						<CommandGroup className='p-0'>
 							{items.map((item) =>
 								renderItem ? (
 									renderItem(item, value === item.value, handleSelect)

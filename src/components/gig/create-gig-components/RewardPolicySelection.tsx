@@ -1,9 +1,11 @@
-import {Paragraph, Caption} from '@/components/design-sytem/typography';
+import { Paragraph, Caption } from '@/components/design-sytem/typography';
 import AddRewardPolicy from '@/components/modals/create-reward-policy';
-import {Box, Button, Flex} from '@radix-ui/themes';
-import {RewardPoliciesCombobox} from './RewardsCombobox';
-import {ErrorMessage} from './extras';
-import {PlusIcon} from 'lucide-react';
+import { Box, Flex } from '@radix-ui/themes';
+import { RewardPoliciesCombobox } from './RewardsCombobox';
+import { ErrorMessage } from './extras';
+import { PlusIcon } from 'lucide-react';
+import { Button } from '@/components/ui/aria-components/Button';
+import Symbol from '@/components/icons/symbol';
 
 type AdditionalInfoProps = {
 	formik: any;
@@ -16,14 +18,11 @@ export const RewardPolicySelection = ({
 	rewardPoliciesQuery,
 	openAddRewardPolicyModal,
 }: AdditionalInfoProps) => (
-	<Box className="space-y-4 p-4 rounded-xl bg-white pressable-shadow">
+	<Box className="space-y-4 flex gap-8 items-end">
 		<label className="space-y-2">
 			<Paragraph weight="semibold">
 				Reward policy <span className="text-red-500">*</span>
 			</Paragraph>
-			<Caption color="secondary">
-				Select a reward policy to associate with this gig.
-			</Caption>
 			{rewardPoliciesQuery.data && (
 				<RewardPoliciesCombobox
 					data={rewardPoliciesQuery.data}
@@ -42,17 +41,11 @@ export const RewardPolicySelection = ({
 				}
 				trigger={
 					<Button
-						size={'2'}
-						variant="ghost"
-						color="blue"
-						radius="full"
-						style={{
-							fontWeight: 500,
-							color: 'var(--colors-primary)',
-							fontSize: '14px',
-						}}
-						onClick={openAddRewardPolicyModal}>
-						<PlusIcon className="size-4" />
+						variant="outline"
+						onPress={openAddRewardPolicyModal}>
+						<Symbol>
+							add
+						</Symbol>
 						Add a new reward policy?
 					</Button>
 				}

@@ -1,10 +1,10 @@
-import {useFormContext} from '../context';
-import {renderField} from '../utils/fieldRenderer';
-import {H2, Paragraph} from '@/components/design-sytem/typography';
+import { useFormContext } from '../context';
+import { renderField } from '../utils/fieldRenderer';
+import { H2, Paragraph } from '@/components/design-sytem/typography';
 import Box from '@/components/design-sytem/box';
 
 export function FormPreview() {
-	const {form, selectedFieldId} = useFormContext();
+	const { form, selectedFieldId } = useFormContext();
 
 	return (
 		<div className="p-6 rounded min-h-full">
@@ -12,7 +12,7 @@ export function FormPreview() {
 			{form.description && (
 				<Paragraph className="mb-6">{form.description}</Paragraph>
 			)}
-			<form>
+			<form className='pb-64'>
 				{form.fields.map((field) => (
 					<Box
 						key={field.id}

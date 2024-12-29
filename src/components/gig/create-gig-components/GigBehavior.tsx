@@ -1,25 +1,25 @@
 import Box from '@/components/design-sytem/box';
 import Separator from '@/components/design-sytem/separator';
-import {Paragraph, H3} from '@/components/design-sytem/typography';
-import {RadioCards, Text} from '@radix-ui/themes';
-import {ListOrdered, ShuffleIcon} from 'lucide-react';
+import { Paragraph, H3 } from '@/components/design-sytem/typography';
+import { RadioCards, Text } from '@radix-ui/themes';
+import { ListOrdered, ShuffleIcon } from 'lucide-react';
 import styles from './gig-behavior.module.css';
-import {cn} from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 type GigBehaviorProps = {
 	formik: any;
 };
 
-export const GigBehavior = ({formik}: GigBehaviorProps) => (
+export const GigBehavior = ({ formik }: GigBehaviorProps) => (
 	<>
-		<Box css={{maxWidth: 800}}>
+		<Box css={{ maxWidth: 800 }}>
 			<Box className="mb-4">
 				<Text
 					weight="medium"
 					size="4">
 					Question ordering
 				</Text>
-				<Paragraph className="mb-4 text-sm">
+				<Paragraph className="mb-4 text-[13px]">
 					Configure how questions are presented to participants of this gig.
 				</Paragraph>
 			</Box>
@@ -63,7 +63,7 @@ export const GigBehavior = ({formik}: GigBehaviorProps) => (
 			</RadioCards.Root>
 		</Box>
 		<Separator />
-		<Box css={{maxWidth: 800}}>
+		<Box css={{ maxWidth: 800 }}>
 			<Box className="mb-4">
 				<Text
 					weight="medium"

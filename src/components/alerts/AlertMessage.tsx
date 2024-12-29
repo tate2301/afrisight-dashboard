@@ -13,7 +13,7 @@ function AlertMessage({ type, text }: Props) {
         : type === "success"
           ? "bg-green-100"
           : "bg-blue-100"
-        } text-sm font-medium p-2 rounded-lg`}
+        } text-[13px] font-medium p-2 rounded-lg`}
     >
       <p
         className={`${type === "error"

@@ -1,33 +1,20 @@
-import {cn} from '@/lib/utils';
-import {LogOutIcon, Settings, HelpCircle} from 'lucide-react';
+'use client';
+import { cn } from '@/lib/utils';
+import { LogOutIcon, Settings, HelpCircle } from 'lucide-react';
 import Box from '../../components/design-sytem/box';
-import {useRouter} from 'next/router';
-import {NAVBAR_HEIGHT, SIDEBAR_WIDTH} from '../constants';
+import { NAVBAR_HEIGHT, SIDEBAR_WIDTH } from '../constants';
 import Flex from '@/components/design-sytem/flex';
-import {Caption, Paragraph} from '@/components/design-sytem/typography';
-import Separator from '@/components/design-sytem/separator';
+import { Caption, Paragraph } from '@/components/design-sytem/typography';
 import styled from '@/components/design-sytem/theme';
 import Link from 'next/link';
-import AddUser from '@/components/modals/create-user';
-import {Avatar, Button, Text, DropdownMenu} from '@radix-ui/themes';
-import {useAuth} from '@/context/AuthContext';
-import {AddTeamMember} from '@/components/icons/team.member.add';
+import { Avatar, DropdownMenu } from '@radix-ui/themes';
+import { useAuth } from '@/context/AuthContext';
 import {
 	BuildingStorefrontIcon,
 	ChevronDownIcon,
-	GiftTopIcon,
-	Square2StackIcon,
-	Square3Stack3DIcon,
-	UserCircleIcon,
+	GiftTopIcon, Square3Stack3DIcon,
+	UserCircleIcon
 } from '@heroicons/react/24/solid';
-import {ChevronRight} from '@/components/icons/chevron.right';
-
-interface UserProfile {
-	firstName?: string;
-	lastName?: string;
-	email: string;
-	profilePicture?: string;
-}
 
 const sidebarNavItems: SidebarNavItemProps[] = [
 	// {
@@ -55,30 +42,15 @@ const sidebarNavItems: SidebarNavItemProps[] = [
 		text: 'Rewards',
 		href: '/rewards',
 	},
-	// {
-	//     Icon: PersonStanding,
-	//     text: "Participants",
-	//     href: "/participants"
-	// },
-	// {
-	//     Icon: Store,
-	//     text: "Store",
-	//     href: "/store"
-	// },
-	// {
-	//     Icon: Inbox,
-	//     text: "Payout requests",
-	//     href: "/payout-requests"
-	// }
 ];
 
 const WorkspaceCard = () => {
-	const {userProfile, isAuthenticated, logout} = useAuth();
+	const { userProfile, isAuthenticated, logout } = useAuth();
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
-			className="relative items-center p-2 px-1 space-x-2 bg-white elevated-shadow m-2 rounded-xl"
-			css={{height: NAVBAR_HEIGHT}}>
+			className="relative items-center py-2 pl-4 px-2 space-x-2 bg-white pressable-shadow m-2 rounded-xl"
+			css={{ height: NAVBAR_HEIGHT }}>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<Flex className="items-center space-x-2 cursor-pointer w-full">
@@ -141,44 +113,26 @@ const WorkspaceCard = () => {
 };
 
 const Sidebar = () => {
-	const {userProfile, isAuthenticated, logout} = useAuth();
-	console.log({userProfile, isAuthenticated});
+	const { userProfile, isAuthenticated, logout } = useAuth();
+	console.log({ userProfile, isAuthenticated });
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
 			direction={'column'}
-			className="bg-zinc-100 sticky top-0 h-screen flex-shrink-0"
+			className="sticky top-0 h-screen flex-shrink-0"
 			css={{
 				borderRight: '1px solid $gray2',
 				width: SIDEBAR_WIDTH,
 				gap: 0,
+				backgroundColor: '#FAF9F7'
 			}}>
 			<WorkspaceCard />
-			<Flex
-				direction={'column'}
-				className="p-2 space-y-2">
-				<AddUser
-					trigger={
-						<Button
-							color={'gray'}
-							variant={'soft'}
-							radius="full">
-							<AddTeamMember className="size-5 mr-2" />
-							Invite an administrator
-						</Button>
-					}
-				/>
-			</Flex>
-			<Separator />
+
 			<Box className="mt-4">
-				<div className="px-4 py-2 text-sm font-medium text-gray-500">
-					<Text
-						size={'1'}
-						className="uppercase">
-						Platform NAVIGATION
-					</Text>
+				<div className="px-4 py-2 text-gray-500">
+					<p className="text-xs uppercase font-semibold">NAVIGATION</p>
 				</div>
-				<ul className="flex flex-col gap-1 p-2 flex-1">
+				<ul className="flex flex-col gap-1 p-1 flex-1">
 					{sidebarNavItems.map((item, index) => (
 						<SidebarNavItem
 							key={index}
@@ -195,14 +149,15 @@ const Sidebar = () => {
 const ListItem = styled('li', {
 	display: 'flex',
 	alignItems: 'center',
-	padding: '$2 $3',
+	padding: '8px 12px',
 	borderRadius: '8px',
 	fontWeight: '500',
-	fontSize: '14px',
 	lineHeight: '1.5',
+	fontSize: '14px',
 	'&:hover': {
 		backgroundColor: '$gray2',
 	},
+	height: 32,
 });
 
 type SidebarNavItemProps = {
@@ -210,29 +165,15 @@ type SidebarNavItemProps = {
 	text: string;
 	href: string;
 };
-const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
-	const router = useRouter();
-	const pathname = router.pathname;
-	const active = pathname.includes(href);
-
+const SidebarNavItem = ({ Icon, text, href }: SidebarNavItemProps) => {
 	return (
-		<a href={href}>
+		<Link href={href}>
 			<ListItem
-				className={cn(
-					'rounded-md hover:bg-zinc-400/20',
-					active && 'bg-zinc-400/15 hover:bg-white',
-				)}>
+				className={cn('rounded-md hover:bg-zinc-400/20 p-2 text-zinc-800')}>
 				<Icon className="w-4 h-4 mr-4" />
 				{text}
-				{active && (
-					<Caption
-						color="tertiary"
-						className="ml-auto">
-						<ChevronRight className="size-4" />
-					</Caption>
-				)}
 			</ListItem>
-		</a>
+		</Link>
 	);
 };
 

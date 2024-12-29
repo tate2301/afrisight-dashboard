@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useReducer, ReactNode, Dispatch } from "react";
 import {
   getFromLocalStorage,

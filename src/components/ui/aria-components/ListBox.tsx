@@ -1,4 +1,4 @@
-import {Check} from 'lucide-react';
+import { Check } from 'lucide-react';
 import React from 'react';
 import {
 	ListBox as AriaListBox,
@@ -11,11 +11,11 @@ import {
 	SectionProps,
 	composeRenderProps,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
 
 interface ListBoxProps<T>
-	extends Omit<AriaListBoxProps<T>, 'layout' | 'orientation'> {}
+	extends Omit<AriaListBoxProps<T>, 'layout' | 'orientation'> { }
 
 export function ListBox<T extends object>({
 	children,
@@ -35,7 +35,7 @@ export function ListBox<T extends object>({
 
 export const itemStyles = tv({
 	extend: focusRing,
-	base: 'group relative flex items-center gap-8 cursor-default select-none py-1.5 px-2.5 rounded-md will-change-transform text-sm forced-color-adjust-none',
+	base: 'group relative flex items-center gap-8 cursor-default select-none py-1.5 px-2.5 rounded-md will-change-transform text-[13px] forced-color-adjust-none',
 	variants: {
 		isSelected: {
 			false:
@@ -68,7 +68,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
 }
 
 export const dropdownItemStyles = tv({
-	base: 'group flex items-center gap-4 cursor-default select-none py-2 pl-3 pr-1 rounded-lg outline outline-0 text-sm forced-color-adjust-none',
+	base: 'group flex items-center gap-4 cursor-default select-none py-2 pl-3 pr-1 rounded-lg outline outline-0 text-[13px] forced-color-adjust-none',
 	variants: {
 		isDisabled: {
 			false: 'text-gray-900 dark:text-zinc-100',
@@ -96,7 +96,7 @@ export function DropdownItem(props: ListBoxItemProps) {
 			{...props}
 			textValue={textValue}
 			className={dropdownItemStyles}>
-			{composeRenderProps(props.children, (children, {isSelected}) => (
+			{composeRenderProps(props.children, (children, { isSelected }) => (
 				<>
 					<span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
 						{children}
@@ -119,7 +119,7 @@ export function DropdownSection<T extends object>(
 ) {
 	return (
 		<Section className="first:-mt-[5px] after:content-[''] after:block after:h-[5px]">
-			<Header className="text-sm font-semibold text-gray-500 dark:text-zinc-300 px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-gray-100/60 dark:bg-zinc-700/60 backdrop-blur-md supports-[-moz-appearance:none]:bg-gray-100 border-y dark:border-y-zinc-700 [&+*]:mt-1">
+			<Header className="text-[13px] font-semibold text-gray-500 dark:text-zinc-300 px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-gray-100/60 dark:bg-zinc-700/60 backdrop-blur-md supports-[-moz-appearance:none]:bg-gray-100 border-y dark:border-y-zinc-700 [&+*]:mt-1">
 				{props.title}
 			</Header>
 			<Collection items={props.items}>{props.children}</Collection>

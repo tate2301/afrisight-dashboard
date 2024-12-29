@@ -8,9 +8,9 @@ import {
 	DateValue,
 	Text,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {CalendarGridHeader, CalendarHeader} from './Calendar';
-import {focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { CalendarGridHeader, CalendarHeader } from './Calendar';
+import { focusRing } from '@/lib/utils';
 
 export interface RangeCalendarProps<T extends DateValue>
 	extends Omit<AriaRangeCalendarProps<T>, 'visibleDuration'> {
@@ -50,7 +50,7 @@ export function RangeCalendar<T extends DateValue>({
 					{(date) => (
 						<CalendarCell
 							date={date}
-							className="group w-9 h-9 text-sm outline outline-0 cursor-default outside-month:text-gray-300 selected:bg-blue-100 dark:selected:bg-blue-700/30 forced-colors:selected:bg-[Highlight] invalid:selected:bg-red-100 dark:invalid:selected:bg-red-700/30 forced-colors:invalid:selected:bg-[Mark] [td:first-child_&]:rounded-s-full selection-start:rounded-s-full [td:last-child_&]:rounded-e-full selection-end:rounded-e-full">
+							className="group w-9 h-9 text-[13px] outline outline-0 cursor-default outside-month:text-gray-300 selected:bg-blue-100 dark:selected:bg-blue-700/30 forced-colors:selected:bg-[Highlight] invalid:selected:bg-red-100 dark:invalid:selected:bg-red-700/30 forced-colors:invalid:selected:bg-[Mark] [td:first-child_&]:rounded-s-full selection-start:rounded-s-full [td:last-child_&]:rounded-e-full selection-end:rounded-e-full">
 							{({
 								formattedDate,
 								isSelected,
@@ -80,7 +80,7 @@ export function RangeCalendar<T extends DateValue>({
 			{errorMessage && (
 				<Text
 					slot="errorMessage"
-					className="text-sm text-red-600">
+					className="text-[13px] text-red-600">
 					{errorMessage}
 				</Text>
 			)}

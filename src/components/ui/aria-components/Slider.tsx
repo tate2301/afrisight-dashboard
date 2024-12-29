@@ -6,9 +6,9 @@ import {
 	SliderThumb,
 	SliderTrack,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {Label} from './Field';
-import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { Label } from './Field';
+import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
 
 const trackStyles = tv({
 	base: 'rounded-full',
@@ -55,13 +55,13 @@ export function Slider<T extends number | number[]>({
 				'orientation-horizontal:grid orientation-vertical:flex grid-cols-[1fr_auto] flex-col items-center gap-2 orientation-horizontal:w-64',
 			)}>
 			<Label>{label}</Label>
-			<SliderOutput className="text-sm text-gray-500 dark:text-zinc-400 font-medium orientation-vertical:hidden">
-				{({state}) =>
+			<SliderOutput className="text-[13px] text-gray-500 dark:text-zinc-400 font-medium orientation-vertical:hidden">
+				{({ state }) =>
 					state.values.map((_, i) => state.getThumbValueLabel(i)).join(' – ')
 				}
 			</SliderOutput>
 			<SliderTrack className="group col-span-2 orientation-horizontal:h-6 orientation-vertical:w-6 orientation-vertical:h-64 flex items-center">
-				{({state, ...renderProps}) => (
+				{({ state, ...renderProps }) => (
 					<>
 						<div className={trackStyles(renderProps)} />
 						{state.values.map((_, i) => (

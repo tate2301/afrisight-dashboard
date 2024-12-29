@@ -1,5 +1,5 @@
-import {useFormContext} from '../context';
-import {FormField} from '../types';
+import { useFormContext } from '../context';
+import { FormField } from '../types';
 import {
 	CalendarIcon,
 	CheckCircleIcon,
@@ -11,55 +11,56 @@ import {
 	TextIcon,
 	Trash2Icon,
 } from 'lucide-react';
-import {Paragraph} from '@/components/design-sytem/typography';
+import { Paragraph } from '@/components/design-sytem/typography';
 import Box from '@/components/design-sytem/box';
 import styled from '@/components/design-sytem/theme';
 import Separator from '@/components/design-sytem/separator';
-import {Button, IconButton, Text} from '@radix-ui/themes';
-import {cn} from '@/lib/utils';
+import { Button, IconButton, Text } from '@radix-ui/themes';
+import { cn } from '@/lib/utils';
+import Symbol from '@/components/icons/symbol';
 
 const fieldTypes = [
 	{
 		type: 'shortAnswer',
 		label: 'Short Answer',
-		icon: <TextIcon className="size-4" />,
+		icon: "text_fields",
 	},
 	{
 		type: 'longAnswer',
 		label: 'Long Answer',
-		icon: <FileTextIcon className="size-4" />,
+		icon: "segment",
 	},
-	{type: 'email', label: 'Email', icon: <MailIcon className="size-4" />},
-	{type: 'date', label: 'Date', icon: <CalendarIcon className="size-4" />},
+	{ type: 'email', label: 'Email', icon: "mail" },
+	{ type: 'date', label: 'Date', icon: "calendar_month" },
 	{
 		type: 'multipleChoice',
 		label: 'Multiple Choice',
-		icon: <ListPlusIcon className="size-4" />,
+		icon: "checklist",
 	},
 	{
 		type: 'yesNo',
 		label: 'Yes/No',
-		icon: <CheckCircleIcon className="size-4" />,
+		icon: "arrow_split",
 	},
 	{
 		type: 'npsRating',
 		label: 'NPS Rating',
-		icon: <StarIcon className="size-4" />,
+		icon: "star_half",
 	},
 	{
 		type: 'likertScale',
 		label: 'Likert Scale',
-		icon: <StarIcon className="size-4" />,
+		icon: "star",
 	},
 	{
 		type: 'fileUpload',
 		label: 'File Upload',
-		icon: <FilePlusIcon className="size-4" />,
+		icon: "cloud_upload",
 	},
 ];
 
 export function FieldList() {
-	const {form, addField, selectedFieldId, setSelectedFieldId, removeField} =
+	const { form, addField, selectedFieldId, setSelectedFieldId, removeField } =
 		useFormContext();
 
 	const handleAddField = (type: FormField['type']) => {
@@ -77,31 +78,33 @@ export function FieldList() {
 	return (
 		<div>
 			<div className="mb-4">
-				<Box className="mb-2">
-					<Text
-						size={'3'}
-						weight={'bold'}
-						className="text-md font-medium mb-2 px-4">
-						Add question
-					</Text>
+				<Box className="mb-4 px-4">
+					<p
+						className="font-semibold uppercase text-content-tertiary">
+						Field types
+					</p>
+					<p className='text-content-tertiary'>
+						Click an item to add to the form
+					</p>
 				</Box>
-				<div className="flex flex-col gap-2 px-4">
+				<Separator className='mb-2' />
+				<div className="grid grid-cols-2 gap-2 px-4">
 					{fieldTypes.map((fieldType) => (
-						<Button
+						<button
 							key={fieldType.type}
 							onClick={() =>
 								handleAddField(fieldType.type as FormField['type'])
 							}
-							variant="soft"
-							color={'bronze'}
 							style={{
 								justifyContent: 'flex-start',
 								gap: '8px',
 							}}
-							className="w-full justify-start flex items-center gap-2">
-							{fieldType.icon}
+							className="w-full justify-start font-medium text-content-secondary flex items-center gap-2 py-2 bg-surface-secondary px-2 rounded-lg hover:bg-surface-tertiary">
+							<Symbol>
+								{fieldType.icon}
+							</Symbol>
 							{fieldType.label}
-						</Button>
+						</button>
 					))}
 				</div>
 			</div>
@@ -164,7 +167,7 @@ const FieldListItem = ({
 				'flex-1 flex items-center justify-start py-2 px-3 gap-4 text-zinc-600 rounded-xl h-[40px] bg-zinc-50',
 				isSelected && 'bg-indigo-600 text-white',
 			)}>
-			<span>{fieldTypes.find((type) => type.type === field.type)?.icon}</span>
+			<Symbol>{fieldTypes.find((type) => type.type === field.type)?.icon}</Symbol>
 			<Text
 				size="2"
 				weight={'medium'}

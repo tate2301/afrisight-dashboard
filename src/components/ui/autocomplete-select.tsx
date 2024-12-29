@@ -93,7 +93,7 @@ function AutocompleteSelect<T extends AutocompleteOption>({
           ))
         ) : (
           <div className="flex items-center justify-center pb-2">
-            <p className="italic text-sm text-zinc-600">No items found</p>
+            <p className="italic text-[13px] text-zinc-600">No items found</p>
           </div>
         )}
       </SelectContent>

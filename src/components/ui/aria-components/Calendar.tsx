@@ -1,4 +1,4 @@
-import {ChevronLeft, ChevronRight} from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
 import {
 	Calendar as AriaCalendar,
@@ -13,13 +13,13 @@ import {
 	Text,
 	useLocale,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {Button} from './Button';
-import {focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { Button } from './Button';
+import { focusRing } from '@/lib/utils';
 
 const cellStyles = tv({
 	extend: focusRing,
-	base: 'w-9 h-9 text-sm cursor-default rounded-full flex items-center justify-center forced-color-adjust-none',
+	base: 'w-9 h-9 text-[13px] cursor-default rounded-full flex items-center justify-center forced-color-adjust-none',
 	variants: {
 		isSelected: {
 			false:
@@ -58,7 +58,7 @@ export function Calendar<T extends DateValue>({
 			{errorMessage && (
 				<Text
 					slot="errorMessage"
-					className="text-sm text-red-600">
+					className="text-[13px] text-red-600">
 					{errorMessage}
 				</Text>
 			)}
@@ -67,7 +67,7 @@ export function Calendar<T extends DateValue>({
 }
 
 export function CalendarHeader() {
-	let {direction} = useLocale();
+	let { direction } = useLocale();
 
 	return (
 		<header className="flex items-center gap-1 pb-4 px-1 w-full">

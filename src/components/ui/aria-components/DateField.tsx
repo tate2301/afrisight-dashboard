@@ -8,9 +8,9 @@ import {
 	DateValue,
 	ValidationResult,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {Description, FieldError, Label, fieldGroupStyles} from './Field';
-import {composeTailwindRenderProps} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { Description, FieldError, Label, fieldGroupStyles } from './Field';
+import { composeTailwindRenderProps } from '@/lib/utils';
 
 export interface DateFieldProps<T extends DateValue>
 	extends AriaDateFieldProps<T> {
@@ -61,7 +61,7 @@ export function DateInput(props: Omit<DateInputProps, 'children'>) {
 			className={(renderProps) =>
 				fieldGroupStyles({
 					...renderProps,
-					class: 'block min-w-[150px] px-2 py-1.5 text-sm',
+					class: 'block min-w-[150px] px-2 py-1.5 text-[13px]',
 				})
 			}
 			{...props}>

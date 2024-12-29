@@ -1,8 +1,12 @@
+"use client";
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/router';
+import { NextRouter, } from 'next/router';
+import { useRouter } from "next/navigation"
 import apiClient from '@/hooks/useApiFetcher';
 import { getAccessTokenFromCookies, getRefreshTokenFromCookies, setAccessTokenToCookies, setRefreshTokenToCookies } from '@/hooks/cookies';
 import { AUTH_ROUTES } from '@/lib/api-routes';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface UserProfile {
     id: string;
@@ -36,13 +40,13 @@ export const useAuth = () => {
 
 interface AuthProviderProps {
     children: ReactNode;
+    router: NextRouter | AppRouterInstance
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children, router }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-    const router = useRouter();
 
     useEffect(() => {
         const checkAuth = async () => {

@@ -7,12 +7,12 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '../ui/sheet';
-import {PlusCircleIcon} from '@heroicons/react/24/outline';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Button from '../buttons/CustomButton';
-import {useState} from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import {apiUrl} from '../../utils/apiUrl';
-import {getMessage} from '../../helpers/getMessage';
+import { apiUrl } from '../../utils/apiUrl';
+import { getMessage } from '../../helpers/getMessage';
 import AlertMessage from '../alerts/AlertMessage';
 
 function SideDrawer() {
@@ -28,7 +28,7 @@ function SideDrawer() {
 	const createNewGig = async () => {
 		try {
 			setLoading(true);
-			const {data} = await axios.post(`${apiUrl}/gig/create`, {
+			const { data } = await axios.post(`${apiUrl}/gig/create`, {
 				name,
 				price,
 				desc,
@@ -48,7 +48,7 @@ function SideDrawer() {
 	return (
 		<Sheet>
 			<SheetTrigger>
-				<div className="add-new bg-zinc-900  text-sm text-white  flex flex-row items-center space-x-4 rounded-lg font-medium p-2">
+				<div className="add-new bg-zinc-900  text-[13px] text-white  flex flex-row items-center space-x-4 rounded-lg font-medium p-2">
 					<PlusCircleIcon
 						height={24}
 						width={24}
@@ -119,7 +119,7 @@ function SideDrawer() {
 											d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
 										/>
 									</svg>
-									<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+									<p className="mb-2 text-[13px] text-gray-500 dark:text-gray-400">
 										<span className="font-medium">Click to upload</span> or drag
 										and drop
 									</p>

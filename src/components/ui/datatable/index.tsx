@@ -46,7 +46,7 @@ export function DataTable<TData, TValue>({
 	}, [_selectedItems, onSelect]);
 
 	return (
-		<Box className="max-w-full flex-1 overflow-auto">
+		<Box className="max-w-full w-full h-full flex-1 overflow-auto">
 			<AnimatePresence>
 				{selectedItems?.length > 0 && (
 					<TableActions

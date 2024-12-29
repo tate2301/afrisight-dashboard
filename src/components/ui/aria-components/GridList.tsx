@@ -6,9 +6,9 @@ import {
 	GridListItemProps,
 	GridListProps,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {Checkbox} from './Checkbox';
-import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { Checkbox } from './Checkbox';
+import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
 
 export function GridList<T extends object>({
 	children,
@@ -28,7 +28,7 @@ export function GridList<T extends object>({
 
 const itemStyles = tv({
 	extend: focusRing,
-	base: 'relative flex gap-3 cursor-default select-none py-2 px-3 text-sm text-gray-900 dark:text-zinc-200 border-y dark:border-y-zinc-700 border-transparent first:border-t-0 last:border-b-0 first:rounded-t-md last:rounded-b-md -mb-px last:mb-0 -outline-offset-2',
+	base: 'relative flex gap-3 cursor-default select-none py-2 px-3 text-[13px] text-gray-900 dark:text-zinc-200 border-y dark:border-y-zinc-700 border-transparent first:border-t-0 last:border-b-0 first:rounded-t-md last:rounded-b-md -mb-px last:mb-0 -outline-offset-2',
 	variants: {
 		isSelected: {
 			false: 'hover:bg-gray-100 dark:hover:bg-zinc-700/60',
@@ -40,14 +40,14 @@ const itemStyles = tv({
 	},
 });
 
-export function GridListItem({children, ...props}: GridListItemProps) {
+export function GridListItem({ children, ...props }: GridListItemProps) {
 	let textValue = typeof children === 'string' ? children : undefined;
 	return (
 		<AriaGridListItem
 			textValue={textValue}
 			{...props}
 			className={itemStyles}>
-			{({selectionMode, selectionBehavior, allowsDragging}) => (
+			{({ selectionMode, selectionBehavior, allowsDragging }) => (
 				<>
 					{/* Add elements for drag and drop and selection. */}
 					{allowsDragging && <Button slot="drag">≡</Button>}

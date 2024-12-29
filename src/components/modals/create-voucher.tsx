@@ -1,10 +1,10 @@
-import {ErrorMessage, Field, Form, Formik} from 'formik';
-import {Input} from '../ui/input';
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Input } from '../ui/input';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {useEffect, useState} from 'react';
-import {Dialog, Flex, TextField} from '@radix-ui/themes';
-import {Text} from '@radix-ui/themes';
+import { useEffect, useState } from 'react';
+import { Dialog, Flex, TextField } from '@radix-ui/themes';
+import { Text } from '@radix-ui/themes';
 import Box from '../design-sytem/box';
 import Button from '../design-sytem/button';
 
@@ -14,7 +14,7 @@ export default function CreateVoucher(props: {
 }) {
 	const [code, setCode] = useState('');
 	const queryClient = useQueryClient();
-	const {data, isLoading, isError, refetch} = useQuery({
+	const { data, isLoading, isError, refetch } = useQuery({
 		queryKey: ['generate-voucher'],
 		queryFn: async () => {
 			const res = await axiosInstance.get('/gamification/voucher/generate');
@@ -43,7 +43,7 @@ export default function CreateVoucher(props: {
 				},
 			);
 			const voucher_id = response.voucher._id;
-			queryClient.invalidateQueries({queryKey: ['vouchers']});
+			queryClient.invalidateQueries({ queryKey: ['vouchers'] });
 			props.callback(voucher_id);
 		} catch (error) {
 			console.log(error);
@@ -55,9 +55,9 @@ export default function CreateVoucher(props: {
 			<Dialog.Content>
 				<Dialog.Title>Create Voucher</Dialog.Title>
 				<Dialog.Description>Create a new voucher</Dialog.Description>
-				<Box css={{margin: '24px 0'}}>
+				<Box css={{ margin: '24px 0' }}>
 					<Formik
-						initialValues={{code: '', name: '', expiresAt: ''}}
+						initialValues={{ code: '', name: '', expiresAt: '' }}
 						onSubmit={onSubmit}>
 						<Form>
 							<div className="mb-6">
@@ -80,7 +80,7 @@ export default function CreateVoucher(props: {
 							<div className="flex flex-col space-y-2 mb-6">
 								<label
 									htmlFor="code"
-									className="text-sm font-medium">
+									className="text-[13px] font-medium">
 									Voucher code
 								</label>
 								<Field
@@ -95,14 +95,14 @@ export default function CreateVoucher(props: {
 									<button
 										type="button"
 										onClick={() => refetch()}
-										className="text-blue-600 text-sm font-medium">
+										className="text-blue-600 text-[13px] font-medium">
 										Generate new code
 									</button>
 								</div>
 								<ErrorMessage
 									name="code"
 									component="div"
-									className="text-red-500 text-sm"
+									className="text-red-500 text-[13px]"
 								/>
 							</div>
 							<label>

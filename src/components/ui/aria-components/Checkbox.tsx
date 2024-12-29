@@ -1,5 +1,5 @@
-import {Check, Minus} from 'lucide-react';
-import React, {ReactNode} from 'react';
+import { Check, Minus } from 'lucide-react';
+import React, { ReactNode } from 'react';
 import {
 	Checkbox as AriaCheckbox,
 	CheckboxGroup as AriaCheckboxGroup,
@@ -8,9 +8,9 @@ import {
 	ValidationResult,
 	composeRenderProps,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {Description, FieldError, Label} from './Field';
-import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { Description, FieldError, Label } from './Field';
+import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
 
 export interface CheckboxGroupProps
 	extends Omit<AriaCheckboxGroupProps, 'children'> {
@@ -37,7 +37,7 @@ export function CheckboxGroup(props: CheckboxGroupProps) {
 }
 
 const checkboxStyles = tv({
-	base: 'flex gap-2 items-center group text-sm transition',
+	base: 'flex gap-2 items-center group text-[13px] transition',
 	variants: {
 		isDisabled: {
 			false: 'text-gray-800 dark:text-zinc-200',
@@ -72,9 +72,9 @@ export function Checkbox(props: CheckboxProps) {
 		<AriaCheckbox
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				checkboxStyles({...renderProps, className}),
+				checkboxStyles({ ...renderProps, className }),
 			)}>
-			{({isSelected, isIndeterminate, ...renderProps}) => (
+			{({ isSelected, isIndeterminate, ...renderProps }) => (
 				<>
 					<div
 						className={boxStyles({

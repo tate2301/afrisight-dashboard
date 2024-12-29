@@ -1,9 +1,9 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 import CXMappersHeader from '@/components/page-header/CXMappersHeader';
 import Link from 'next/link';
-import {apiUrl} from '@/utils/apiUrl';
+import { apiUrl } from '@/utils/apiUrl';
 import AlertMessage from '@/components/alerts/AlertMessage';
 import Button from '@/components/buttons/CustomButton';
 import Head from 'next/head';
@@ -47,7 +47,7 @@ function Home() {
 					<h3 className="text-lg text-zinc-900 font-medium">
 						Forgot password?
 					</h3>
-					<p className="text-sm text-zinc-500">
+					<p className="text-[13px] text-zinc-500">
 						If you’ve forgotten your password, enter your email address below
 						and we will email you further instructions.{' '}
 					</p>
@@ -55,7 +55,7 @@ function Home() {
 				<div className="flex flex-col space-y-2">
 					<label
 						htmlFor="email"
-						className="text-sm font-medium text-zinc-500">
+						className="text-[13px] font-medium text-zinc-500">
 						Email
 					</label>
 					<input

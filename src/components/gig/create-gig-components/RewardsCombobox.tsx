@@ -1,10 +1,12 @@
-import { Caption, Paragraph } from "@/components/design-sytem/typography";
-import { CheckFill } from "@/components/icons/check.fill";
-import { Combobox, ComboboxItem } from "@/components/ui/combobox";
-import { CommandItem } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
-import { formatDate } from "@/utils/strings";
-import { Flex } from "@radix-ui/themes";
+import { Caption, Paragraph } from '@/components/design-sytem/typography';
+import { CheckFill } from '@/components/icons/check.fill';
+import Symbol from '@/components/icons/symbol';
+import { Separator } from '@/components/ui/aria-components/Separator';
+import { Combobox, ComboboxItem } from '@/components/ui/combobox';
+import { CommandItem } from '@/components/ui/command';
+import { cn } from '@/lib/utils';
+import { formatDate } from '@/utils/strings';
+import { Flex } from '@radix-ui/themes';
 
 type RewardPolicyItem = {
     _id: string;
@@ -26,35 +28,49 @@ export const RewardPoliciesCombobox = (props: {
         handleSelect: (value: string) => void,
     ) => {
         return (
-            <CommandItem
-                onSelect={handleSelect}
-                key={item.value}
-                value={item.value}
-                className="flex">
-                <CheckFill
-                    className={cn(
-                        'mr-2 h-4 w-4',
-                        isSelected ? 'opacity-100' : 'opacity-0',
-                    )}
-                />
-                <Flex
-                    direction={'column'}
-                    className="flex-1">
-                    <Paragraph
-                        className="truncate"
-                        weight={'semibold'}
-                        color={'primary'}>
-                        {item.label}
-                    </Paragraph>
-                    <Caption>
-                        ${item.data.dollarValue} &bull; {item.data.pointsValue} XP
-                        {item.data.voucher && <> &bull; Includes voucher</>}
-                    </Caption>
-                    <Caption color="secondary">
-                        Created: {formatDate(item.data.createdAt)}
-                    </Caption>
-                </Flex>
-            </CommandItem>
+            <>
+                <CommandItem
+                    onSelect={handleSelect}
+                    key={item.value}
+                    value={item.value}
+                    className="flex rounded-none">
+                    <Symbol
+                        className={cn(
+                            'mr-2 h-4 w-4',
+                            isSelected ? 'opacity-100' : 'opacity-0',
+                        )}
+                    >
+                        check
+                    </Symbol>
+                    <Flex
+                        direction={'column'}
+                        className="flex-1">
+                        <div className="flex items-baseline justify-between">
+                            <p
+                                className="truncate font-semibold mb-1"
+                                color={'primary'}>
+                                {item.label}
+                            </p>
+                            <p className="text-content-tertiary">
+                                {formatDate(item.data.createdAt)}
+                            </p>
+                        </div>
+                        <div className="flex gap-2 items-baseline">
+                            <span className="text-content-tertiary">${item.data.dollarValue}</span>{' '}
+                            <span>&bull;</span>
+                            <span className="text-content-tertiary">{item.data.pointsValue} XP</span>
+                            {item.data.voucher && (
+                                <>
+                                    {' '}
+                                    <span className="text-content-tertiary">&bull;</span>{' '}
+                                    <span className="text-content-tertiary">Includes voucher</span>
+                                </>
+                            )}
+                        </div>
+                    </Flex>
+                </CommandItem>
+                <Separator />
+            </>
         );
     };
 

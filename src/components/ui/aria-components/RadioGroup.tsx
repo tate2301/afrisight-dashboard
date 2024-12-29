@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import {
 	Radio as RACRadio,
 	RadioGroup as RACRadioGroup,
@@ -6,9 +6,9 @@ import {
 	RadioProps,
 	ValidationResult,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {Description, FieldError, Label} from './Field';
-import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { Description, FieldError, Label } from './Field';
+import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
 
 export interface RadioGroupProps extends Omit<RACRadioGroupProps, 'children'> {
 	label?: string;
@@ -59,7 +59,7 @@ export function Radio(props: RadioProps) {
 			{...props}
 			className={composeTailwindRenderProps(
 				props.className,
-				'flex gap-2 items-center group text-gray-800 disabled:text-gray-300 dark:text-zinc-200 dark:disabled:text-zinc-600 forced-colors:disabled:text-[GrayText] text-sm transition',
+				'flex gap-2 items-center group text-gray-800 disabled:text-gray-300 dark:text-zinc-200 dark:disabled:text-zinc-600 forced-colors:disabled:text-[GrayText] text-[13px] transition',
 			)}>
 			{(renderProps) => (
 				<>

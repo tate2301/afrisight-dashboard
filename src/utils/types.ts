@@ -1,4 +1,4 @@
-import {RewardPolicy} from '@/pages/gigs';
+import { RewardPolicy } from '@/pages/gigs';
 
 export interface UserInfoTypes {
 	id: number;
@@ -26,7 +26,7 @@ export interface DashboardItemProps {
 
 export interface SectionType {
 	id: number;
-	options: Array<{name: string; _id: string}>;
+	options: Array<{ name: string; _id: string }>;
 	type: {
 		name: string;
 		_id: string;
@@ -106,7 +106,7 @@ export type TStoreItem = {
 export type ProfileType = 'ADMIN' | 'SUPPORT' | 'CLIENT' | 'PARTICIPANT';
 export type UserRole = ProfileType;
 
-export interface TProfile {
+export interface Profile {
 	id: string;
 	userId: string;
 	profileType: ProfileType;
@@ -265,11 +265,13 @@ export type Gig = {
 	form: string;
 	location: string;
 	tags: string[];
-	targetAgeRange: {min: number; max: number};
+	// TODO: Define submissions type
+	gig_submissions: any[]
+	targetAgeRange: { min: number; max: number };
 	targetGender: 'Male' | 'Female' | 'Other' | 'All';
 	languageRequirements: string[];
 	educationLevel: string;
-	incomeRange: {min: number; max: number};
+	incomeRange: { min: number; max: number };
 	_id: string;
 	__v: number;
 };

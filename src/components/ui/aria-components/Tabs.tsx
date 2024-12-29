@@ -10,11 +10,11 @@ import {
 	TabsProps,
 	composeRenderProps,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { focusRing } from '@/lib/utils';
 
 const tabsStyles = tv({
-	base: 'flex gap-4',
+	base: 'flex gap-2',
 	variants: {
 		orientation: {
 			horizontal: 'flex-col',
@@ -28,7 +28,7 @@ export function Tabs(props: TabsProps) {
 		<RACTabs
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				tabsStyles({...renderProps, className}),
+				tabsStyles({ ...renderProps, className }),
 			)}
 		/>
 	);
@@ -49,7 +49,7 @@ export function TabList<T extends object>(props: TabListProps<T>) {
 		<RACTabList
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				tabListStyles({...renderProps, className}),
+				tabListStyles({ ...renderProps, className }),
 			)}
 		/>
 	);
@@ -57,7 +57,7 @@ export function TabList<T extends object>(props: TabListProps<T>) {
 
 const tabProps = tv({
 	extend: focusRing,
-	base: 'flex items-center cursor-default rounded-full px-4 py-1.5 text-sm font-medium transition forced-color-adjust-none',
+	base: 'flex items-center cursor-default rounded-full px-4 py-1.5  font-medium transition forced-color-adjust-none',
 	variants: {
 		isSelected: {
 			false:
@@ -75,7 +75,7 @@ export function Tab(props: TabProps) {
 		<RACTab
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				tabProps({...renderProps, className}),
+				tabProps({ ...renderProps, className }),
 			)}
 		/>
 	);
@@ -83,7 +83,7 @@ export function Tab(props: TabProps) {
 
 const tabPanelStyles = tv({
 	extend: focusRing,
-	base: 'flex-1 p-4 text-sm text-gray-900 dark:text-zinc-100',
+	base: 'flex-1  text-[13px] text-gray-900 dark:text-zinc-100',
 });
 
 export function TabPanel(props: TabPanelProps) {
@@ -91,7 +91,7 @@ export function TabPanel(props: TabPanelProps) {
 		<RACTabPanel
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				tabPanelStyles({...renderProps, className}),
+				tabPanelStyles({ ...renderProps, className }),
 			)}
 		/>
 	);

@@ -1,4 +1,4 @@
-import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
+import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
 import React from 'react';
 import {
 	FieldErrorProps,
@@ -13,15 +13,15 @@ import {
 	TextProps,
 	composeRenderProps,
 } from 'react-aria-components';
-import {twMerge} from 'tailwind-merge';
-import {tv} from 'tailwind-variants';
+import { twMerge } from 'tailwind-merge';
+import { tv } from 'tailwind-variants';
 
 export function Label(props: LabelProps) {
 	return (
 		<RACLabel
 			{...props}
 			className={twMerge(
-				'text-sm text-gray-500 dark:text-zinc-400 font-medium cursor-default w-fit',
+				'text-[13px] text-gray-500 dark:text-zinc-400 font-medium cursor-default w-fit',
 				props.className,
 			)}
 		/>
@@ -33,7 +33,7 @@ export function Description(props: TextProps) {
 		<Text
 			{...props}
 			slot="description"
-			className={twMerge('text-sm text-gray-600', props.className)}
+			className={twMerge('text-[13px] text-gray-600', props.className)}
 		/>
 	);
 }
@@ -44,7 +44,7 @@ export function FieldError(props: FieldErrorProps) {
 			{...props}
 			className={composeTailwindRenderProps(
 				props.className,
-				'text-sm text-red-600 forced-colors:text-[Mark]',
+				'text-[13px] text-red-600 forced-colors:text-[Mark]',
 			)}
 		/>
 	);
@@ -77,7 +77,7 @@ export function FieldGroup(props: GroupProps) {
 		<Group
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				fieldGroupStyles({...renderProps, className}),
+				fieldGroupStyles({ ...renderProps, className }),
 			)}
 		/>
 	);
@@ -89,7 +89,7 @@ export function Input(props: InputProps) {
 			{...props}
 			className={composeTailwindRenderProps(
 				props.className,
-				'px-2 py-1.5 flex-1 min-w-0 outline outline-0 bg-white dark:bg-zinc-900 text-sm text-gray-800 dark:text-zinc-200 disabled:text-gray-200 dark:disabled:text-zinc-600',
+				'px-2 py-1.5 flex-1 min-w-0 outline outline-0 bg-white dark:bg-zinc-900 text-[13px] text-gray-800 dark:text-zinc-200 disabled:text-gray-200 dark:disabled:text-zinc-600',
 			)}
 		/>
 	);

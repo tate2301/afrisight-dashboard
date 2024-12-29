@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 import CXMappersHeader from '@/components/page-header/CXMappersHeader';
-import {apiUrl} from '@/utils/apiUrl';
+import { apiUrl } from '@/utils/apiUrl';
 import AlertMessage from '@/components/alerts/AlertMessage';
 import Button from '@/components/buttons/CustomButton';
 import {
@@ -23,7 +23,7 @@ function ChangePassword() {
 	const [passwordError, setPasswordError] = useState('');
 	const [confirmPasswordError, setConfirmPasswordError] = useState('');
 	const router = useRouter();
-	const {token} = router.query;
+	const { token } = router.query;
 
 	const validatePassword = (password: string) => {
 		const regex =
@@ -101,7 +101,7 @@ function ChangePassword() {
 							<CardDescription>Your password has been updated.</CardDescription>
 						</CardHeader>
 						<CardContent>
-							<p className="text-sm text-zinc-500">
+							<p className="text-[13px] text-zinc-500">
 								You can now close this page and log in with your new password.
 							</p>
 						</CardContent>
@@ -117,7 +117,7 @@ function ChangePassword() {
 			<div className="p-4 md:p-0 max-w-sm mx-auto w-full flex flex-col space-y-6">
 				<div>
 					<h3 className="text-lg text-zinc-900 font-medium">Change Password</h3>
-					<p className="text-sm text-zinc-500">
+					<p className="text-[13px] text-zinc-500">
 						Enter your new password below.
 					</p>
 				</div>
@@ -125,7 +125,7 @@ function ChangePassword() {
 					<div className="flex flex-col space-y-2">
 						<label
 							htmlFor="newPassword"
-							className="text-sm font-medium text-zinc-500">
+							className="text-[13px] font-medium text-zinc-500">
 							New Password
 						</label>
 						<input
@@ -145,7 +145,7 @@ function ChangePassword() {
 					<div className="flex flex-col space-y-2">
 						<label
 							htmlFor="confirmPassword"
-							className="text-sm font-medium text-zinc-500">
+							className="text-[13px] font-medium text-zinc-500">
 							Confirm Password
 						</label>
 						<input

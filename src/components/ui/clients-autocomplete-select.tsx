@@ -21,7 +21,7 @@ const ClientsAutocompleteSelect: React.FC<ClientsAutocompleteSelectProps> = ({
   const renderOption = (client: Client) => (
     <div className="flex flex-col">
       <span className="font-medium">{client.name}</span>
-      <span className="text-sm text-gray-500">{client.email}</span>
+      <span className="text-[13px] text-gray-500">{client.email}</span>
     </div>
   );
 

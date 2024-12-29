@@ -5,12 +5,12 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../ui/dialog';
-import {Input} from '@/components/ui/input';
+import { Input } from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {PlusIcon} from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 import useDisclosure from '@/hooks/useDisclosure';
-import {addDays} from 'date-fns';
+import { addDays } from 'date-fns';
 import {
 	ErrorMessage,
 	Field,
@@ -21,12 +21,12 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import AutocompleteSelect from '@/components/ui/autocomplete';
-import {Textarea} from '@/components/ui/textarea';
-import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {Label} from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import useWithStatus from '@/hooks/useWithStatus';
-import {useEffect, useState} from 'react';
-import {cn} from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
 import {
 	AUTH_ROUTES,
 	FORM_ROUTES,
@@ -35,7 +35,7 @@ import {
 } from '@/lib/api-routes';
 import ClientsAutocompleteSelect from './select/clients-autocomplete-select';
 import ClientFormsAutocomplete from '../ui/client-forms-autocomplete';
-import {Button} from '@radix-ui/themes';
+import { Button } from '@radix-ui/themes';
 
 type SurveyFormSchema = {
 	name: string;
@@ -51,9 +51,9 @@ type SurveyFormSchema = {
 	additionalRewardValue: any;
 };
 
-export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
-	const {executor, isLoading, error} = useWithStatus();
-	const {isOpen, onClose, onOpen} = useDisclosure();
+export const CreateSurvey = (props: { callback: () => Promise<void> }) => {
+	const { executor, isLoading, error } = useWithStatus();
+	const { isOpen, onClose, onOpen } = useDisclosure();
 
 	const onSubmit = async (
 		values: SurveyFormSchema,
@@ -141,7 +141,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 						}}
 						validationSchema={validationSchema}
 						onSubmit={onSubmit}>
-						{({isSubmitting, setFieldValue, values, isValid, errors}) => {
+						{({ isSubmitting, setFieldValue, values, isValid, errors }) => {
 							return (
 								<Form>
 									<div className="p-4 bg-white block">
@@ -150,7 +150,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="name"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Name
 												</label>
 												<Field
@@ -163,14 +163,14 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="name"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 
 											<div className="flex flex-col space-y-2 mb-12">
 												<label
 													htmlFor="description"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Description
 												</label>
 												<Field
@@ -182,7 +182,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="description"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 
@@ -190,7 +190,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 												<div className="flex flex-col space-y-2">
 													<label
 														htmlFor="client"
-														className="text-sm font-medium">
+														className="text-[13px] font-medium">
 														Client
 													</label>
 													<ClientsAutocompleteSelect
@@ -201,13 +201,13 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 													<ErrorMessage
 														name="client"
 														component="div"
-														className="text-red-500 text-sm"
+														className="text-red-500 text-[13px]"
 													/>
 												</div>
 												<div className="flex flex-col space-y-2">
 													<label
 														htmlFor="form"
-														className="text-sm font-medium">
+														className="text-[13px] font-medium">
 														Form
 													</label>
 													<ClientFormsAutocomplete
@@ -220,7 +220,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 													<ErrorMessage
 														name="form"
 														component="div"
-														className="text-red-500 text-sm"
+														className="text-red-500 text-[13px]"
 													/>
 												</div>
 											</div>
@@ -228,7 +228,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="coverImage"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Cover Image
 												</label>
 												<input
@@ -246,7 +246,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="coverImage"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 										</div>
@@ -255,14 +255,14 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="difficulty"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Difficulty
 												</label>
 												<Field
 													// onValueChange={(value) => setFieldValue("category", value)}
 													// value={values.category}
 													name="difficulty">
-													{({field, form}: FieldProps) => (
+													{({ field, form }: FieldProps) => (
 														<AutocompleteSelect
 															name={field.name}
 															onChange={(value) =>
@@ -270,8 +270,8 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 															}
 															defaultValue={field.value}
 															options={[
-																{value: 'expert', label: 'Expert Knowledge'},
-																{value: 'simple', label: 'Easy'},
+																{ value: 'expert', label: 'Expert Knowledge' },
+																{ value: 'simple', label: 'Easy' },
 																{
 																	value: 'experienced',
 																	label: 'Experience required',
@@ -297,21 +297,21 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="difficulty"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="category"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Category
 												</label>
 												<Field
 													// onValueChange={(value) => setFieldValue("category", value)}
 													// value={values.category}
 													name="category">
-													{({field, form}: FieldProps) => (
+													{({ field, form }: FieldProps) => (
 														<AutocompleteSelect
 															name={field.name}
 															onChange={(value) =>
@@ -319,9 +319,9 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 															}
 															defaultValue={field.value}
 															options={[
-																{value: 'language', label: 'Language'},
-																{value: 'research', label: 'Research'},
-																{value: 'commercial', label: 'Commercial'},
+																{ value: 'language', label: 'Language' },
+																{ value: 'research', label: 'Research' },
+																{ value: 'commercial', label: 'Commercial' },
 															]}
 															placeholder="Category"
 															renderOption={(option) => (
@@ -335,13 +335,13 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="category"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="duration"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Duration
 												</label>
 												<Field
@@ -356,7 +356,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="duration"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 										</div>
@@ -366,7 +366,7 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="dollarRewardValue"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Dollar amount (USD)
 												</label>
 												<Field
@@ -378,16 +378,16 @@ export const CreateSurvey = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="dollarRewardValue"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 
 											<div className="mb-6">
-												<p className="font-medium text-sm mb-2">
+												<p className="font-medium text-[13px] mb-2">
 													Additional reward type
 												</p>
 												<Field name="additionalReward">
-													{({field, form}: FieldProps) => (
+													{({ field, form }: FieldProps) => (
 														<RadioGroup
 															name="additionalReward"
 															defaultValue="points"
@@ -475,7 +475,7 @@ const VoucherRewardInputs = (props: {
 			<div className="flex flex-col space-y-2 mb-6">
 				<label
 					htmlFor="additionalRewardValue.code"
-					className="text-sm font-medium">
+					className="text-[13px] font-medium">
 					Voucher code
 				</label>
 				<Field
@@ -491,14 +491,14 @@ const VoucherRewardInputs = (props: {
 							const code = generateVoucherCode();
 							props.setFieldValue('additionalRewardValue.code', code);
 						}}
-						className="text-blue-600 text-sm font-medium">
+						className="text-blue-600 text-[13px] font-medium">
 						Generate code
 					</button>
 				</div>
 				<ErrorMessage
 					name="additionalRewardValue.code"
 					component="div"
-					className="text-red-500 text-sm"
+					className="text-red-500 text-[13px]"
 				/>
 			</div>
 		</div>
@@ -510,7 +510,7 @@ const PointsRewardInput = () => {
 		<div className="flex flex-col space-y-2 mb-6">
 			<label
 				htmlFor="additionalRewardValue.amount"
-				className="text-sm font-medium">
+				className="text-[13px] font-medium">
 				XP reward
 			</label>
 			<Field
@@ -525,7 +525,7 @@ const PointsRewardInput = () => {
 			<ErrorMessage
 				name="additionalRewardValue.amount"
 				component="div"
-				className="text-red-500 text-sm"
+				className="text-red-500 text-[13px]"
 			/>
 		</div>
 	);

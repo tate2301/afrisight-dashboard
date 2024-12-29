@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import {FormType, SectionType} from '../../utils/types';
+import { FormType, SectionType } from '../../utils/types';
 
 type Props = {
 	item: FormType;
@@ -17,7 +17,7 @@ const getRandomImage = () => {
 	return images[randomIndex];
 };
 
-function FormItem({item}: Props) {
+function FormItem({ item }: Props) {
 	const randomImage = getRandomImage();
 	return (
 		<div className="col-span-1 flex rounded-xl overflow-hidden bg-white pressable-shadow">
@@ -29,9 +29,9 @@ function FormItem({item}: Props) {
 					{item.form.description}
 				</p>
 				<div className="flex items-center gap-2 mb-4 font-medium text-zinc-500 dark:text-zinc-300 ">
-					<p className="text-sm">{5} min (est) to complete</p>
+					<p className="text-[13px]">{5} min (est) to complete</p>
 					<p>&bull;</p>
-					<p className="text-sm">{item.form.sections.length} questions</p>
+					<p className="text-[13px]">{item.form.sections.length} questions</p>
 				</div>
 
 				<div className="flex-1"></div>

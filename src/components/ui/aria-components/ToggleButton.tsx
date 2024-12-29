@@ -1,15 +1,15 @@
-import {focusRing} from '@/lib/utils';
+import { focusRing } from '@/lib/utils';
 import React from 'react';
 import {
 	ToggleButton as RACToggleButton,
 	ToggleButtonProps,
 	composeRenderProps,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants';
 
 let styles = tv({
 	extend: focusRing,
-	base: 'px-5 py-2 text-sm text-center transition rounded-lg border border-black/10 dark:border-white/10 forced-colors:border-[ButtonBorder] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] dark:shadow-none cursor-default forced-color-adjust-none',
+	base: 'px-5 py-2 text-[13px] text-center transition rounded-lg border border-black/10 dark:border-white/10 forced-colors:border-[ButtonBorder] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] dark:shadow-none cursor-default forced-color-adjust-none',
 	variants: {
 		isSelected: {
 			false:
@@ -27,7 +27,7 @@ export function ToggleButton(props: ToggleButtonProps) {
 		<RACToggleButton
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				styles({...renderProps, className}),
+				styles({ ...renderProps, className }),
 			)}
 		/>
 	);

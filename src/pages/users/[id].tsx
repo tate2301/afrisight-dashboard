@@ -1,12 +1,12 @@
-import {ReactNode, Suspense, useEffect, useState} from 'react';
-import {Pencil, DownloadCloud} from 'lucide-react';
+import { ReactNode, Suspense, useEffect, useState } from 'react';
+import { Pencil, DownloadCloud } from 'lucide-react';
 import GeneralLayout from '@/layout/GeneralLayout';
 import useWithStatus from '@/hooks/useWithStatus';
-import {FORM_ROUTES, USER_ROUTES} from '@/lib/api-routes';
-import {useRouter} from 'next/router';
+import { FORM_ROUTES, USER_ROUTES } from '@/lib/api-routes';
+import { useRouter } from 'next/router';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {formatDate} from 'date-fns';
-import {Form, TProfile} from '@/utils/types';
+import { formatDate } from 'date-fns';
+import { Form, Profile } from '@/utils/types';
 import {
 	Table,
 	TableBody,
@@ -17,15 +17,15 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
-import {Box, Button, Flex, Text} from '@radix-ui/themes';
-import {ChevronRight} from '@/components/icons/chevron.right';
-import {useQuery, useSuspenseQuery} from '@tanstack/react-query';
-import {XFill} from '@/components/icons/x.fill';
+import { Box, Button, Flex, Text } from '@radix-ui/themes';
+import { ChevronRight } from '@/components/icons/chevron.right';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { XFill } from '@/components/icons/x.fill';
 import LoadingPage from '@/components/semantic-page/loading';
 import UserActions from '@/components/users/actions';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 
-const UserManagementInterface = ({id}: {id: string}) => {
+const UserManagementInterface = ({ id }: { id: string }) => {
 	const fetchUserData = async (id: string) => {
 		const response = await axiosInstance.get(USER_ROUTES.GET_USER_BY_ID(id));
 		return response;
@@ -35,7 +35,7 @@ const UserManagementInterface = ({id}: {id: string}) => {
 		data: profile,
 		error,
 		isLoading,
-	} = useSuspenseQuery<TProfile, Error>({
+	} = useSuspenseQuery<Profile, Error>({
 		queryKey: ['user', id],
 		queryFn: () => fetchUserData(id as string),
 	});
@@ -115,11 +115,11 @@ const SectionTitle = ({
 			<h3 className="font-medium text-zinc-900 text-lg">{title}</h3>
 			<div className="flex items-center gap-4">{actions}</div>
 		</div>
-		{subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
+		{subtitle && <p className="text-[13px] text-gray-500">{subtitle}</p>}
 	</div>
 );
 
-const FormsCreated = (props: TProfile) => {
+const FormsCreated = (props: Profile) => {
 	const [forms, setForms] = useState([]);
 
 	const getFormsForThisUser = async () => {
@@ -161,7 +161,7 @@ const FormsCreated = (props: TProfile) => {
 	);
 };
 
-const GigsCreated = (props: TProfile) => {
+const GigsCreated = (props: Profile) => {
 	return (
 		<div className="py-4">
 			<SectionTitle
@@ -190,7 +190,7 @@ const GigsCreated = (props: TProfile) => {
 	);
 };
 
-const GigsParticipated = (props: TProfile) => {
+const GigsParticipated = (props: Profile) => {
 	return (
 		<div className="py-4">
 			<SectionTitle
@@ -211,7 +211,7 @@ const GigsParticipated = (props: TProfile) => {
 	);
 };
 
-const Vouchers = (props: TProfile) => {
+const Vouchers = (props: Profile) => {
 	return (
 		<div className="py-4">
 			<SectionTitle
@@ -230,7 +230,7 @@ const Vouchers = (props: TProfile) => {
 	);
 };
 
-const StorePurchases = (props: TProfile) => {
+const StorePurchases = (props: Profile) => {
 	return (
 		<div className="py-4">
 			<SectionTitle
@@ -249,7 +249,7 @@ const StorePurchases = (props: TProfile) => {
 	);
 };
 
-const PointsBalanceSection = (props: TProfile) => {
+const PointsBalanceSection = (props: Profile) => {
 	return (
 		<div className="py-4">
 			<SectionTitle
@@ -265,7 +265,7 @@ const PointsBalanceSection = (props: TProfile) => {
 					<p className="font-medium text-zinc-900">24</p>
 					<p>points</p>
 				</div>
-				<p className="text-sm">User can earn points by participating in gigs</p>
+				<p className="text-[13px]">User can earn points by participating in gigs</p>
 			</div>
 		</div>
 	);
@@ -282,7 +282,7 @@ const TablePreview = (props: {
 				<TableRow>
 					{props.columns.map((item) => (
 						<TableHead
-							className="h-[28px] text-sm"
+							className="h-[28px] text-[13px]"
 							key={item}>
 							{item}
 						</TableHead>
@@ -295,7 +295,7 @@ const TablePreview = (props: {
 						{props.fields?.map((field) => (
 							<TableCell
 								key={field}
-								className=" text-sm">
+								className=" text-[13px]">
 								{item[field]}
 							</TableCell>
 						))}
@@ -307,7 +307,7 @@ const TablePreview = (props: {
 	);
 };
 
-const UserDetails = (props: {profile: any}) => (
+const UserDetails = (props: { profile: any }) => (
 	<div className="space-y-4">
 		<DetailItem
 			label="Profile ID"
@@ -353,7 +353,7 @@ const DetailItem = ({
 );
 
 export const getServerSideProps = async (context: any) => {
-	const {id} = context.query;
+	const { id } = context.query;
 	return {
 		props: {
 			id,

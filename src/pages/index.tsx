@@ -1,18 +1,18 @@
-import React, {FormEvent, useContext, useState} from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import axios from 'axios';
-import {apiUrl} from '../utils/apiUrl';
+import { apiUrl } from '../utils/apiUrl';
 import AlertMessage from '../components/alerts/AlertMessage';
-import {getMessage} from '../helpers/getMessage';
-import {Store} from '../context/Store';
-import {useRouter} from 'next/router';
+import { getMessage } from '../helpers/getMessage';
+import { Store } from '../context/Store';
+import { useRouter } from 'next/router';
 import CXMappersHeader from '@/components/page-header/CXMappersHeader';
 import Link from 'next/link';
 import {
 	setAccessTokenToCookies,
 	setRefreshTokenToCookies,
 } from '@/hooks/cookies';
-import {useAuth} from '@/context/AuthContext';
-import {Button, TextField} from '@radix-ui/themes';
+import { useAuth } from '@/context/AuthContext';
+import { Button, TextField } from '@radix-ui/themes';
 
 function Home() {
 	const [username, setUsername] = useState('');
@@ -20,19 +20,19 @@ function Home() {
 	const [loading, setLoading] = useState(false);
 	const [err, setErr] = useState('');
 	const [msg, setMsg] = useState('');
-	const {dispatch} = useContext<any>(Store);
+	const { dispatch } = useContext<any>(Store);
 	const router = useRouter();
-	const {login} = useAuth();
+	const { login } = useAuth();
 
 	const loginToDashboard = async (e: FormEvent) => {
 		e.preventDefault();
 		setLoading(true);
 		try {
-			const {data} = await axios.post(`${apiUrl}/auth/login/email`, {
+			const { data } = await axios.post(`${apiUrl}/auth/login/email`, {
 				email: username,
 				password,
 			});
-			const {accessToken, refreshToken, ...userInfo} = data;
+			const { accessToken, refreshToken, ...userInfo } = data;
 
 			await setAccessTokenToCookies(accessToken);
 			await setRefreshTokenToCookies(refreshToken);
@@ -50,7 +50,8 @@ function Home() {
 				if (error.status === 400) {
 					setErr('Invalid email or password');
 				} else {
-					setErr(getMessage(error));
+					console.log(error);
+					setErr(error.response?.data.error);
 				}
 			}
 			setLoading(false);
@@ -73,7 +74,7 @@ function Home() {
 					<div className="flex flex-col space-y-2">
 						<label
 							htmlFor="username"
-							className="text-sm font-medium text-zinc-500">
+							className="text-[13px] font-medium text-zinc-500">
 							Email
 						</label>
 						<TextField.Root
@@ -87,7 +88,7 @@ function Home() {
 					<div className="flex flex-col space-y-2">
 						<label
 							htmlFor="password"
-							className="text-sm font-medium text-zinc-500 focus:border-[#007C7C]">
+							className="text-[13px] font-medium text-zinc-500 focus:border-[#007C7C]">
 							Password
 						</label>
 						<TextField.Root

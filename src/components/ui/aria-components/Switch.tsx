@@ -3,8 +3,8 @@ import {
 	Switch as AriaSwitch,
 	SwitchProps as AriaSwitchProps,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
 
 export interface SwitchProps extends Omit<AriaSwitchProps, 'children'> {
 	children: React.ReactNode;
@@ -38,13 +38,13 @@ const handle = tv({
 	},
 });
 
-export function Switch({children, ...props}: SwitchProps) {
+export function Switch({ children, ...props }: SwitchProps) {
 	return (
 		<AriaSwitch
 			{...props}
 			className={composeTailwindRenderProps(
 				props.className,
-				'group flex gap-2 items-center text-gray-800 disabled:text-gray-300 dark:text-zinc-200 dark:disabled:text-zinc-600 forced-colors:disabled:text-[GrayText] text-sm transition',
+				'group flex gap-2 items-center text-gray-800 disabled:text-gray-300 dark:text-zinc-200 dark:disabled:text-zinc-600 forced-colors:disabled:text-[GrayText] text-[13px] transition',
 			)}>
 			{(renderProps) => (
 				<>

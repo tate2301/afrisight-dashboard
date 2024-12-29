@@ -32,20 +32,17 @@ export default function TableContent<TData, TValue>({
                             {row.getVisibleCells().map((cell, index) => (
                                 <TableCell
                                     key={cell.id}
-                                    style={{
-                                        width: index === 0 ? '40px' : cell.column.getSize(),
-                                        position: index < 2 ? 'sticky' : 'initial',
-                                        left: index === 0 ? 0 : index === 1 ? '40px' : 'initial',
-                                        zIndex: index < 2 ? 1 : 'initial',
-                                        height: '32px',
-                                    }}
                                     data-state={row.getIsSelected() && 'selected'}
                                     className={cn(
-                                        index === 0 && 'sticky left-0 z-10 px-0',
-                                        'border-r border-zinc-400/20 overflow-hidden',
-                                        index < 2 &&
-                                        'bg-white data-[state=selected]:bg-muted group-hover:bg-muted/50',
+                                        'sticky',
+                                        index === 0 && 'px-0',
+                                        index < 2 && 'bg-zinc-50 -hover:bg-muted/50',
                                     )}
+                                    style={{
+                                        left: index === 0 ? 0 : index === 1 ? '40px' : 'initial',
+                                        zIndex: index < 2 ? 5 : 'initial',
+                                        height: '28px',
+                                    }}
                                 >
                                     <Flex
                                         className={cn(

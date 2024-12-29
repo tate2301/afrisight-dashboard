@@ -1,16 +1,16 @@
-import {PlusIcon} from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import GeneralLayout from '../../layout/GeneralLayout';
-import {H1, H3, Paragraph} from '@/components/design-sytem/typography';
+import { H1, H3, Paragraph } from '@/components/design-sytem/typography';
 import Separator from '@/components/design-sytem/separator';
 import Flex from '@/components/design-sytem/flex';
 import Box from '@/components/design-sytem/box';
 import GigCard from '@/components/gig/card';
-import {ArrowRight} from '@/components/icons/arrow.right';
-import {ColumnDef} from '@tanstack/react-table';
-import {Checkbox} from '@/components/ui/checkbox';
-import {DataTable} from '@/components/ui/datatable';
-import {Button, Heading} from '@radix-ui/themes';
+import { ArrowRight } from '@/components/icons/arrow.right';
+import { ColumnDef } from '@tanstack/react-table';
+import { Checkbox } from '@/components/ui/checkbox';
+import { DataTable } from '@/components/ui/datatable';
+import { Button, Heading } from '@radix-ui/themes';
 
 const gigs = [
 	{
@@ -127,23 +127,24 @@ const Overview = () => {
 				<Box>
 					<Box>
 						<Flex
-							css={{padding: '4px 12px'}}
+							css={{ padding: '4px 12px' }}
 							justifyContent={'between'}
 							alignItems={'center'}>
 							<Heading size="4">Pending gigs</Heading>
 							<Flex
 								alignItems={'center'}
-								css={{gap: 8}}>
+								css={{ gap: 8 }}>
 								<Button variant="ghost">Approve 2 gigs</Button>
 								<Button>Archive 2 gigs</Button>
 							</Flex>
 						</Flex>
 						<Box
-							css={{padding: '20px 0'}}
+							css={{ padding: '20px 0' }}
 							className="py-2 space-y-[20px]">
 							{gigs.map((gig) => (
 								<GigCard
 									key={gig._id}
+									form={gig.form}
 									_id={gig._id?.toString() ?? ''}
 									createdDate={gig.createdDate}
 									status={'DRAFT'}
@@ -160,7 +161,7 @@ const Overview = () => {
 					<Flex
 						justifyContent={'between'}
 						alignItems={'end'}
-						css={{padding: '0 20px', marginBottom: 20}}>
+						css={{ padding: '0 20px', marginBottom: 20 }}>
 						<H3 className="mb-2 px-4">Pending payout requests</H3>
 						<Button>
 							View all payout requests <ArrowRight />
@@ -180,7 +181,7 @@ type QuickActionCardProps = {
 	button: React.ReactNode;
 };
 
-const QuickActionCard = ({title, caption, button}: QuickActionCardProps) => {
+const QuickActionCard = ({ title, caption, button }: QuickActionCardProps) => {
 	return (
 		<div className="p-4 bg-zinc-100 rounded-2xl w-64">
 			<Paragraph
@@ -240,7 +241,7 @@ const payoutRequests: PayoutRequests[] = [
 const payoutRequestColumns: ColumnDef<PayoutRequests>[] = [
 	{
 		id: 'select',
-		header: ({table}) => (
+		header: ({ table }) => (
 			<Checkbox
 				checked={
 					table.getIsAllPageRowsSelected() ||
@@ -250,7 +251,7 @@ const payoutRequestColumns: ColumnDef<PayoutRequests>[] = [
 				aria-label="Select all"
 			/>
 		),
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Checkbox
 				checked={row.getIsSelected()}
 				onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -263,7 +264,7 @@ const payoutRequestColumns: ColumnDef<PayoutRequests>[] = [
 	{
 		accessorKey: 'user.profilePic',
 		header: 'Avatar',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<div className="flex items-center ">
 				<img
 					src={row.original.user.profilePic}
@@ -281,14 +282,14 @@ const payoutRequestColumns: ColumnDef<PayoutRequests>[] = [
 	{
 		accessorKey: 'amount',
 		header: 'Amount',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Paragraph weight={'medium'}>US${row.original.amount}</Paragraph>
 		),
 	},
 	{
 		accessorKey: 'balance',
 		header: 'Balance',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<Paragraph weight={'medium'}>US${row.original.balance}</Paragraph>
 		),
 	},

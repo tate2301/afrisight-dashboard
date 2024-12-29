@@ -1,14 +1,16 @@
 import React from 'react';
-import {FormField} from '../types';
-import {Input} from '@/components/ui/input';
-import {Textarea} from '@/components/ui/textarea';
-import {Label} from '@/components/ui/label';
-import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {Checkbox} from '@/components/ui/checkbox';
-import {Paragraph} from '@/components/design-sytem/typography';
+import { FormField } from '../types';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Paragraph } from '@/components/design-sytem/typography';
+import { TextInput } from '@/components/gig/create-gig-components/extras';
+import { DatePicker } from '@/components/ui/aria-components/DatePicker';
 
 export function renderField(field: FormField) {
-	const {id, label, required, type, properties} = field;
+	const { id, label, required, type, properties } = field;
 
 	const commonProps = {
 		id,
@@ -28,7 +30,8 @@ export function renderField(field: FormField) {
 						{label}
 						{required && '*'}
 					</Paragraph>
-					<Input
+
+					<TextInput
 						type="text"
 						{...commonProps}
 						minLength={properties.minLength}
@@ -65,7 +68,7 @@ export function renderField(field: FormField) {
 						{label}
 						{required && '*'}
 					</Paragraph>
-					<Input
+					<TextInput
 						type="email"
 						{...commonProps}
 					/>
@@ -82,8 +85,8 @@ export function renderField(field: FormField) {
 						{label}
 						{required && '*'}
 					</Paragraph>
-					<Input
-						type="date"
+					<DatePicker
+
 						{...commonProps}
 					/>
 				</div>
@@ -154,15 +157,16 @@ export function renderField(field: FormField) {
 						{required && '*'}
 					</Paragraph>
 					<div className="flex space-x-2">
-						{Array.from({length: maxRating}, (_, i) => i + 1).map((value) => (
+						{Array.from({ length: maxRating }, (_, i) => i + 1).map((value) => (
 							<button
 								key={value}
-								className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">
+								type='button'
+								className="w-8 h-8 rounded-full font-semibold text-content-tertiary bg-surface-secondary flex items-center justify-center hover:bg-surface-quaternary hover:text-content hover:pressable-shadow">
 								{value}
 							</button>
 						))}
 					</div>
-					<div className="flex justify-between text-sm text-gray-500">
+					<div className="flex justify-between text-[13px] text-gray-500">
 						<span>Not at all likely</span>
 						<span>Extremely likely</span>
 					</div>
@@ -182,11 +186,13 @@ export function renderField(field: FormField) {
 						{required && '*'}
 					</Paragraph>
 					<div className="flex space-x-2">
-						{Array.from({length: maxRatingScale}, (_, i) => i + 1).map(
+						{Array.from({ length: maxRatingScale }, (_, i) => i + 1).map(
 							(value) => (
 								<button
 									key={value}
-									className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">
+									type='button'
+									className="w-8 h-8 rounded-full font-semibold text-content-tertiary bg-surface-secondary flex items-center justify-center hover:bg-surface-quaternary hover:text-content hover:pressable-shadow">
+
 									{value}
 								</button>
 							),
@@ -211,7 +217,7 @@ export function renderField(field: FormField) {
 						accept={properties.allowedFileTypes?.join(',')}
 					/>
 					{properties.maxFileSize && (
-						<p className="text-sm text-gray-500">
+						<p className="text-[13px] text-gray-500">
 							Max file size: {properties.maxFileSize}MB
 						</p>
 					)}

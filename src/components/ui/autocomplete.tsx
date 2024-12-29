@@ -55,7 +55,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({
             placeholder="Search..."
             value={searchTerm}
             onChange={handleSearch}
-            className="mb-2 w-full px-2 outline-none ring-0 text-sm"
+            className="mb-2 w-full px-2 outline-none ring-0 text-[13px]"
           />
         </div>
         {filteredOptions.map((option) => (

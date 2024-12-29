@@ -2,11 +2,11 @@ import { parseCookies, setCookie } from "nookies";
 
 export const getAccessTokenFromCookies = (ctx?: any) => {
   const cookies = parseCookies(ctx);
-  return cookies["auth_token"];
+  return cookies["access_token"];
 };
 
 export const setAccessTokenToCookies = (token: string) => {
-  setCookie(null, "auth_token", token, {
+  setCookie(null, "access_token", token, {
     maxAge: 30 * 24 * 60 * 60,
     path: "/",
   });

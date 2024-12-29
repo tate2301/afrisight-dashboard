@@ -1,4 +1,4 @@
-import {Heading} from '@radix-ui/themes';
+import { Heading } from '@radix-ui/themes';
 import styled from './theme';
 
 const textVariants = {
@@ -61,7 +61,7 @@ const H3 = styled(Heading, {
 
 const Paragraph = styled('p', {
 	fontWeight: 400,
-	fontSize: 14,
+	fontSize: 13,
 	lineHeight: '24px',
 	color: '$labelSecondary',
 	variants: textVariants,
@@ -71,8 +71,7 @@ const Caption = styled('p', {
 	fontWeight: 400,
 	fontSize: 12,
 	lineHeight: '16px',
-	color: '$labelSecondary',
 	variants: textVariants,
 });
 
-export {H1, H2, H3, Paragraph, Caption};
+export { H1, H2, H3, Paragraph, Caption };

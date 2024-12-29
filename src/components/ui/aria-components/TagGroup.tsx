@@ -1,5 +1,5 @@
-import {XIcon} from 'lucide-react';
-import React, {createContext, useContext} from 'react';
+import { XIcon } from 'lucide-react';
+import React, { createContext, useContext } from 'react';
 import {
 	Tag as AriaTag,
 	TagGroup as AriaTagGroup,
@@ -11,10 +11,10 @@ import {
 	Text,
 	composeRenderProps,
 } from 'react-aria-components';
-import {twMerge} from 'tailwind-merge';
-import {tv} from 'tailwind-variants';
-import {Description, Label} from './Field';
-import {focusRing} from '@/lib/utils';
+import { twMerge } from 'tailwind-merge';
+import { tv } from 'tailwind-variants';
+import { Description, Label } from './Field';
+import { focusRing } from '@/lib/utils';
 
 const colors = {
 	gray: 'bg-gray-100 text-gray-600 border-gray-200 hover:border-gray-300 dark:bg-zinc-700 dark:text-zinc-300 dark:border-zinc-600 dark:hover:border-zinc-500',
@@ -57,7 +57,7 @@ const tagStyles = tv({
 
 export interface TagGroupProps<T>
 	extends Omit<AriaTagGroupProps, 'children'>,
-		Pick<TagListProps<T>, 'items' | 'children' | 'renderEmptyState'> {
+	Pick<TagListProps<T>, 'items' | 'children' | 'renderEmptyState'> {
 	color?: Color;
 	label?: string;
 	description?: string;
@@ -94,7 +94,7 @@ export function TagGroup<T extends object>({
 			{errorMessage && (
 				<Text
 					slot="errorMessage"
-					className="text-sm text-red-600">
+					className="text-[13px] text-red-600">
 					{errorMessage}
 				</Text>
 			)}
@@ -107,7 +107,7 @@ const removeButtonStyles = tv({
 	base: 'cursor-default rounded-full transition-[background-color] p-0.5 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 pressed:bg-black/20 dark:pressed:bg-white/20',
 });
 
-export function Tag({children, color, ...props}: TagProps) {
+export function Tag({ children, color, ...props }: TagProps) {
 	let textValue = typeof children === 'string' ? children : undefined;
 	let groupColor = useContext(ColorContext);
 	return (
@@ -115,9 +115,9 @@ export function Tag({children, color, ...props}: TagProps) {
 			textValue={textValue}
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				tagStyles({...renderProps, className, color: color || groupColor}),
+				tagStyles({ ...renderProps, className, color: color || groupColor }),
 			)}>
-			{({allowsRemoving}) => (
+			{({ allowsRemoving }) => (
 				<>
 					{children}
 					{allowsRemoving && (

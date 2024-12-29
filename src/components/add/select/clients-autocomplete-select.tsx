@@ -93,7 +93,7 @@ const ClientsAutocompleteSelect: React.FC<ClientsAutocompleteSelectProps> = ({
                 <div className="size-8 rounded-full mr-4 bg-zinc-400/10" />
                 <div className="flex gap-2">
                   <span className="font-medium">{client.user.email}</span>
-                  <span className="text-sm text-gray-500 truncate text-ellipsis">
+                  <span className="text-[13px] text-gray-500 truncate text-ellipsis">
                     {client.user.email}
                   </span>
                 </div>

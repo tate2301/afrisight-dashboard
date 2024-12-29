@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import {FormProvider, useFormContext} from '../context';
-import {FormPreview} from './FormPreview';
-import {FieldList} from './FieldList';
-import {FieldProperties} from './FieldProperties';
+import React, { useState } from 'react';
+import { FormProvider, useFormContext } from '../context';
+import { FormPreview } from './FormPreview';
+import { FieldList } from './FieldList';
+import { FieldProperties } from './FieldProperties';
 import Box from '@/components/design-sytem/box';
 import Flex from '@/components/design-sytem/flex';
 import Separator from '@/components/design-sytem/separator';
-import {FormBuilderHeader} from './FormBuilderHeader';
-import {FullscreenPreviewModal} from './FullscreenPreviewModal';
-import {Form} from '../types';
+import { FormBuilderHeader } from './FormBuilderHeader';
+import { FullscreenPreviewModal } from './FullscreenPreviewModal';
+import { Form } from '../types';
 
 interface FormBuilderProps {
 	gig_id: string;
@@ -22,13 +22,15 @@ export function FormBuilderPresenter({
 	formName,
 	formDescription,
 }: FormBuilderProps) {
-	const {form, updateForm, selectedFieldId} = useFormContext();
+	const { form, updateForm, selectedFieldId } = useFormContext();
 	const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
-	// Update form with the provided name and description
+	// Add dependency check to prevent infinite updates
 	React.useEffect(() => {
-		updateForm({title: formName, description: formDescription});
-	}, [formName, formDescription, updateForm]);
+		if (form.title !== formName || form.description !== formDescription) {
+			updateForm({ title: formName, description: formDescription });
+		}
+	}, [formName, formDescription]);
 
 	const handlePreviewClick = () => {
 		setIsPreviewModalOpen(true);
@@ -46,8 +48,8 @@ export function FormBuilderPresenter({
 			}}
 			className="flex flex-col">
 			<Flex
-				css={{gap: 0}}
-				className="flex-1 overflow-y-auto">
+				css={{ gap: 0 }}
+				className="flex-1 overflow-y-auto divide-x divide-zinc-400/20">
 				<aside className="w-1/4 bg-white py-4 overflow-y-auto">
 					<FieldList />
 				</aside>

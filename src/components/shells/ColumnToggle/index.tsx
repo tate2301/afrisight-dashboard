@@ -1,8 +1,8 @@
-import {ChevronDown, Columns} from 'lucide-react';
-import {Label} from '@/components/ui/label';
-import {Button, Popover, Switch, Text} from '@radix-ui/themes';
-import {useState} from 'react';
-import {Paragraph} from '@/components/design-sytem/typography';
+import { ChevronDown, Columns } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Button, Popover, Switch, Text } from '@radix-ui/themes';
+import { useState } from 'react';
+import { Paragraph } from '@/components/design-sytem/typography';
 
 interface ColumnToggleProps {
 	label: string;
@@ -10,14 +10,14 @@ interface ColumnToggleProps {
 	onToggle: (enabled: boolean) => void;
 }
 
-function ColumnToggle({label, enabled, onToggle}: ColumnToggleProps) {
+function ColumnToggle({ label, enabled, onToggle }: ColumnToggleProps) {
 	return (
 		<div className="flex items-center justify-between py-2">
 			<Paragraph
 				as={'label'}
 				color={'secondary'}
 				htmlFor={`${label}-toggle`}
-				className="text-sm ">
+				className="text-[13px] ">
 				{label}
 			</Paragraph>
 			<Switch
@@ -30,7 +30,7 @@ function ColumnToggle({label, enabled, onToggle}: ColumnToggleProps) {
 }
 
 interface ColumnVisibilityToggleProps {
-	columns: {label: string; enabled: boolean}[];
+	columns: { label: string; enabled: boolean }[];
 	onToggle: (label: string, enabled: boolean) => void;
 }
 

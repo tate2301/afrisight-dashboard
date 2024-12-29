@@ -4,22 +4,24 @@ import {
 	Button as RACButton,
 	ButtonProps as RACButtonProps,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { focusRing } from '@/lib/utils';
 
 export interface ButtonProps extends RACButtonProps {
-	variant?: 'primary' | 'secondary' | 'destructive' | 'icon';
+	variant?: 'primary' | 'secondary' | 'destructive' | 'icon' | 'ghost' | "outline";
 }
 
 let button = tv({
 	extend: focusRing,
-	base: 'px-5 py-2 text-sm text-center transition rounded-lg border border-black/10 dark:border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] dark:shadow-none cursor-default',
+	base: 'px-5 py-1.5 h-[32px] flex items-center gap-2 rounded-lg text-[13px] text-center transition font-semibold border border-black/10 dark:border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] dark:shadow-none cursor-default',
 	variants: {
 		variant: {
 			primary: 'bg-blue-600 hover:bg-blue-700 pressed:bg-blue-800 text-white',
 			secondary:
-				'bg-gray-100 hover:bg-gray-200 pressed:bg-gray-300 text-gray-800 dark:bg-zinc-600 dark:hover:bg-zinc-500 dark:pressed:bg-zinc-400 dark:text-zinc-100',
+				'bg-gray-50 hover:bg-gray-200 pressed:bg-gray-300 text-gray-800 dark:bg-zinc-600 dark:hover:bg-zinc-500 dark:pressed:bg-zinc-400 dark:text-zinc-100',
 			destructive: 'bg-red-700 hover:bg-red-800 pressed:bg-red-900 text-white',
+			ghost: 'bg-zinc-100 hover:bg-zinc-400/20 border-none px-4 text-zinc-600',
+			outline: 'border border-transparent pressable-shadow pressed:border-content-tertiary',
 			icon: 'border-0 p-1 flex items-center justify-center text-gray-600 hover:bg-black/[5%] pressed:bg-black/10 dark:text-zinc-400 dark:hover:bg-white/10 dark:pressed:bg-white/20 disabled:bg-transparent',
 		},
 		isDisabled: {
@@ -36,7 +38,7 @@ export function Button(props: ButtonProps) {
 		<RACButton
 			{...props}
 			className={composeRenderProps(props.className, (className, renderProps) =>
-				button({...renderProps, variant: props.variant, className}),
+				button({ ...renderProps, variant: props.variant, className }),
 			)}
 		/>
 	);

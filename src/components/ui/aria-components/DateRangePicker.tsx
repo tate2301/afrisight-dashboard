@@ -1,4 +1,4 @@
-import {CalendarIcon} from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import React from 'react';
 import {
 	DateRangePicker as AriaDateRangePicker,
@@ -6,13 +6,13 @@ import {
 	DateValue,
 	ValidationResult,
 } from 'react-aria-components';
-import {Button} from './Button';
-import {DateInput} from './DateField';
-import {Dialog} from './Dialog';
-import {Description, FieldError, FieldGroup, Label} from './Field';
-import {Popover} from './Popover';
-import {RangeCalendar} from './RangeCalendar';
-import {composeTailwindRenderProps} from '@/lib/utils';
+import { Button } from './Button';
+import { DateInput } from './DateField';
+import { Dialog } from './Dialog';
+import { Description, FieldError, FieldGroup, Label } from './Field';
+import { Popover } from './Popover';
+import { RangeCalendar } from './RangeCalendar';
+import { composeTailwindRenderProps } from '@/lib/utils';
 
 export interface DateRangePickerProps<T extends DateValue>
 	extends AriaDateRangePickerProps<T> {
@@ -38,7 +38,7 @@ export function DateRangePicker<T extends DateValue>({
 			<FieldGroup className="min-w-[208px] w-auto">
 				<DateInput
 					slot="start"
-					className="px-2 py-1.5 text-sm"
+					className="px-2 py-1.5 text-[13px]"
 				/>
 				<span
 					aria-hidden="true"
@@ -47,7 +47,7 @@ export function DateRangePicker<T extends DateValue>({
 				</span>
 				<DateInput
 					slot="end"
-					className="flex-1 px-2 py-1.5 text-sm"
+					className="flex-1 px-2 py-1.5 text-[13px]"
 				/>
 				<Button
 					variant="icon"

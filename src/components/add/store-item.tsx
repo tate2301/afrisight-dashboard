@@ -1,7 +1,7 @@
-import {Input} from '@/components/ui/input';
+import { Input } from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
 import axiosInstance from '@/hooks/useApiFetcher';
-import {GAMIFICATION_ROUTES} from '@/lib/api-routes';
+import { GAMIFICATION_ROUTES } from '@/lib/api-routes';
 import useDisclosure from '@/hooks/useDisclosure';
 import {
 	ErrorMessage,
@@ -20,9 +20,9 @@ import {
 	DialogTrigger,
 } from '../ui/dialog';
 import useWithStatus from '@/hooks/useWithStatus';
-import {Plus} from 'lucide-react';
+import { Plus } from 'lucide-react';
 import AutocompleteSelect from '../ui/autocomplete';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 
 type StoreItemFormSchema = {
 	name: string;
@@ -47,9 +47,9 @@ type AdditionalFields = {
 	currentPricePoints: number;
 };
 
-const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
-	const {executor, isLoading, error} = useWithStatus();
-	const {isOpen, onClose, onOpen} = useDisclosure();
+const CreateStoreListing = (props: { callback: () => Promise<void> }) => {
+	const { executor, isLoading, error } = useWithStatus();
+	const { isOpen, onClose, onOpen } = useDisclosure();
 
 	const onSubmit = async (
 		values: StoreItemFormSchema,
@@ -123,15 +123,15 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 						}}
 						validationSchema={validationSchema}
 						onSubmit={onSubmit}>
-						{({isSubmitting, setFieldValue, values, errors}) => {
-							console.log({errors});
+						{({ isSubmitting, setFieldValue, values, errors }) => {
+							console.log({ errors });
 							return (
 								<Form>
 									<div className="p-4">
 										<div className="flex flex-col space-y-2 mb-6">
 											<label
 												htmlFor="name"
-												className="text-sm font-medium">
+												className="text-[13px] font-medium">
 												Name
 											</label>
 											<Field
@@ -143,14 +143,14 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 											<ErrorMessage
 												name="name"
 												component="div"
-												className="text-red-500 text-sm"
+												className="text-red-500 text-[13px]"
 											/>
 										</div>
 
 										<div className="flex flex-col space-y-2 mb-6">
 											<label
 												htmlFor="description"
-												className="text-sm font-medium">
+												className="text-[13px] font-medium">
 												Description
 											</label>
 											<Field
@@ -162,7 +162,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 											<ErrorMessage
 												name="description"
 												component="div"
-												className="text-red-500 text-sm"
+												className="text-red-500 text-[13px]"
 											/>
 										</div>
 
@@ -170,7 +170,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="type"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Type
 												</label>
 												<Field
@@ -178,7 +178,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 													// value={values.category}
 													defaultValue="virtual_good"
 													name="type">
-													{({field, form}: FieldProps) => (
+													{({ field, form }: FieldProps) => (
 														<AutocompleteSelect
 															name={field.name}
 															onChange={(value) =>
@@ -190,7 +190,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 																	value: 'virtual_good',
 																	label: 'Virtual Goods',
 																},
-																{value: 'voucher', label: 'Voucher'},
+																{ value: 'voucher', label: 'Voucher' },
 															]}
 															placeholder="Set item type"
 															renderOption={(option) => (
@@ -207,7 +207,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="type"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 										</div>
@@ -215,7 +215,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="pointsCost"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Cost in points
 												</label>
 												<Field
@@ -227,13 +227,13 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="pointsCost"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="stock"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Total supply
 												</label>
 												<Field
@@ -245,14 +245,14 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="stock"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 
 											<div className="flex flex-col space-y-2 mb-6">
 												<label
 													htmlFor="maxRedemptionsPerUser"
-													className="text-sm font-medium">
+													className="text-[13px] font-medium">
 													Max redemptions per user
 												</label>
 												<Field
@@ -264,7 +264,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 												<ErrorMessage
 													name="maxRedemptionsPerUser"
 													component="div"
-													className="text-red-500 text-sm"
+													className="text-red-500 text-[13px]"
 												/>
 											</div>
 										</div>
@@ -272,7 +272,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 										<div className="flex flex-col space-y-2 mb-6">
 											<label
 												htmlFor="expiresAt"
-												className="text-sm font-medium">
+												className="text-[13px] font-medium">
 												Expires At
 											</label>
 											<Field
@@ -284,14 +284,14 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 											<ErrorMessage
 												name="expiresAt"
 												component="div"
-												className="text-red-500 text-sm"
+												className="text-red-500 text-[13px]"
 											/>
 										</div>
 
 										<div className="flex flex-col space-y-2 mb-6">
 											<label
 												htmlFor="imageUrl"
-												className="text-sm font-medium">
+												className="text-[13px] font-medium">
 												Image URL
 											</label>
 											<Field
@@ -303,7 +303,7 @@ const CreateStoreListing = (props: {callback: () => Promise<void>}) => {
 											<ErrorMessage
 												name="imageUrl"
 												component="div"
-												className="text-red-500 text-sm"
+												className="text-red-500 text-[13px]"
 											/>
 										</div>
 
@@ -361,7 +361,7 @@ const VoucherDetails = (props: {
 			<div className="flex flex-col space-y-2 mb-6">
 				<label
 					htmlFor="voucherDetails.voucherCode"
-					className="text-sm font-medium">
+					className="text-[13px] font-medium">
 					Voucher Code
 				</label>
 				<Field
@@ -377,21 +377,21 @@ const VoucherDetails = (props: {
 							const code = generateVoucherCode();
 							props.setFieldValue('voucherDetails.voucherCode', code);
 						}}
-						className="text-blue-600 text-sm font-medium">
+						className="text-blue-600 text-[13px] font-medium">
 						Generate code
 					</button>
 				</div>
 				<ErrorMessage
 					name="voucherDetails.voucherCode"
 					component="div"
-					className="text-red-500 text-sm"
+					className="text-red-500 text-[13px]"
 				/>
 			</div>
 
 			<div className="flex flex-col space-y-2 mb-6">
 				<label
 					htmlFor="voucherDetails.voucherValue"
-					className="text-sm font-medium">
+					className="text-[13px] font-medium">
 					Voucher value (USD)
 				</label>
 				<Field
@@ -403,14 +403,14 @@ const VoucherDetails = (props: {
 				<ErrorMessage
 					name="voucherDetails.voucherValue"
 					component="div"
-					className="text-red-500 text-sm"
+					className="text-red-500 text-[13px]"
 				/>
 			</div>
 
 			<div className="flex flex-col space-y-2 mb-6">
 				<label
 					htmlFor="voucherDetails.voucherExpiration"
-					className="text-sm font-medium">
+					className="text-[13px] font-medium">
 					Voucher Expiration
 				</label>
 				<Field
@@ -422,7 +422,7 @@ const VoucherDetails = (props: {
 				<ErrorMessage
 					name="voucherDetails.voucherExpiration"
 					component="div"
-					className="text-red-500 text-sm"
+					className="text-red-500 text-[13px]"
 				/>
 			</div>
 		</>

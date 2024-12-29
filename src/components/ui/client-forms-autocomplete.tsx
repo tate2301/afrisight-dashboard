@@ -22,7 +22,7 @@ const ClientFormsAutocomplete: React.FC<ClientFormsAutocompleteProps> = ({
   const renderOption = (form: ClientForm) => (
     <div className="flex flex-col">
       <span className="font-medium">{form.name}</span>
-      <span className="text-sm text-gray-500">
+      <span className="text-[13px] text-gray-500">
         Created: {formatDate(form.createdAt, "dd MMM, yyyy")}
       </span>
     </div>

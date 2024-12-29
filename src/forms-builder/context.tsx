@@ -7,7 +7,7 @@ import React, {
 	useCallback,
 	useRef,
 } from 'react';
-import {Form, FormField} from './types';
+import { Form, FormField } from './types';
 
 interface FormContextType {
 	form: Form;
@@ -41,14 +41,6 @@ export function FormProvider({
 			return hydrateForm(initialForm);
 		}
 
-		const initialShortAnswerField: FormField = {
-			id: `field_${Date.now()}`,
-			type: 'shortAnswer',
-			label: 'Short Answer',
-			required: false,
-			properties: {},
-		};
-
 		return {
 			id: '',
 			title: '',
@@ -58,7 +50,7 @@ export function FormProvider({
 				backgroundColor: '#ffffff',
 				fontFamily: 'Inter, sans-serif',
 			},
-			fields: [initialShortAnswerField],
+			fields: [],
 		};
 	});
 
@@ -66,9 +58,35 @@ export function FormProvider({
 		form.fields[0]?.id || null,
 	);
 
-	const updateForm = (updatedForm: Partial<Form>) => {
-		setForm((prevForm) => ({...prevForm, ...updatedForm}));
-	};
+	const updateForm = useCallback((updatedForm: Partial<Form>) => {
+		setForm(prevForm => {
+			const newForm = { ...prevForm };
+			let hasChanges = false;
+
+			if (updatedForm.id !== undefined && prevForm.id !== updatedForm.id) {
+				newForm.id = updatedForm.id;
+				hasChanges = true;
+			}
+			if (updatedForm.title !== undefined && prevForm.title !== updatedForm.title) {
+				newForm.title = updatedForm.title;
+				hasChanges = true;
+			}
+			if (updatedForm.description !== undefined && prevForm.description !== updatedForm.description) {
+				newForm.description = updatedForm.description;
+				hasChanges = true;
+			}
+			if (updatedForm.theme !== undefined && prevForm.theme !== updatedForm.theme) {
+				newForm.theme = updatedForm.theme;
+				hasChanges = true;
+			}
+			if (updatedForm.fields !== undefined && prevForm.fields !== updatedForm.fields) {
+				newForm.fields = updatedForm.fields;
+				hasChanges = true;
+			}
+
+			return hasChanges ? newForm : prevForm;
+		});
+	}, []);
 
 	const addField = (field: FormField) => {
 		setForm((prevForm) => ({
@@ -81,7 +99,7 @@ export function FormProvider({
 		setForm((prevForm) => ({
 			...prevForm,
 			fields: prevForm.fields.map((field) =>
-				field.id === fieldId ? {...field, ...updatedField} : field,
+				field.id === fieldId ? { ...field, ...updatedField } : field,
 			),
 		}));
 	};
@@ -98,7 +116,7 @@ export function FormProvider({
 			const newFields = Array.from(prevForm.fields);
 			const [reorderedItem] = newFields.splice(startIndex, 1);
 			newFields.splice(endIndex, 0, reorderedItem);
-			return {...prevForm, fields: newFields};
+			return { ...prevForm, fields: newFields };
 		});
 	};
 
