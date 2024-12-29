@@ -1,19 +1,20 @@
 'use client';
-import { cn } from '@/lib/utils';
-import { LogOutIcon, Settings, HelpCircle } from 'lucide-react';
+import {cn} from '@/lib/utils';
+import {LogOutIcon, Settings, HelpCircle} from 'lucide-react';
 import Box from '../../components/design-sytem/box';
-import { NAVBAR_HEIGHT, SIDEBAR_WIDTH } from '../constants';
+import {NAVBAR_HEIGHT, SIDEBAR_WIDTH} from '../constants';
 import Flex from '@/components/design-sytem/flex';
-import { Caption, Paragraph } from '@/components/design-sytem/typography';
+import {Caption, Paragraph} from '@/components/design-sytem/typography';
 import styled from '@/components/design-sytem/theme';
 import Link from 'next/link';
-import { Avatar, DropdownMenu } from '@radix-ui/themes';
-import { useAuth } from '@/context/AuthContext';
+import {Avatar, DropdownMenu} from '@radix-ui/themes';
+import {useAuth} from '@/context/AuthContext';
 import {
 	BuildingStorefrontIcon,
 	ChevronDownIcon,
-	GiftTopIcon, Square3Stack3DIcon,
-	UserCircleIcon
+	GiftTopIcon,
+	Square3Stack3DIcon,
+	UserCircleIcon,
 } from '@heroicons/react/24/solid';
 
 const sidebarNavItems: SidebarNavItemProps[] = [
@@ -45,12 +46,12 @@ const sidebarNavItems: SidebarNavItemProps[] = [
 ];
 
 const WorkspaceCard = () => {
-	const { userProfile, isAuthenticated, logout } = useAuth();
+	const {userProfile, isAuthenticated, logout} = useAuth();
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
 			className="relative items-center py-2 pl-4 px-2 space-x-2 bg-white pressable-shadow m-2 rounded-xl"
-			css={{ height: NAVBAR_HEIGHT }}>
+			css={{height: NAVBAR_HEIGHT}}>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<Flex className="items-center space-x-2 cursor-pointer w-full">
@@ -113,8 +114,8 @@ const WorkspaceCard = () => {
 };
 
 const Sidebar = () => {
-	const { userProfile, isAuthenticated, logout } = useAuth();
-	console.log({ userProfile, isAuthenticated });
+	const {userProfile, isAuthenticated, logout} = useAuth();
+	console.log({userProfile, isAuthenticated});
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
@@ -124,7 +125,7 @@ const Sidebar = () => {
 				borderRight: '1px solid $gray2',
 				width: SIDEBAR_WIDTH,
 				gap: 0,
-				backgroundColor: '#FAF9F7'
+				backgroundColor: '#FAF9F7',
 			}}>
 			<WorkspaceCard />
 
@@ -165,7 +166,7 @@ type SidebarNavItemProps = {
 	text: string;
 	href: string;
 };
-const SidebarNavItem = ({ Icon, text, href }: SidebarNavItemProps) => {
+const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
 	return (
 		<Link href={href}>
 			<ListItem
