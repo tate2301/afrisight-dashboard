@@ -1,10 +1,8 @@
-import {SurveyGig} from '@/pages/gigs';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import axiosInstance from '@/hooks/useApiFetcher';
 import {SURVEY_ROUTES} from '@/lib/api-routes';
 import {AxiosRequestHeaders} from 'axios';
-import {Gig} from '@/utils/types';
 import {TBaseGig} from '../create-gig-components/FormikWrapper';
 
 export type PartialGig = Partial<TBaseGig>;

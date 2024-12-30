@@ -1,7 +1,5 @@
 import {Formik, FormikProps} from 'formik';
 import * as Yup from 'yup';
-import {PartialGig} from '../hooks/useGig';
-import {SurveyGig} from '@/pages/gigs';
 import {Gig} from '@/utils/types';
 
 const validationSchema = Yup.object({

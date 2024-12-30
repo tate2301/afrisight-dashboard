@@ -1,4 +1,4 @@
-import { useSearchParams } from 'next/navigation';
+import {useSearchParams} from 'next/navigation';
 
 export type GigShellProps = {
 	title: string;
@@ -17,16 +17,15 @@ export type GigShellProps = {
 	onSelect?: (selected: any) => void;
 };
 
-
 export type FilterColumnConfig = {
-	label: string
-	type: "string" | "number" | "boolean" | "date"
-	enabled: boolean
-}
+	label: string;
+	type: 'string' | 'number' | 'boolean' | 'date';
+	enabled: boolean;
+};
 
 export const useGetCurrentTabFromQuery = (tabs: string[]) => {
 	const searchParams = useSearchParams();
 	const currentTab =
-		searchParams.get('tab') || tabs[0].toLowerCase().replaceAll(' ', '-');
+		searchParams?.get('tab') || tabs[0].toLowerCase().replaceAll(' ', '-');
 	return currentTab;
 };

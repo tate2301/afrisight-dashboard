@@ -4,7 +4,7 @@ import {useRouter} from 'next/router';
 const useSearch = () => {
 	const router = useRouter();
 	const query = useSearchParams();
-	const s = query.get('s') || '';
+	const s = query?.get('s') || '';
 
 	const setSearchQuery = (value: string) => {
 		router.push({
