@@ -1,23 +1,23 @@
 import GeneralLayout from '../../layout/GeneralLayout';
 import axiosInstance from '@/hooks/useApiFetcher';
-import { SURVEY_ROUTES } from '@/lib/api-routes';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import {SURVEY_ROUTES} from '@/lib/api-routes';
+import {PlusIcon} from '@heroicons/react/24/outline';
 import Box from '@/components/design-sytem/box';
-import { Button } from '@radix-ui/themes';
+import {Button} from '@radix-ui/themes';
 import GigCard from '@/components/gig/card';
 import TablePageHeader from '@/components/shells/TablePageHeader';
-import { useSearchParams } from 'next/navigation';
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
-import { useSetPageTitle } from '@/layout/context';
-import { buildApiUrlWithParams } from '@/utils/apiUrl';
-import { useEffect } from 'react';
-import { useSearch } from '@/components/search/use-search';
-import { usePagination } from '@/hooks/use-pagination';
-import { FilterConfigMap, useFilter } from '@/hooks/use-filter';
-import { CloudDownloadIcon } from 'lucide-react';
+import {useSearchParams} from 'next/navigation';
+import {keepPreviousData, useMutation, useQuery} from '@tanstack/react-query';
+import {useSetPageTitle} from '@/layout/context';
+import {buildApiUrlWithParams} from '@/utils/apiUrl';
+import {useEffect} from 'react';
+import {useSearch} from '@/components/search/use-search';
+import {usePagination} from '@/hooks/use-pagination';
+import {FilterConfigMap, useFilter} from '@/hooks/use-filter';
+import {CloudDownloadIcon} from 'lucide-react';
 import Separator from '@/components/design-sytem/separator';
-import { useRouter } from 'next/router';
-import { Gig as TGig } from '@/utils/types';
+import {useRouter} from 'next/router';
+import {Gig as TGig} from '@/utils/types';
 
 const tabs = ['All', 'Pending', 'Running', 'Paused', 'Archived'];
 const tabToGigStatus = (status: string) => {
@@ -46,14 +46,13 @@ export type RewardPolicy = {
 	voucher: string | null;
 };
 
-
 const filterConfig: FilterConfigMap = {
 	status: {
 		type: 'select',
 		label: 'Status',
 		options: [
-			{ label: 'Active', value: 'active' },
-			{ label: 'Inactive', value: 'inactive' },
+			{label: 'Active', value: 'active'},
+			{label: 'Inactive', value: 'inactive'},
 		],
 	},
 	amount: {
@@ -66,10 +65,10 @@ function Gig() {
 	useSetPageTitle('Gigs');
 	const query = useSearchParams();
 	const router = useRouter();
-	const { filters, FilterButton, getFilterQuery } = useFilter(filterConfig);
+	const {filters, FilterButton, getFilterQuery} = useFilter(filterConfig);
 
 	const activeTab =
-		query.get('tab') || tabs[0].toLowerCase().replaceAll(' ', '-');
+		query?.get('tab') || tabs[0].toLowerCase().replaceAll(' ', '-');
 	const searchQuery = useSearch();
 	const {
 		page,
@@ -111,7 +110,7 @@ function Gig() {
 	const createGigMutation = useMutation({
 		mutationKey: ['gigs'],
 		mutationFn: async () => {
-			const { _id } = await axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY);
+			const {_id} = await axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY);
 			router.push(`/gigs/create-gig/${_id}`);
 		},
 	});
@@ -195,7 +194,7 @@ function Gig() {
 						<Separator />
 					</Box>
 					<Box
-						css={{ padding: '20px 0' }}
+						css={{padding: '20px 0'}}
 						className="py-2 space-y-[20px]">
 						{surveys.docs.map((gig: TGig) => (
 							<GigCard

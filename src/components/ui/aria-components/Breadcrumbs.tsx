@@ -27,6 +27,7 @@ export function Breadcrumb(
 		<AriaBreadcrumb
 			{...props}
 			className={composeTailwindRenderProps(
+				//@ts-ignore
 				props.className,
 				'flex items-center gap-1',
 			)}>

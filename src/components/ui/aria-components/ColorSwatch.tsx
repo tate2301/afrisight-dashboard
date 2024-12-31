@@ -10,7 +10,7 @@ export function ColorSwatch(props: ColorSwatchProps) {
 		<AriaColorSwatch
 			{...props}
 			className={composeTailwindRenderProps(
-				props.className,
+				props.className as string,
 				'w-8 h-8 rounded border border-black/10',
 			)}
 			style={({color}) => ({

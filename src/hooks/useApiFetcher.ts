@@ -3,15 +3,15 @@ import axios, {
 	InternalAxiosRequestConfig,
 	AxiosResponse,
 } from 'axios';
-import { apiUrl } from '../utils/apiUrl';
-import { AUTH_ROUTES } from '@/lib/api-routes';
+import {apiUrl} from '../utils/apiUrl';
+import {AUTH_ROUTES} from '@/lib/api-routes';
 import {
 	getAccessTokenFromCookies,
 	getRefreshTokenFromCookies,
 	setAccessTokenToCookies,
 	setRefreshTokenToCookies,
 } from './cookies';
-import { useAuth } from '@/context/AuthContext';
+import {useAuth} from '@/context/AuthContext';
 
 interface ApiError {
 	error?: string;
@@ -80,7 +80,7 @@ class ApiClient {
 		if (error.response?.status === 401 && !originalRequest._retry) {
 			if (this.isRefreshing) {
 				return new Promise((resolve, reject) => {
-					this.failedQueue.push({ resolve, reject });
+					this.failedQueue.push({resolve, reject});
 				})
 					.then((token) => {
 						originalRequest.headers['Authorization'] = `Bearer ${token}`;
@@ -107,7 +107,7 @@ class ApiClient {
 					},
 				);
 
-				const { accessToken, refreshToken: newRefreshToken } = response.data;
+				const {accessToken, refreshToken: newRefreshToken} = response.data;
 
 				await setAccessTokenToCookies(accessToken);
 				await setRefreshTokenToCookies(newRefreshToken);
@@ -126,13 +126,16 @@ class ApiClient {
 		}
 
 		const errorResponse = error.response?.data as ApiError;
-		const errorMessage = errorResponse?.error ||
+		const errorMessage =
+			errorResponse?.error ||
 			errorResponse?.message ||
 			this.getDefaultErrorMessage(error.response?.status) ||
 			'An unexpected error occurred';
 
 		const enhancedError = new Error(errorMessage);
+		// @ts-ignore
 		enhancedError.statusCode = error.response?.status;
+		// @ts-ignore
 		enhancedError.data = error.response?.data;
 
 		switch (error.response?.status) {
@@ -168,7 +171,7 @@ class ApiClient {
 	private async handleLogout(): Promise<void> {
 		await setAccessTokenToCookies('');
 		await setRefreshTokenToCookies('');
-		const { logout } = useAuth();
+		const {logout} = useAuth();
 		await logout();
 	}
 

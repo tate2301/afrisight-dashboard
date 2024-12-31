@@ -5,10 +5,10 @@ import {
 	SliderOutput,
 	SliderTrack,
 } from 'react-aria-components';
-import { tv } from 'tailwind-variants';
-import { Label } from './Field';
-import { composeTailwindRenderProps } from '@/lib/utils';
-import { ColorThumb } from './ColorThumb';
+import {tv} from 'tailwind-variants';
+import {Label} from './Field';
+import {composeTailwindRenderProps} from '@/lib/utils';
+import {ColorThumb} from './ColorThumb';
 
 const trackStyles = tv({
 	base: 'group col-span-2 orientation-horizontal:h-6 rounded-lg',
@@ -27,19 +27,19 @@ interface ColorSliderProps extends AriaColorSliderProps {
 	label?: string;
 }
 
-export function ColorSlider({ label, ...props }: ColorSliderProps) {
+export function ColorSlider({label, ...props}: ColorSliderProps) {
 	return (
 		<AriaColorSlider
 			{...props}
 			className={composeTailwindRenderProps(
-				props.className,
+				props.className as string,
 				'orientation-horizontal:grid orientation-vertical:flex grid-cols-[1fr_auto] flex-col items-center gap-2 orientation-horizontal:w-56',
 			)}>
 			<Label>{label}</Label>
 			<SliderOutput className="text-[13px] text-gray-500 dark:text-zinc-400 font-medium orientation-vertical:hidden" />
 			<SliderTrack
 				className={trackStyles}
-				style={({ defaultStyle, isDisabled }) => ({
+				style={({defaultStyle, isDisabled}) => ({
 					...defaultStyle,
 					background: isDisabled
 						? undefined

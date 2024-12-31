@@ -16,7 +16,10 @@ export function ColorSwatchPicker({
 	return (
 		<AriaColorSwatchPicker
 			{...props}
-			className={composeTailwindRenderProps(props.className, 'flex gap-1')}>
+			className={composeTailwindRenderProps(
+				props.className as string,
+				'flex gap-1',
+			)}>
 			{children}
 		</AriaColorSwatchPicker>
 	);

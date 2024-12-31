@@ -5,8 +5,8 @@ import {useState} from 'react';
 const usePagination = () => {
 	const router = useRouter();
 	const query = useSearchParams();
-	const page = query.get('page') || '1';
-	const pageSize = query.get('pageSize') || '20';
+	const page = query?.get('page') || '1';
+	const pageSize = query?.get('pageSize') || '20';
 	const [paginationNavParams, setPaginationNavParams] = useState({
 		hasNextPage: false,
 		hasPreviousPage: false,
