@@ -39,7 +39,7 @@ export function ColorField({
 		<AriaColorField
 			{...props}
 			className={composeTailwindRenderProps(
-				props.className,
+				props.className as string,
 				'flex flex-col gap-1',
 			)}>
 			{label && <Label>{label}</Label>}

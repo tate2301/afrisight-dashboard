@@ -13,7 +13,7 @@ export function ColorArea(props: ColorAreaProps) {
 		<AriaColorArea
 			{...props}
 			className={composeTailwindRenderProps(
-				props.className,
+				props.className as string,
 				'w-56 h-56 rounded-lg bg-gray-300 dark:bg-zinc-800 forced-colors:bg-[GrayText]',
 			)}
 			style={({defaultStyle, isDisabled}) => ({
