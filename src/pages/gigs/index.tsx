@@ -104,7 +104,6 @@ function Gig() {
 
 			return response;
 		},
-		placeholderData: keepPreviousData,
 	});
 
 	const createGigMutation = useMutation({

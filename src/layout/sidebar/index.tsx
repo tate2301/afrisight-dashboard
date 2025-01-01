@@ -168,7 +168,9 @@ type SidebarNavItemProps = {
 };
 const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
 	return (
-		<Link href={href}>
+		<Link
+			href={href}
+			prefetch={false}>
 			<ListItem
 				className={cn('rounded-md hover:bg-zinc-400/20 p-2 text-zinc-800')}>
 				<Icon className="w-4 h-4 mr-4" />

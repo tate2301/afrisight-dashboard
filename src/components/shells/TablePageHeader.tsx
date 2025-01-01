@@ -34,6 +34,7 @@ export default function TablePageHeader({
 	pageSize,
 	previousPage,
 	total,
+	title,
 }: GigShellProps) {
 	const router = useRouter();
 	const {value, setSearchQuery} = useSearch();
@@ -62,8 +63,52 @@ export default function TablePageHeader({
 	return (
 		<Box
 			className="flex-col w-full"
-			style={{height: TABLE_ACTIONS_HEIGHT}}>
-			<TabNav.Root className="flex-1 h-[48px] items-end px-2">
+			style={{minHeight: TABLE_ACTIONS_HEIGHT}}>
+			<Flex
+				css={{gap: 8}}
+				alignItems={'center'}
+				className="px-4 pl-0 py-1 justify-between w-full h-[48px]">
+				<div className="flex-1 items-end p-2">
+					<h1 className="font-bold">{title}</h1>
+				</div>
+				<Flex className="space-x-8 p-2">
+					<SearchBox
+						value={value}
+						onChange={setSearchQuery}
+					/>
+					<div className="w-px h-full bg-zinc-400/20" />
+					<Flex className="flex-1 justify-end items-center space-x-8">
+						<Caption
+							className="inline-flex gap-1 mr-4 font-medium"
+							color={'tertiary'}>
+							{(currentPage - 1) * pageSize + 1} -{' '}
+							{(currentPage - 1) * pageSize + pageSize} of {total}
+						</Caption>
+						<Flex style={{gap: 8}}>
+							<Button
+								onClick={previousPage}
+								disabled={!hasPreviousPage}
+								color={'gray'}
+								radius="full"
+								variant={'soft'}>
+								<ChevronLeft />
+								Previous
+							</Button>
+							<Button
+								onClick={nextPage}
+								disabled={!hasNextPage}
+								className="items-center flex"
+								color={'gray'}
+								radius="full"
+								variant={'soft'}>
+								Next
+								<ChevronRight />
+							</Button>
+						</Flex>
+					</Flex>
+				</Flex>
+			</Flex>
+			<TabNav.Root className="flex-1 items-end px-2 borderb-0">
 				{tabs.map((tab) => (
 					<TabNav.Link
 						active={activeTab === tab.toLowerCase().replaceAll(' ', '-')}
@@ -75,59 +120,7 @@ export default function TablePageHeader({
 					{actions}
 				</Flex>
 			</TabNav.Root>
-			<Flex
-				css={{gap: 8}}
-				alignItems={'center'}
-				className="px-4 pl-0 py-1 justify-between w-full h-[48px]">
-				<Flex className="space-x-8 p-2">
-					<SearchBox
-						value={value}
-						onChange={setSearchQuery}
-					/>
-					<div className="w-px h-full bg-zinc-400/20" />
-					<Flex className="space-x-2">
-						<ColumnVisibilityToggle
-							columns={columns}
-							onToggle={(label, enabled) => {
-								setColumns(
-									columns.map((c) => (c.label === label ? {...c, enabled} : c)),
-								);
-							}}
-						/>
-						<FilterBuilder columns={columns} />
-					</Flex>
-				</Flex>
 
-				<Flex className="flex-1 justify-end items-center space-x-8">
-					<Caption
-						className="inline-flex gap-1 mr-4 font-medium"
-						color={'tertiary'}>
-						{(currentPage - 1) * pageSize + 1} -{' '}
-						{(currentPage - 1) * pageSize + pageSize} of {total}
-					</Caption>
-					<Flex style={{gap: 8}}>
-						<Button
-							onClick={previousPage}
-							disabled={!hasPreviousPage}
-							color={'gray'}
-							radius="full"
-							variant={'soft'}>
-							<ChevronLeft />
-							Previous
-						</Button>
-						<Button
-							onClick={nextPage}
-							disabled={!hasNextPage}
-							className="items-center flex"
-							color={'gray'}
-							radius="full"
-							variant={'soft'}>
-							Next
-							<ChevronRight />
-						</Button>
-					</Flex>
-				</Flex>
-			</Flex>
 			{isLoading && (
 				<Flex>
 					<Spinner />

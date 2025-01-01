@@ -84,6 +84,8 @@ function createAxiosServerInstance(config?: AxiosServerConfig) {
 
 				if (!access_token) throw new Error('UnAuthorized');
 
+				cookieStore.setAccessToken(access_token);
+
 				originalRequest.headers['Authorization'] = `Bearer ${access_token}`;
 				return instance(originalRequest);
 			} catch (refreshError) {

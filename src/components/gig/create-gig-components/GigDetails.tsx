@@ -80,7 +80,7 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 				onChange={(value) =>
 					formik.setFieldValue(
 						'endDate',
-						value.add({days: 1}).toDate(getLocalTimeZone()).toString(),
+						value?.add({days: 1}).toDate(getLocalTimeZone()).toString(),
 					)
 				}
 			/>
