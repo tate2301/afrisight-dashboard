@@ -1,4 +1,4 @@
-import { RewardPolicy } from '@/pages/gigs';
+import {RewardPolicy} from '@/pages/gigs';
 
 export interface UserInfoTypes {
 	id: number;
@@ -26,7 +26,7 @@ export interface DashboardItemProps {
 
 export interface SectionType {
 	id: number;
-	options: Array<{ name: string; _id: string }>;
+	options: Array<{name: string; _id: string}>;
 	type: {
 		name: string;
 		_id: string;
@@ -114,17 +114,23 @@ export interface Profile {
 	firstname?: string;
 	surname?: string;
 	profilePic?: string;
-	isHasChildren?: boolean;
-	ifDrinksAlcohol?: boolean;
-	ifSmokes?: boolean;
-	ifExercises?: boolean;
-	weight?: number;
-	occupation?: string;
-	companyName?: string;
-	monthlyIncome?: number;
-	education?: string;
-	ethnicity?: string;
-	hobbies: string[];
+	metadata?: {
+		gender?: 'male' | 'female' | 'other' | 'unknown';
+		dateOfBirth?: Date;
+		interests?: string[];
+		education?: 'high_school' | 'bachelors' | 'masters' | 'phd';
+		language?: 'en' | 'fr';
+		weight?: number;
+		occupation?: string;
+		companyName?: string;
+		monthlyIncome?: string;
+		ethnicity?: string;
+		hobbies?: string[];
+		isHasChildren?: boolean;
+		ifDrinksAlcohol?: boolean;
+		ifSmokes?: boolean;
+		ifExercises?: boolean;
+	};
 	userInventoryId?: string;
 	isDeleted: boolean;
 	deletedAt?: string;
@@ -266,12 +272,12 @@ export type Gig = {
 	location: string;
 	tags: string[];
 	// TODO: Define submissions type
-	gig_submissions: any[]
-	targetAgeRange: { min: number; max: number };
+	gig_submissions: any[];
+	targetAgeRange: {min: number; max: number};
 	targetGender: 'Male' | 'Female' | 'Other' | 'All';
 	languageRequirements: string[];
 	educationLevel: string;
-	incomeRange: { min: number; max: number };
+	incomeRange: {min: number; max: number};
 	_id: string;
 	__v: number;
 };

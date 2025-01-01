@@ -9,7 +9,12 @@ const TableLink = ({
 	className,
 	style,
 	...rest
-}: {children: ReactNode; className?: string; style?: any} & LinkProps) => {
+}: {
+	children: ReactNode;
+	className?: string;
+	style?: any;
+	target?: string;
+} & LinkProps) => {
 	return (
 		<Link
 			{...rest}

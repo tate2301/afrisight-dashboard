@@ -78,6 +78,7 @@
 		"tailwind-variants": "^0.2.1",
 		"tailwindcss-animate": "^1.0.7",
 		"tslib": "^2.3.0",
+		"why-did-you-render": "^1.0.1",
 		"yup": "^1.4.0"
 	},
 	"devDependencies": {
