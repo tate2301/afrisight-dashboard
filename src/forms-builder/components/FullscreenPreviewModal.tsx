@@ -43,7 +43,7 @@ export function FullscreenPreviewModal({ isOpen, onClose, form }: FullscreenPrev
                 <H2 className="tracking-tight mb-2">{form.title}</H2>
                 {form.description && <Paragraph className="mb-6">{form.description}</Paragraph>}
                 <form>
-                    {form.fields.map((field) => (
+                    {form.fields?.map((field) => (
                         <Box key={field.id} css={{ marginBottom: '16px' }}>
                             {renderField(field)}
                         </Box>

@@ -1,36 +1,36 @@
-import {Paragraph} from '@/components/design-sytem/typography';
-import {DataTable} from '@/components/ui/datatable';
+import { Paragraph } from '@/components/design-sytem/typography';
+import { DataTable } from '@/components/ui/datatable';
 import TableLink from '@/components/ui/datatable/Link';
-import {useFormContext} from '@/forms-builder/context';
-import {ColumnDef} from '@tanstack/react-table';
-import {memo, useCallback, useMemo, useState} from 'react';
-import {isEmail, isLink} from './utils';
+import { useFormContext } from '@/forms-builder/context';
+import { ColumnDef } from '@tanstack/react-table';
+import { memo, useCallback, useMemo, useState } from 'react';
+import { isEmail, isLink } from './utils';
 import submissionsColumns from './tables/submissions';
 import SubmissionsTableActions from './tables/SubmissionsTableActions';
-import {Response} from './types';
+import { Response } from './types';
 
 const GigDataset = memo(
-	({_id, responses}: {_id: string; responses: Response[]}) => {
-		const {form} = useFormContext();
+	({ _id, responses }: { _id: string; responses: Response[] }) => {
+		const { form } = useFormContext();
 		const [selectedRows, setSelectedRows] = useState<Response[]>([]);
 
 		const questionsAsColumns = useMemo(() => {
 			if (!form?.fields) return [];
 
-			return form.fields.map((question) => ({
+			return form.fields?.map((question) => ({
 				accessorKey: question.id,
 				header: () => (
 					<Paragraph className="line-clamp-1 font-medium">
 						{question.label}
 					</Paragraph>
 				),
-				cell: ({row}: {row: any}) => {
+				cell: ({ row }: { row: any }) => {
 					const value = row.original[question.id] ?? '-';
 
 					if (isLink(value) || isEmail(value)) {
 						return (
 							<TableLink
-								style={{display: '-webkit-box'}}
+								style={{ display: '-webkit-box' }}
 								className="line-clamp-1 text-wrap truncate text-ellipsis inline-flex lowercase"
 								href={isEmail(value) ? `mailto:${value}` : value}>
 								{value}
@@ -65,7 +65,7 @@ const GigDataset = memo(
 					createdAt: doc.createdAt,
 					user: doc.user,
 					...doc.responses.reduce((acc: any, response: any) => {
-						const question = form.fields.find(
+						const question = form.fields?.find(
 							(field) => field.label === response.question,
 						);
 
@@ -92,7 +92,7 @@ const GigDataset = memo(
 			[responses],
 		);
 
-		console.log({data, columns});
+		console.log({ data, columns });
 
 		const handleSelect = useCallback((rows: Response[]) => {
 			setSelectedRows(rows);

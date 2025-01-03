@@ -29,7 +29,7 @@ const Label = styled(Caption, {
 
 export function FieldProperties() {
 	const { form, updateField, selectedFieldId } = useFormContext();
-	const selectedField = form.fields.find(
+	const selectedField = form.fields?.find(
 		(field) => field.id === selectedFieldId,
 	);
 

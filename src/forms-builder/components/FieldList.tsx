@@ -117,7 +117,7 @@ export function FieldList() {
 					Questions
 				</Paragraph>
 				<ul className="space-y-2 px-1">
-					{form.fields.map((field) => (
+					{form.fields?.map((field) => (
 						<FieldListItem
 							key={field.id}
 							field={field}

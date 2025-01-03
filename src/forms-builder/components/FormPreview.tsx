@@ -13,7 +13,7 @@ export function FormPreview() {
 				<Paragraph className="mb-6">{form.description}</Paragraph>
 			)}
 			<form className='pb-64'>
-				{form.fields.map((field) => (
+				{form.fields?.map((field) => (
 					<Box
 						key={field.id}
 						css={{

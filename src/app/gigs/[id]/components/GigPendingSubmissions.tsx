@@ -1,16 +1,16 @@
-import {Paragraph} from '@/components/design-sytem/typography';
-import {DataTable} from '@/components/ui/datatable';
+import { Paragraph } from '@/components/design-sytem/typography';
+import { DataTable } from '@/components/ui/datatable';
 import TableLink from '@/components/ui/datatable/Link';
-import {useFormContext} from '@/forms-builder/context';
-import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover';
-import {ColumnDef} from '@tanstack/react-table';
-import {memo, useCallback, useMemo, useState} from 'react';
-import {isEmail, isLink} from './utils';
+import { useFormContext } from '@/forms-builder/context';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ColumnDef } from '@tanstack/react-table';
+import { memo, useCallback, useMemo, useState } from 'react';
+import { isEmail, isLink } from './utils';
 import submissionsColumns from './tables/submissions';
 import SubmissionsTableActions from './tables/SubmissionsTableActions';
-import {Response} from './types';
+import { Response } from './types';
 
-const ImagePreview = ({src}: {src: string}) => {
+const ImagePreview = ({ src }: { src: string }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
@@ -28,7 +28,7 @@ const ImagePreview = ({src}: {src: string}) => {
 						className="w-8 h-8 object-cover rounded-lg"
 					/>
 					<TableLink
-						style={{display: '-webkit-box'}}
+						style={{ display: '-webkit-box' }}
 						target="_blank"
 						className="line-clamp-1 text-wrap truncate text-ellipsis inline-flex lowercase"
 						href={src}>
@@ -52,27 +52,27 @@ const ImagePreview = ({src}: {src: string}) => {
 };
 
 const GigPendingSubmissions = memo(
-	({_id, responses}: {_id: string; responses: Response[]}) => {
-		const {form} = useFormContext();
+	({ _id, responses }: { _id: string; responses: Response[] }) => {
+		const { form } = useFormContext();
 		const [selectedRows, setSelectedRows] = useState<Response[]>([]);
 
 		const questionsAsColumns = useMemo(() => {
 			if (!form?.fields) return [];
 
-			return form.fields.map((question) => ({
+			return form.fields?.map((question) => ({
 				accessorKey: question.id,
 				header: () => (
 					<Paragraph className="line-clamp-1 font-medium">
 						{question.label}
 					</Paragraph>
 				),
-				cell: ({row}: {row: any}) => {
+				cell: ({ row }: { row: any }) => {
 					const value = row.original[question.id] ?? '-';
 
 					if (isEmail(value)) {
 						return (
 							<TableLink
-								style={{display: '-webkit-box'}}
+								style={{ display: '-webkit-box' }}
 								className="line-clamp-1 text-wrap truncate text-ellipsis inline-flex lowercase"
 								href={isEmail(value) ? `mailto:${value}` : value}>
 								{value}
@@ -86,7 +86,7 @@ const GigPendingSubmissions = memo(
 						}
 						return (
 							<TableLink
-								style={{display: '-webkit-box'}}
+								style={{ display: '-webkit-box' }}
 								className="line-clamp-1 text-wrap truncate text-ellipsis inline-flex lowercase"
 								href={value}>
 								{value}
@@ -121,7 +121,7 @@ const GigPendingSubmissions = memo(
 					createdAt: doc.createdAt,
 					user: doc.user,
 					...doc.responses.reduce((acc: any, response: any) => {
-						const question = form.fields.find(
+						const question = form.fields?.find(
 							(field) => field.label === response.question,
 						);
 

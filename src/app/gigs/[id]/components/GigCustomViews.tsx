@@ -1,23 +1,23 @@
-import {Paragraph} from '@/components/design-sytem/typography';
-import {DataTable} from '@/components/ui/datatable';
+import { Paragraph } from '@/components/design-sytem/typography';
+import { DataTable } from '@/components/ui/datatable';
 import TableLink from '@/components/ui/datatable/Link';
-import {useFormContext} from '@/forms-builder/context';
-import {ColumnDef} from '@tanstack/react-table';
-import {keepPreviousData, useQuery} from '@tanstack/react-query';
-import {memo, useCallback, useMemo, useState} from 'react';
-import {isEmail, isLink} from './utils';
+import { useFormContext } from '@/forms-builder/context';
+import { ColumnDef } from '@tanstack/react-table';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { memo, useCallback, useMemo, useState } from 'react';
+import { isEmail, isLink } from './utils';
 import submissionsColumns from './tables/submissions';
 import axiosClientInstance from '@/helpers/server/auth/axiosClientInstance';
 import SubmissionsTableActions from './tables/SubmissionsTableActions';
-import {Response} from './types';
-import {Profile, User} from '@/utils/types';
-import {evaluateBooleanToYesOrNo} from '@/utils/strings';
+import { Response } from './types';
+import { Profile, User } from '@/utils/types';
+import { evaluateBooleanToYesOrNo } from '@/utils/strings';
 
 export type GigParticipant = {
 	_id: string;
 	email: string;
 	createdAt: string;
-	user: User & {profile: Profile};
+	user: User & { profile: Profile };
 	fullName: string;
 	isVerified: boolean;
 	birthday: string;
@@ -35,13 +35,13 @@ export type GigParticipant = {
 	exercises: string;
 };
 
-const GigCustomViews = memo(({_id}: {_id: string}) => {
-	const {form} = useFormContext();
+const GigCustomViews = memo(({ _id }: { _id: string }) => {
+	const { form } = useFormContext();
 	const [selectedRows, setSelectedRows] = useState<GigParticipant[]>([]);
 
-	const {data: responses = []} = useQuery<
+	const { data: responses = [] } = useQuery<
 		{
-			user: User & {profile: Profile};
+			user: User & { profile: Profile };
 		}[]
 	>({
 		queryKey: ['responses', _id],
@@ -56,20 +56,20 @@ const GigCustomViews = memo(({_id}: {_id: string}) => {
 	const participantColumns = useMemo(() => {
 		if (!form?.fields) return [];
 
-		return form.fields.map((question) => ({
+		return form.fields?.map((question) => ({
 			accessorKey: question.id,
 			header: () => (
 				<Paragraph className="line-clamp-1 font-medium">
 					{question.label}
 				</Paragraph>
 			),
-			cell: ({row}: {row: any}) => {
+			cell: ({ row }: { row: any }) => {
 				const value = row.original[question.id] ?? '-';
 
 				if (isLink(value) || isEmail(value)) {
 					return (
 						<TableLink
-							style={{display: '-webkit-box'}}
+							style={{ display: '-webkit-box' }}
 							className="line-clamp-1 text-wrap truncate text-ellipsis inline-flex lowercase"
 							href={isEmail(value) ? `mailto:${value}` : value}>
 							{value}
@@ -98,7 +98,7 @@ const GigCustomViews = memo(({_id}: {_id: string}) => {
 
 	const data: GigParticipant[] = useMemo(
 		() =>
-			responses.map((doc: {user: User & {profile: Profile}}) => ({
+			responses.map((doc: { user: User & { profile: Profile } }) => ({
 				_id: doc.user._id,
 				email: doc.user.email,
 				createdAt: doc.user.createdAt,

@@ -6,7 +6,7 @@ import React, {
 	useEffect,
 	useCallback,
 } from 'react';
-import {Form, FormField} from './types';
+import { Form, FormField } from './types';
 
 interface FormContextType {
 	form: Form;
@@ -53,7 +53,7 @@ export function FormProvider({
 	});
 
 	const [selectedFieldId, setSelectedFieldId] = useState<string | null>(
-		form.fields[0]?.id || null,
+		form.fields ? form.fields[0]?.id : null,
 	);
 
 	const updateForm = useCallback((updatedForm: Partial<Form>) => {
@@ -68,23 +68,23 @@ export function FormProvider({
 					updatedForm.fields !== prevForm.fields);
 
 			if (!hasChanges) return prevForm;
-			return {...prevForm, ...updatedForm};
+			return { ...prevForm, ...updatedForm };
 		});
 	}, []);
 
 	const addField = useCallback((field: FormField) => {
 		setForm((prevForm) => ({
 			...prevForm,
-			fields: [...prevForm.fields, field],
+			fields: [...(prevForm.fields ?? []), field],
 		}));
 	}, []);
 
 	const updateField = useCallback(
 		(fieldId: string, updatedField: Partial<FormField>) => {
 			setForm((prevForm) => ({
-				...prevForm,
-				fields: prevForm.fields.map((field) =>
-					field.id === fieldId ? {...field, ...updatedField} : field,
+				...(prevForm ?? []),
+				fields: prevForm.fields?.map((field) =>
+					field.id === fieldId ? { ...field, ...updatedField } : field,
 				),
 			}));
 		},
@@ -93,8 +93,8 @@ export function FormProvider({
 
 	const removeField = useCallback((fieldId: string) => {
 		setForm((prevForm) => ({
-			...prevForm,
-			fields: prevForm.fields.filter((field) => field.id !== fieldId),
+			...(prevForm ?? []),
+			fields: prevForm.fields?.filter((field) => field.id !== fieldId),
 		}));
 	}, []);
 
@@ -103,7 +103,7 @@ export function FormProvider({
 			const newFields = Array.from(prevForm.fields);
 			const [reorderedItem] = newFields.splice(startIndex, 1);
 			newFields.splice(endIndex, 0, reorderedItem);
-			return {...prevForm, fields: newFields};
+			return { ...prevForm, fields: newFields };
 		});
 	}, []);
 
@@ -111,7 +111,7 @@ export function FormProvider({
 
 	// Stay in sync with first field as default selection
 	useEffect(() => {
-		const firstFieldId = form.fields[0]?.id || null;
+		const firstFieldId = form.fields ? form.fields[0]?.id : null;
 		setSelectedFieldId((prev) => (prev !== firstFieldId ? firstFieldId : prev));
 	}, [form.fields]);
 
