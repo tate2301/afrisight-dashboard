@@ -29,8 +29,7 @@ const GigHeader = ({
 				<div className="flex">
 					<Button
 						onPress={navigation.back}
-						variant="ghost"
-						isDisabled={isSaving || isPublishing}>
+						variant="ghost">
 						Back to Gigs
 					</Button>
 				</div>
@@ -40,8 +39,8 @@ const GigHeader = ({
 					<div className="flex gap-4">
 						<Button
 							variant="secondary"
-							isDisabled={isSaving || isPublishing}
-							onPress={() => window.open('/radar', '_blank')}>
+							isPending={isSaving}
+							onPress={onSaveChanges}>
 							Open in Radar
 							<span className="material-symbols-rounded text-xs">
 								north_east
@@ -57,25 +56,19 @@ const GigHeader = ({
 										: 'secondary'
 							}
 							isPending={isPublishing}
-							isDisabled={isSaving}
 							onPress={onPublish}>
-							{isPublishing ? (
-								<Symbol>hourglass_empty</Symbol>
-							) : status === 'ACTIVE' ? (
-								<Symbol>pause</Symbol>
-							) : null}
-							{status === 'ACTIVE'
-								? 'Pause submissions'
+							{status === 'ACTIVE' && <Symbol>pause</Symbol>}
+							{status === 'DRAFT'
+								? 'Enable submissions'
 								: status === 'PAUSED'
 									? 'Resume submissions'
-									: 'Enable submissions'}
+									: 'Pause submissions'}
 						</Button>
 						<Button
 							variant="primary"
 							isPending={isSaving}
-							isDisabled={isPublishing}
 							onPress={onSaveChanges}>
-							{isSaving ? 'Saving...' : 'Publish'}
+							Publish
 						</Button>
 					</div>
 				</div>
@@ -122,7 +115,7 @@ const Stat = ({name, value}: {name: string; value: string | number}) => (
 		<Caption className="text-content-tertiary text-xs uppercase !font-medium">
 			{name}
 		</Caption>
-		<p className="text-lg font-bold text-content-primary tracking-tight">
+		<p className="text-lg font-semibold text-content-primary tracking-tight">
 			{value}
 		</p>
 	</div>

@@ -58,23 +58,19 @@ export function FormProvider({
 
 	const updateForm = useCallback((updatedForm: Partial<Form>) => {
 		setForm((prevForm) => {
-			// Deep compare theme changes
-			const hasThemeChanges =
-				updatedForm.theme &&
-				JSON.stringify(updatedForm.theme) === JSON.stringify(prevForm.theme);
+			const newForm = {...prevForm};
 
-			const hasChanges =
-				(updatedForm.id && updatedForm.id !== prevForm.id) ||
-				(updatedForm.title && updatedForm.title !== prevForm.title) ||
-				(updatedForm.description &&
-					updatedForm.description !== prevForm.description) ||
-				hasThemeChanges ||
-				(Array.isArray(updatedForm.fields) &&
-					JSON.stringify(updatedForm.fields) !==
-						JSON.stringify(prevForm.fields));
+			if (updatedForm.theme) {
+				newForm.theme = {
+					...newForm.theme,
+					...updatedForm.theme,
+				};
+			}
 
-			if (!hasChanges) return prevForm;
-			return {...prevForm, ...updatedForm};
+			return {
+				...newForm,
+				...updatedForm,
+			};
 		});
 	}, []);
 

@@ -125,6 +125,7 @@ export default function GigPageShell(props: GigPageShellProps) {
 						id="questions"
 						className={'border-t border-zinc-400/30 overflow-y-auto w-full'}>
 						<GigFormBuilder
+							{...survey}
 							_id={id as string}
 							description={survey.description}
 							name={survey.name}

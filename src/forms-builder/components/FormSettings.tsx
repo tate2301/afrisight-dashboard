@@ -21,9 +21,11 @@ export function FormSettings() {
 			(theme) => theme.id === themeId,
 		);
 		if (selectedTheme) {
-			const newTheme = selectedTheme;
 			updateForm({
-				theme: newTheme,
+				theme: {
+					...selectedTheme, // Use the entire selected theme
+					id: themeId, // Ensure the ID is set
+				},
 			});
 		}
 	};
@@ -67,21 +69,21 @@ export function FormSettings() {
 
 				{/* Theme Palettes Grid */}
 				<div className="grid grid-cols-2 gap-3">
-					{predefinedThemes.map((theme) => (
+					{predefinedThemes.map((presetTheme) => (
 						<button
-							key={theme.id}
-							onClick={() => handleThemeSelect(theme.id)}
+							key={presetTheme.id}
+							onClick={() => handleThemeSelect(presetTheme.id)}
 							className={`p-4 rounded-lg border transition-all ${
-								theme.id === theme.id ? 'ring-2 ring-primary' : ''
+								theme.id === presetTheme.id ? 'ring-2 ring-primary' : ''
 							}`}
 							style={{
-								background: theme.colors.background,
-								color: theme.colors.text,
+								background: presetTheme.colors.background,
+								color: presetTheme.colors.text,
 							}}>
 							<div className="space-y-2">
-								<h3 className="font-medium text-sm">{theme.name}</h3>
+								<h3 className="font-medium text-sm">{presetTheme.name}</h3>
 								<div className="flex gap-1.5">
-									{Object.values(theme.colors).map((color, i) => (
+									{Object.values(presetTheme.colors).map((color, i) => (
 										<div
 											key={i}
 											className="w-4 h-4 rounded-full"
