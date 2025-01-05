@@ -29,7 +29,8 @@ const GigHeader = ({
 				<div className="flex">
 					<Button
 						onPress={navigation.back}
-						variant="ghost">
+						variant="ghost"
+						isDisabled={isSaving || isPublishing}>
 						Back to Gigs
 					</Button>
 				</div>
@@ -39,8 +40,8 @@ const GigHeader = ({
 					<div className="flex gap-4">
 						<Button
 							variant="secondary"
-							isPending={isSaving}
-							onPress={onSaveChanges}>
+							isDisabled={isSaving || isPublishing}
+							onPress={() => window.open('/radar', '_blank')}>
 							Open in Radar
 							<span className="material-symbols-rounded text-xs">
 								north_east
@@ -56,19 +57,25 @@ const GigHeader = ({
 										: 'secondary'
 							}
 							isPending={isPublishing}
+							isDisabled={isSaving}
 							onPress={onPublish}>
-							{status === 'ACTIVE' && <Symbol>pause</Symbol>}
-							{status === 'DRAFT'
-								? 'Enable submissions'
+							{isPublishing ? (
+								<Symbol>hourglass_empty</Symbol>
+							) : status === 'ACTIVE' ? (
+								<Symbol>pause</Symbol>
+							) : null}
+							{status === 'ACTIVE'
+								? 'Pause submissions'
 								: status === 'PAUSED'
 									? 'Resume submissions'
-									: 'Pause submissions'}
+									: 'Enable submissions'}
 						</Button>
 						<Button
 							variant="primary"
 							isPending={isSaving}
+							isDisabled={isPublishing}
 							onPress={onSaveChanges}>
-							Publish
+							{isSaving ? 'Saving...' : 'Publish'}
 						</Button>
 					</div>
 				</div>

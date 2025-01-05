@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import {Form, FormField} from './types';
 import {createEmptyForm, deserializeForm} from './utils/formUtils';
+import {DEFAULT_THEME} from './constants';
 
 interface FormContextType {
 	form: Form;
@@ -37,9 +38,11 @@ export function FormProvider({
 	const [form, setForm] = useState<Form>(() => {
 		if (initialForm) {
 			try {
-				return typeof initialForm === 'string'
-					? deserializeForm(initialForm)
-					: initialForm;
+				const form = deserializeForm(initialForm);
+				return {
+					...form,
+					theme: form?.theme || DEFAULT_THEME,
+				};
 			} catch (e) {
 				console.error('Failed to parse initial form:', e);
 				return createEmptyForm({});

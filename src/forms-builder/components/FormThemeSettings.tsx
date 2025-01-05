@@ -6,6 +6,7 @@ import {HexColorPicker} from 'react-colorful';
 import Box from '@/components/design-sytem/box';
 import {Paragraph} from '@/components/design-sytem/typography';
 import Separator from '@/components/design-sytem/separator';
+import {DEFAULT_THEME} from '../constants';
 
 const fontFamilies = [
 	{value: 'Inter, sans-serif', label: 'Inter'},
@@ -17,14 +18,15 @@ const fontFamilies = [
 
 export function FormThemeSettings() {
 	const {form, updateForm} = useFormContext();
+	const theme = form.theme || DEFAULT_THEME;
 	const [showColorPicker, setShowColorPicker] = React.useState<
 		'primary' | 'background' | null
 	>(null);
 
-	const handleThemeChange = (key: keyof typeof form.theme, value: string) => {
+	const handleThemeChange = (key: keyof typeof theme, value: string) => {
 		updateForm({
 			theme: {
-				...form.theme,
+				...theme,
 				[key]: value,
 			},
 		});
@@ -44,7 +46,7 @@ export function FormThemeSettings() {
 				<div>
 					<Label htmlFor="fontFamily">Font Family</Label>
 					<Select.Root
-						value={form.theme.font}
+						value={theme.font || DEFAULT_THEME.font}
 						onValueChange={(value) => handleThemeChange('font', value)}>
 						<Select.Trigger />
 						<Select.Content>

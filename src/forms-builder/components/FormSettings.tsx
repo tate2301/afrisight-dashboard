@@ -4,10 +4,11 @@ import {Label} from '@/components/ui/label';
 import {Paragraph} from '@/components/design-sytem/typography';
 import {TextArea, TextField} from '@radix-ui/themes';
 import {predefinedThemes, ensureCompleteTheme} from '../utils/themeUtils';
+import {DEFAULT_THEME} from '../constants';
 
 export function FormSettings() {
 	const {form, updateForm} = useFormContext();
-	const safeTheme = ensureCompleteTheme(form.theme);
+	const theme = form.theme || DEFAULT_THEME;
 
 	console.log({predefinedThemes});
 
@@ -71,7 +72,7 @@ export function FormSettings() {
 							key={theme.id}
 							onClick={() => handleThemeSelect(theme.id)}
 							className={`p-4 rounded-lg border transition-all ${
-								safeTheme.id === theme.id ? 'ring-2 ring-primary' : ''
+								theme.id === theme.id ? 'ring-2 ring-primary' : ''
 							}`}
 							style={{
 								background: theme.colors.background,
@@ -102,17 +103,21 @@ export function FormSettings() {
 							<div className="flex gap-2">
 								<div
 									className="w-10 h-10 rounded border"
-									style={{backgroundColor: form.theme.colors.background}}
+									style={{
+										backgroundColor:
+											theme.colors?.background ||
+											DEFAULT_THEME.colors.background,
+									}}
 								/>
 								<TextField.Root
 									id="primaryColor"
-									value={form.theme.colors.primary}
+									value={theme.colors?.primary || DEFAULT_THEME.colors.primary}
 									onChange={(e) =>
 										updateForm({
 											theme: {
-												...form.theme,
+												...theme,
 												colors: {
-													...form.theme.colors,
+													...theme.colors,
 													primary: e.target.value,
 												},
 											},
@@ -127,17 +132,23 @@ export function FormSettings() {
 							<div className="flex gap-2">
 								<div
 									className="w-10 h-10 rounded border"
-									style={{backgroundColor: form.theme.colors.background}}
+									style={{
+										backgroundColor:
+											theme.colors?.background ||
+											DEFAULT_THEME.colors.background,
+									}}
 								/>
 								<TextField.Root
 									id="backgroundColor"
-									value={form.theme.colors.background}
+									value={
+										theme.colors?.background || DEFAULT_THEME.colors.background
+									}
 									onChange={(e) =>
 										updateForm({
 											theme: {
-												...form.theme,
+												...theme,
 												colors: {
-													...form.theme.colors,
+													...theme.colors,
 													background: e.target.value,
 												},
 											},
