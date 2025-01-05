@@ -38,9 +38,9 @@ export function FormSettings() {
 				<Label htmlFor="fontFamily">Font Family</Label>
 				<TextField.Root
 					id="fontFamily"
-					value={form.theme.fontFamily}
+					value={form.theme.font}
 					onChange={(e) =>
-						updateForm({theme: {...form.theme, fontFamily: e.target.value}})
+						updateForm({theme: {...form.theme, font: e.target.value}})
 					}
 				/>
 			</div>

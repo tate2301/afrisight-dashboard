@@ -15,11 +15,6 @@ export interface FormTheme {
 	font: string;
 }
 
-export type GigForm = {
-	_id: string;
-	gig: string | any;
-};
-
 export type InputType =
 	| 'shortAnswer'
 	| 'longAnswer'
@@ -30,6 +25,11 @@ export type InputType =
 	| 'npsRating'
 	| 'fileUpload'
 	| 'likertScale';
+
+export type GigForm = {
+	_id: string;
+	gig: string | any;
+};
 
 export interface FormField {
 	id: string;

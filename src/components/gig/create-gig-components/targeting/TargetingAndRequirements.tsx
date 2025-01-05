@@ -50,7 +50,6 @@ export function TargetingAndRequirements({
 								})
 					}
 					onChange={handleLocationChange}
-					error={formik.touched.location && (formik.errors.location as string)}
 				/>
 			</section>
 
