@@ -1,13 +1,37 @@
-import {Formik, FormikProps} from 'formik';
+import { Formik, FormikProps } from 'formik';
 import * as Yup from 'yup';
-import {Gig} from '@/utils/types';
+import { Gig } from '@/utils/types';
+import { LocationTargetType } from './targeting/types';
 
-const validationSchema = Yup.object({
-	expectedCompletionTime: Yup.number().min(
-		1,
-		'Minimum completion time is 1 minute',
-	),
-});
+// Define the location structure as it will be saved to the server
+export interface LocationData {
+	type: LocationTargetType;
+	countries: string[]; // country names
+	cities: {
+		country: string;
+		_id: string; // city _id from MongoDB
+	}[];
+}
+
+// Update TBaseGig to use LocationData type
+export type TBaseGig = Partial<
+	Omit<Gig, 'rewardPolicy' | 'coverImage' | 'client' | 'location'> & {
+		rewardPolicy?: string;
+		coverImage: File | null;
+		client: string;
+		endDate: string;
+		location: LocationData; // Use LocationData type directly
+		questionOrdering: 'preserve' | 'shuffle';
+		difficulty: 'easy' | 'medium' | 'hard';
+		duration: number;
+		category: string;
+		tags: string[];
+		targetAgeRange: { min: number; max: number };
+		targetGender: 'Male' | 'Female' | 'Other' | 'All';
+		languageRequirements: string[];
+		educationLevel: 'highSchool' | 'bachelors' | 'masters' | 'phd';
+	}
+>;
 
 export const validationSchemas = {
 	basicInformation: Yup.object({
@@ -31,40 +55,50 @@ export const validationSchemas = {
 		tags: Yup.array().of(Yup.string()),
 	}),
 	targetting: Yup.object({
-		location: Yup.string().required('Location is required'),
-		languageRequirements: Yup.array().of(Yup.string()),
-		educationLevel: Yup.string(),
-		incomeRange: Yup.object({
-			min: Yup.number(),
-			max: Yup.number(),
+		location: Yup.object({
+			type: Yup.string()
+				.oneOf(['all', 'country', 'city'], 'Invalid location type')
+				.required('Location type is required'),
+			countries: Yup.array().when('type', {
+				is: (type: string) => type !== 'all',
+				then: (schema) => schema
+					.of(Yup.string())
+					.min(1, 'At least one country must be selected'),
+				otherwise: (schema) => schema.of(Yup.string())
+			}),
+			cities: Yup.array().of(
+				Yup.object({
+					country: Yup.string().required('Country is required'),
+					_id: Yup.string().required('City ID is required')
+				})
+			)
+		}).test('location-validation', 'Invalid location configuration', function (value) {
+			if (value.type === 'all') return true;
+			if (!value.countries?.length) {
+				return this.createError({ message: 'Please select at least one country' });
+			}
+			return true;
 		}),
-		targetGender: Yup.string().oneOf(['Male', 'Female', 'Other', 'All']),
+		languageRequirements: Yup.array()
+			.of(Yup.string())
+			.min(1, 'At least one language is required'),
+		educationLevel: Yup.string()
+			.oneOf(['highSchool', 'bachelors', 'masters', 'phd'])
+			.required('Education level is required'),
+		targetGender: Yup.string()
+			.oneOf(['Male', 'Female', 'Other', 'All'])
+			.required('Target gender is required'),
 		targetAgeRange: Yup.object({
-			min: Yup.number().min(18, 'Minimum age must be at least 18'),
-			max: Yup.number().max(100, 'Maximum age must be 100 or less'),
-		}),
+			min: Yup.number()
+				.min(13, 'Minimum age must be at least 13')
+				.required('Minimum age is required'),
+			max: Yup.number()
+				.max(100, 'Maximum age must be 100 or less')
+				.moreThan(Yup.ref('min'), 'Maximum age must be greater than minimum age')
+				.required('Maximum age is required')
+		}).required('Age range is required')
 	}),
 };
-
-export type TBaseGig = Partial<
-	Omit<Gig, 'rewardPolicy' | 'coverImage' | 'client'> & {
-		rewardPolicy?: string;
-		coverImage: File | null;
-		client: string;
-		endDate: string;
-		location: string;
-		questionOrdering: 'preserve' | 'shuffle';
-		difficulty: 'easy' | 'medium' | 'hard';
-		duration: number;
-		category: string;
-		tags: string[];
-		targetAgeRange: {min: number; max: number};
-		targetGender: 'Male' | 'Female' | 'Other' | 'All';
-		languageRequirements: string[];
-		educationLevel: string;
-		incomeRange: {min: number; max: number};
-	}
->;
 
 export const _initialValues = {
 	basicInformation: (gig: Partial<TBaseGig>) => ({
@@ -78,14 +112,24 @@ export const _initialValues = {
 		difficulty: gig.difficulty ?? 'easy',
 		questionOrdering: gig.questionOrdering ?? 'preserve',
 	}),
-	targeting: (gig: Partial<TBaseGig>) => ({
-		location: gig.location ?? '',
-		targetGender: gig.targetGender ?? 'All',
-		targetAgeRange: gig.targetAgeRange ?? {min: 18, max: 65},
-		languageRequirements: gig.languageRequirements ?? [],
-		educationLevel: gig.educationLevel ?? '',
-		incomeRange: gig.incomeRange ?? {min: 0, max: 100000},
-	}),
+	targeting: (gig: Partial<TBaseGig>) => {
+		const defaultLocation: LocationData = {
+			type: 'all',
+			countries: [],
+			cities: []
+		};
+
+		// Ensure we're working with LocationData type
+		const location: LocationData = gig.location || defaultLocation;
+
+		return {
+			location,
+			targetGender: gig.targetGender ?? 'All',
+			targetAgeRange: gig.targetAgeRange ?? { min: 13, max: 100 },
+			languageRequirements: gig.languageRequirements ?? [],
+			educationLevel: gig.educationLevel ?? 'highSchool',
+		};
+	},
 	category: (gig: Partial<TBaseGig>) => ({
 		categories: gig.category ?? '',
 		tags: gig.tags ?? [],
@@ -101,7 +145,7 @@ export const FormikWrapper: React.FC<{
 	onSubmit: (values: Partial<TBaseGig>) => Promise<void>;
 	validationSchema: Yup.ObjectSchema<any>;
 	children: (formik: FormikProps<Partial<TBaseGig>>) => React.ReactNode;
-}> = ({onSubmit, children, initialValues}) => {
+}> = ({ validationSchema, onSubmit, children, initialValues }) => {
 	return (
 		<Formik
 			initialValues={initialValues}

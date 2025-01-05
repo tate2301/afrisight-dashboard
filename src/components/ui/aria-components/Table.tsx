@@ -1,4 +1,4 @@
-import { ArrowUp } from 'lucide-react';
+import {ArrowUp} from 'lucide-react';
 import React from 'react';
 import {
 	Cell as AriaCell,
@@ -19,10 +19,10 @@ import {
 	composeRenderProps,
 	useTableOptions,
 } from 'react-aria-components';
-import { twMerge } from 'tailwind-merge';
-import { tv } from 'tailwind-variants';
-import { Checkbox } from './Checkbox';
-import { composeTailwindRenderProps, focusRing } from '@/lib/utils';
+import {twMerge} from 'tailwind-merge';
+import {tv} from 'tailwind-variants';
+import {Checkbox} from './Checkbox';
+import {composeTailwindRenderProps, focusRing} from '@/lib/utils';
 
 export function Table(props: TableProps) {
 	return (
@@ -51,11 +51,11 @@ export function Column(props: ColumnProps) {
 			{...props}
 			className={composeTailwindRenderProps(
 				props.className,
-				'[&:hover]:z-20 [&:focus-within]:z-20 text-start text-[13px] font-semibold text-gray-700 dark:text-zinc-300 cursor-default',
+				'[&:hover]:z-20 [&:focus-within]:z-20 text-start text-[13px] font-bold text-gray-700 dark:text-zinc-300 cursor-default',
 			)}>
 			{composeRenderProps(
 				props.children,
-				(children, { allowsSorting, sortDirection }) => (
+				(children, {allowsSorting, sortDirection}) => (
 					<div className="flex items-center">
 						<Group
 							role="presentation"
@@ -64,8 +64,9 @@ export function Column(props: ColumnProps) {
 							<span className="truncate">{children}</span>
 							{allowsSorting && (
 								<span
-									className={`w-4 h-4 flex items-center justify-center transition ${sortDirection === 'descending' ? 'rotate-180' : ''
-										}`}>
+									className={`w-4 h-4 flex items-center justify-center transition ${
+										sortDirection === 'descending' ? 'rotate-180' : ''
+									}`}>
 									{sortDirection && (
 										<ArrowUp
 											aria-hidden
@@ -84,7 +85,7 @@ export function Column(props: ColumnProps) {
 }
 
 export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
-	let { selectionBehavior, selectionMode, allowsDragging } = useTableOptions();
+	let {selectionBehavior, selectionMode, allowsDragging} = useTableOptions();
 
 	return (
 		<AriaTableHeader
@@ -99,7 +100,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
 				<AriaColumn
 					width={36}
 					minWidth={36}
-					className="text-start text-[13px] font-semibold cursor-default p-2">
+					className="text-start text-[13px] font-bold cursor-default p-2">
 					{selectionMode === 'multiple' && <Checkbox slot="selection" />}
 				</AriaColumn>
 			)}
@@ -119,7 +120,7 @@ export function Row<T extends object>({
 	children,
 	...otherProps
 }: RowProps<T>) {
-	let { selectionBehavior, allowsDragging } = useTableOptions();
+	let {selectionBehavior, allowsDragging} = useTableOptions();
 
 	return (
 		<AriaRow

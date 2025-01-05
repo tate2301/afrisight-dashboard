@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { FormProvider, useFormContext } from '../context';
-import { FormPreview } from './FormPreview';
-import { FieldList } from './FieldList';
-import { FieldProperties } from './FieldProperties';
+import React, {useState} from 'react';
+import {FormProvider, useFormContext} from '../context';
+import {FormPreview} from './FormPreview';
+import {FieldList} from './FieldList';
+import {FieldProperties} from './FieldProperties';
 import Box from '@/components/design-sytem/box';
 import Flex from '@/components/design-sytem/flex';
 import Separator from '@/components/design-sytem/separator';
-import { FormBuilderHeader } from './FormBuilderHeader';
-import { FullscreenPreviewModal } from './FullscreenPreviewModal';
-import { Form } from '../types';
+import {FormBuilderHeader} from './FormBuilderHeader';
+import {FullscreenPreviewModal} from './FullscreenPreviewModal';
+import {FormSettings} from './FormSettings';
+import {Form} from '../types';
+import {Tabs} from '@radix-ui/themes'; // Add this import
+import Symbol from '@/components/icons/symbol';
 
 interface FormBuilderProps {
 	gig_id: string;
@@ -22,13 +25,16 @@ export function FormBuilderPresenter({
 	formName,
 	formDescription,
 }: FormBuilderProps) {
-	const { form, updateForm, selectedFieldId } = useFormContext();
+	const {form, updateForm, selectedFieldId} = useFormContext();
 	const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+	const [activeTab, setActiveTab] = React.useState<'fields' | 'settings'>(
+		'fields',
+	);
 
 	// Add dependency check to prevent infinite updates
 	React.useEffect(() => {
 		if (form.title !== formName || form.description !== formDescription) {
-			updateForm({ title: formName, description: formDescription });
+			updateForm({title: formName, description: formDescription});
 		}
 	}, [formName, formDescription]);
 
@@ -43,20 +49,43 @@ export function FormBuilderPresenter({
 	return (
 		<Box
 			css={{
-				height: `calc(100vh - 52px)`,
 				backgroundColor: '$gray1',
 			}}
-			className="flex flex-col">
+			className="overflow-hidden h-full">
 			<Flex
-				css={{ gap: 0 }}
-				className="flex-1 overflow-y-auto divide-x divide-zinc-400/20">
-				<aside className="w-1/4 bg-white py-4 overflow-y-auto">
-					<FieldList />
+				css={{gap: 0}}
+				className="flex-1 divide-x divide-zinc-400/20 h-full">
+				<aside className="w-1/4 bg-white overflow-y-auto pb-40">
+					<Tabs.Root defaultValue="fields">
+						<Tabs.List className="sticky top-0 bg-white border-b border-zinc-200 px-4 py-2">
+							<Tabs.Trigger
+								value="fields"
+								className="flex items-center gap-2">
+								<Symbol>view_list</Symbol>
+								Fields
+							</Tabs.Trigger>
+							<Tabs.Trigger
+								value="settings"
+								className="flex items-center gap-2">
+								<Symbol>settings</Symbol>
+								Settings
+							</Tabs.Trigger>
+						</Tabs.List>
+
+						<div className="py-4">
+							<Tabs.Content value="fields">
+								<FieldList />
+							</Tabs.Content>
+							<Tabs.Content value="settings">
+								<FormSettings />
+							</Tabs.Content>
+						</div>
+					</Tabs.Root>
 				</aside>
-				<main className="w-1/2 p-4 overflow-y-auto">
+				<main className="w-1/2 p-4 overflow-y-auto pb-40">
 					<FormPreview />
 				</main>
-				<aside className="w-1/4 bg-white overflow-y-auto">
+				<aside className="w-1/4 bg-white overflow-y-auto pb-40">
 					{selectedFieldId && (
 						<div className="p-4">
 							<FieldProperties />

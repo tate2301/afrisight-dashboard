@@ -35,7 +35,7 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 	return (
 		<>
 			<label className="space-y-2">
-				<Paragraph weight="semibold">
+				<Paragraph weight="bold">
 					Title <span className="text-red-500">*</span>
 				</Paragraph>
 				<TextInput
@@ -54,7 +54,7 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 				</Caption>
 			</label>
 			<label className="space-y-2">
-				<Paragraph weight="semibold">
+				<Paragraph weight="bold">
 					Description <span className="text-red-500">*</span>
 				</Paragraph>
 				<textarea
@@ -95,7 +95,7 @@ export const GigDetails = ({formik}: GigDetailsProps) => {
 				onBlur={formik.handleBlur}
 			/>
 			<label className="space-y-2">
-				<Paragraph weight="semibold">Cover image</Paragraph>
+				<Paragraph weight="bold">Cover image</Paragraph>
 				<Box
 					style={{
 						borderRadius: 16,

@@ -6,7 +6,8 @@ import React, {
 	useEffect,
 	useCallback,
 } from 'react';
-import { Form, FormField } from './types';
+import {Form, FormField} from './types';
+import {createEmptyForm, deserializeForm} from './utils/formUtils';
 
 interface FormContextType {
 	form: Form;
@@ -33,42 +34,44 @@ export function FormProvider({
 	initialForm,
 	onFormChange,
 }: FormProviderProps) {
-	const hydrateForm = (json: string): Form => JSON.parse(json);
-
 	const [form, setForm] = useState<Form>(() => {
 		if (initialForm) {
-			return hydrateForm(initialForm);
+			try {
+				return typeof initialForm === 'string'
+					? deserializeForm(initialForm)
+					: initialForm;
+			} catch (e) {
+				console.error('Failed to parse initial form:', e);
+				return createEmptyForm({});
+			}
 		}
-		return {
-			id: '',
-			title: '',
-			description: '',
-			theme: {
-				primaryColor: '#3b82f6',
-				backgroundColor: '#ffffff',
-				fontFamily: 'Inter, sans-serif',
-			},
-			fields: [],
-		};
+		return createEmptyForm({});
 	});
 
-	const [selectedFieldId, setSelectedFieldId] = useState<string | null>(
-		form.fields ? form.fields[0]?.id : null,
-	);
+	// Initialize selectedFieldId only once on mount
+	const [selectedFieldId, setSelectedFieldId] = useState<string | null>(() => {
+		return form.fields && form.fields.length > 0 ? form.fields[0].id : null;
+	});
 
 	const updateForm = useCallback((updatedForm: Partial<Form>) => {
 		setForm((prevForm) => {
+			// Deep compare theme changes
+			const hasThemeChanges =
+				updatedForm.theme &&
+				JSON.stringify(updatedForm.theme) === JSON.stringify(prevForm.theme);
+
 			const hasChanges =
 				(updatedForm.id && updatedForm.id !== prevForm.id) ||
 				(updatedForm.title && updatedForm.title !== prevForm.title) ||
 				(updatedForm.description &&
 					updatedForm.description !== prevForm.description) ||
-				(updatedForm.theme && updatedForm.theme !== prevForm.theme) ||
+				hasThemeChanges ||
 				(Array.isArray(updatedForm.fields) &&
-					updatedForm.fields !== prevForm.fields);
+					JSON.stringify(updatedForm.fields) !==
+						JSON.stringify(prevForm.fields));
 
 			if (!hasChanges) return prevForm;
-			return { ...prevForm, ...updatedForm };
+			return {...prevForm, ...updatedForm};
 		});
 	}, []);
 
@@ -77,6 +80,7 @@ export function FormProvider({
 			...prevForm,
 			fields: [...(prevForm.fields ?? []), field],
 		}));
+		setSelectedFieldId(field.id); // Automatically select newly added field
 	}, []);
 
 	const updateField = useCallback(
@@ -84,36 +88,46 @@ export function FormProvider({
 			setForm((prevForm) => ({
 				...(prevForm ?? []),
 				fields: prevForm.fields?.map((field) =>
-					field.id === fieldId ? { ...field, ...updatedField } : field,
+					field.id === fieldId ? {...field, ...updatedField} : field,
 				),
 			}));
 		},
 		[],
 	);
 
-	const removeField = useCallback((fieldId: string) => {
-		setForm((prevForm) => ({
-			...(prevForm ?? []),
-			fields: prevForm.fields?.filter((field) => field.id !== fieldId),
-		}));
-	}, []);
+	const removeField = useCallback(
+		(fieldId: string) => {
+			setForm((prevForm) => {
+				const fieldIndex = prevForm.fields.findIndex((f) => f.id === fieldId);
+				const newFields = prevForm.fields.filter(
+					(field) => field.id !== fieldId,
+				);
+
+				// Update selection when removing the selected field
+				if (fieldId === selectedFieldId) {
+					const newSelectedIndex = Math.max(0, fieldIndex - 1);
+					setSelectedFieldId(newFields[newSelectedIndex]?.id ?? null);
+				}
+
+				return {
+					...prevForm,
+					fields: newFields,
+				};
+			});
+		},
+		[selectedFieldId],
+	);
 
 	const reorderFields = useCallback((startIndex: number, endIndex: number) => {
 		setForm((prevForm) => {
 			const newFields = Array.from(prevForm.fields);
 			const [reorderedItem] = newFields.splice(startIndex, 1);
 			newFields.splice(endIndex, 0, reorderedItem);
-			return { ...prevForm, fields: newFields };
+			return {...prevForm, fields: newFields};
 		});
 	}, []);
 
 	const exportForm = useCallback(() => JSON.stringify(form), [form]);
-
-	// Stay in sync with first field as default selection
-	useEffect(() => {
-		const firstFieldId = form.fields ? form.fields[0]?.id : null;
-		setSelectedFieldId((prev) => (prev !== firstFieldId ? firstFieldId : prev));
-	}, [form.fields]);
 
 	// Notify parent component of form changes
 	useEffect(() => {
@@ -121,6 +135,15 @@ export function FormProvider({
 			onFormChange(form);
 		}
 	}, [onFormChange, form]);
+
+	// Clean up effect
+	useEffect(() => {
+		return () => {
+			// Cleanup any pending state updates
+			setForm(createEmptyForm({}));
+			setSelectedFieldId(null);
+		};
+	}, []);
 
 	console.log('Rerendered form provider', initialForm);
 

@@ -1,8 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('./fonts.css');
-@import url('./typography.css');
 
 :root {
 	--light-background: #f5f5f5; /* Light Ash Gray - background for light mode */ /* Ash Gray - background */ /* Cream - background base */
@@ -111,21 +109,6 @@
 
 * {
 	@apply border-zinc-400/30 border-collapse;
-}
-
-body {
-	font-family: var(--font-family); /* Font inspired by MercuryOS */
-	font-size: 14px;
-	line-height: 1.25rem;
-	overflow-y: hidden;
-	text-rendering: optimizeLegibility;
-	font-variant-ligatures: common-ligatures; /* Enables default ligatures */
-	font-kerning: normal; /* Enable kerning to ensure optimal letter spacing */
-	font-feature-settings: 'ss01' on; /* Enable specific stylistic set */
-	font-feature-settings:
-		'tnum' on,
-		'pnum' on; /* Use tabular and proportional figures for numerical data */
-	font-feature-settings: 'calt' on; /* Enable contextual alternates for better character flow */
 }
 
 .material .select-shadow {

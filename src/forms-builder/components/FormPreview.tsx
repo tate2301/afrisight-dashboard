@@ -1,37 +1,39 @@
-import { useFormContext } from '../context';
-import { renderField } from '../utils/fieldRenderer';
-import { H2, Paragraph } from '@/components/design-sytem/typography';
-import Box from '@/components/design-sytem/box';
+import {useFormContext} from '../context';
+import {renderField} from '../utils/fieldRenderer';
+import {getCssVariables, ensureCompleteTheme} from '../utils/themeUtils';
 
 export function FormPreview() {
-	const { form, selectedFieldId } = useFormContext();
+	const {form} = useFormContext();
+	const safeTheme = ensureCompleteTheme(form.theme);
 
 	return (
-		<div className="p-6 rounded min-h-full">
-			<H2 className="tracking-tight mb-2">{form.title}</H2>
-			{form.description && (
-				<Paragraph className="mb-6">{form.description}</Paragraph>
-			)}
-			<form className='pb-64'>
-				{form.fields?.map((field) => (
-					<Box
-						key={field.id}
-						css={{
-							marginBottom: '16px',
-							padding: '16px',
-							borderRadius: '12px',
-							backgroundColor:
-								field.id === selectedFieldId ? '$white' : '$white',
-							transition: 'all 0.2s ease-in-out',
-							boxShadow:
-								field.id === selectedFieldId
-									? 'var(--pressable-shadow)'
-									: 'none',
-						}}>
-						{renderField(field)}
-					</Box>
-				))}
-			</form>
+		<div
+			className="max-w-3xl mx-auto p-8 rounded-lg shadow-sm"
+			style={
+				{
+					...getCssVariables(safeTheme),
+					backgroundColor: 'var(--background)',
+					fontFamily: safeTheme.font,
+					color: 'var(--text)',
+				} as React.CSSProperties
+			}>
+			<div className="space-y-8">
+				<div className="space-y-2">
+					<h1
+						className="text-2xl font-bold"
+						style={{color: 'var(--primary)'}}>
+						{form.title}
+					</h1>
+					{form.description && (
+						<p style={{color: 'var(--text-secondary)'}}>{form.description}</p>
+					)}
+				</div>
+				<div className="space-y-6">
+					{form.fields.map((field) => (
+						<div key={field.id}>{renderField(field)}</div>
+					))}
+				</div>
+			</div>
 		</div>
 	);
 }

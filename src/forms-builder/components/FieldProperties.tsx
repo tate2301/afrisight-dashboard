@@ -1,25 +1,25 @@
-import React, { KeyboardEvent } from 'react';
-import { useFormContext } from '../context';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { FormField, InputType } from '../types';
-import { Switch, TextField, Select } from '@radix-ui/themes';
-import { Caption, Paragraph } from '@/components/design-sytem/typography';
+import React, {KeyboardEvent} from 'react';
+import {useFormContext} from '../context';
+import {Input} from '@/components/ui/input';
+import {Textarea} from '@/components/ui/textarea';
+import {Button} from '@/components/ui/button';
+import {FormField, InputType} from '../types';
+import {Switch, TextField, Select} from '@radix-ui/themes';
+import {Caption, Paragraph} from '@/components/design-sytem/typography';
 import Box from '@/components/design-sytem/box';
 import Separator from '@/components/design-sytem/separator';
 import styled from '@/components/design-sytem/theme';
 
 const fieldTypes = [
-	{ value: 'shortAnswer', label: 'Short Answer' },
-	{ value: 'longAnswer', label: 'Long Answer' },
-	{ value: 'email', label: 'Email' },
-	{ value: 'date', label: 'Date' },
-	{ value: 'multipleChoice', label: 'Multiple Choice' },
-	{ value: 'yesNo', label: 'Yes/No' },
-	{ value: 'npsRating', label: 'NPS Rating' },
-	{ value: 'fileUpload', label: 'File Upload' },
-	{ value: 'likertScale', label: 'Likert Scale' },
+	{value: 'shortAnswer', label: 'Short Answer'},
+	{value: 'longAnswer', label: 'Long Answer'},
+	{value: 'email', label: 'Email'},
+	{value: 'date', label: 'Date'},
+	{value: 'multipleChoice', label: 'Multiple Choice'},
+	{value: 'yesNo', label: 'Yes/No'},
+	{value: 'npsRating', label: 'NPS Rating'},
+	{value: 'fileUpload', label: 'File Upload'},
+	{value: 'likertScale', label: 'Likert Scale'},
 ];
 
 const Label = styled(Caption, {
@@ -28,22 +28,32 @@ const Label = styled(Caption, {
 });
 
 export function FieldProperties() {
-	const { form, updateField, selectedFieldId } = useFormContext();
+	const {form, updateField, selectedFieldId} = useFormContext();
 	const selectedField = form.fields?.find(
 		(field) => field.id === selectedFieldId,
 	);
 
 	if (!selectedField) {
-		return <div>No field selected</div>;
+		return null;
 	}
 
 	const handleChange = (key: keyof FormField, value: any) => {
-		updateField(selectedField.id, { [key]: value });
+		updateField(selectedField.id, {[key]: value});
 	};
 
 	const handlePropertyChange = (key: string, value: any) => {
+		// Validate numeric inputs
+		if (typeof value === 'number' && isNaN(value)) {
+			return;
+		}
+
+		// Ensure choices array is never empty for multiple choice
+		if (key === 'choices' && Array.isArray(value) && value.length === 0) {
+			value = ['Option 1'];
+		}
+
 		updateField(selectedField.id, {
-			properties: { ...selectedField.properties, [key]: value },
+			properties: {...selectedField.properties, [key]: value},
 		});
 	};
 
@@ -139,39 +149,39 @@ export function FieldProperties() {
 			{/* Render type-specific properties */}
 			{(selectedField.type === 'shortAnswer' ||
 				selectedField.type === 'longAnswer') && (
-					<>
-						<div>
-							<Label
-								as="label"
-								htmlFor="minLength">
-								Min Length
-							</Label>
-							<TextField.Root
-								id="minLength"
-								type="number"
-								value={selectedField.properties.minLength || ''}
-								onChange={(e) =>
-									handlePropertyChange('minLength', parseInt(e.target.value))
-								}
-							/>
-						</div>
-						<div>
-							<Label
-								as="label"
-								htmlFor="maxLength">
-								Max Length
-							</Label>
-							<TextField.Root
-								id="maxLength"
-								type="number"
-								value={selectedField.properties.maxLength || ''}
-								onChange={(e) =>
-									handlePropertyChange('maxLength', parseInt(e.target.value))
-								}
-							/>
-						</div>
-					</>
-				)}
+				<>
+					<div>
+						<Label
+							as="label"
+							htmlFor="minLength">
+							Min Length
+						</Label>
+						<TextField.Root
+							id="minLength"
+							type="number"
+							value={selectedField.properties.minLength || ''}
+							onChange={(e) =>
+								handlePropertyChange('minLength', parseInt(e.target.value))
+							}
+						/>
+					</div>
+					<div>
+						<Label
+							as="label"
+							htmlFor="maxLength">
+							Max Length
+						</Label>
+						<TextField.Root
+							id="maxLength"
+							type="number"
+							value={selectedField.properties.maxLength || ''}
+							onChange={(e) =>
+								handlePropertyChange('maxLength', parseInt(e.target.value))
+							}
+						/>
+					</div>
+				</>
+			)}
 
 			{selectedField.type === 'multipleChoice' && (
 				<div>
@@ -290,7 +300,6 @@ export function FieldProperties() {
 					/>
 				</div>
 			)}
-
 		</div>
 	);
 }

@@ -1,21 +1,43 @@
 import React from 'react';
-import { FormField } from '../types';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Paragraph } from '@/components/design-sytem/typography';
-import { TextInput } from '@/components/gig/create-gig-components/extras';
-import { DatePicker } from '@/components/ui/aria-components/DatePicker';
+import {FormField} from '../types';
+import {Input} from '@/components/ui/input';
+import {Textarea} from '@/components/ui/textarea';
+import {Label} from '@/components/ui/label';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {Checkbox} from '@/components/ui/checkbox';
+import {Paragraph} from '@/components/design-sytem/typography';
+import {TextInput} from '@/components/gig/create-gig-components/extras';
+import {DatePicker} from '@/components/ui/aria-components/DatePicker';
+
+const commonLabelStyles = {
+	color: 'var(--text)',
+	fontWeight: '500',
+} as const;
+
+const commonInputStyles = {
+	backgroundColor: 'var(--surface)',
+	borderColor: 'var(--border)',
+	color: 'var(--text)',
+} as const;
+
+const commonButtonStyles = {
+	backgroundColor: 'var(--surface)',
+	color: 'var(--text)',
+} as const;
+
+const commonButtonHoverStyles = {
+	backgroundColor: 'var(--primary)',
+	color: 'white',
+} as const;
 
 export function renderField(field: FormField) {
-	const { id, label, required, type, properties } = field;
+	const {id, label, required, type, properties} = field;
 
 	const commonProps = {
 		id,
 		required,
 		placeholder: properties.placeholder || `Enter ${label.toLowerCase()}`,
+		style: commonInputStyles,
 	};
 
 	switch (type) {
@@ -24,11 +46,11 @@ export function renderField(field: FormField) {
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}
 						htmlFor={id}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
 
 					<TextInput
@@ -44,11 +66,11 @@ export function renderField(field: FormField) {
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}
 						htmlFor={id}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
 					<Textarea
 						{...commonProps}
@@ -62,11 +84,11 @@ export function renderField(field: FormField) {
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}
 						htmlFor={id}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
 					<TextInput
 						type="email"
@@ -79,16 +101,13 @@ export function renderField(field: FormField) {
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}
 						htmlFor={id}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
-					<DatePicker
-
-						{...commonProps}
-					/>
+					<DatePicker {...commonProps} />
 				</div>
 			);
 		case 'multipleChoice':
@@ -96,10 +115,10 @@ export function renderField(field: FormField) {
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
 					<RadioGroup>
 						{properties.choices?.map((choice, index) => (
@@ -121,10 +140,10 @@ export function renderField(field: FormField) {
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
 					<RadioGroup>
 						<div className="flex items-center space-x-2">
@@ -144,55 +163,63 @@ export function renderField(field: FormField) {
 					</RadioGroup>
 				</div>
 			);
-		case 'npsRating':
+		case 'npsRating': {
 			const maxRating = properties.npsMaxRating || 10;
 			return (
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}
 						htmlFor={id}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
-					<div className="flex space-x-2">
-						{Array.from({ length: maxRating }, (_, i) => i + 1).map((value) => (
+					<div
+						role="radiogroup"
+						aria-label={label}
+						className="flex space-x-2">
+						{Array.from({length: maxRating}, (_, i) => i + 1).map((value) => (
 							<button
 								key={value}
-								type='button'
-								className="w-8 h-8 rounded-full font-semibold text-content-tertiary bg-surface-secondary flex items-center justify-center hover:bg-surface-quaternary hover:text-content hover:pressable-shadow">
+								type="button"
+								role="radio"
+								aria-checked="false"
+								aria-label={`Rating ${value}`}
+								className="w-8 h-8 rounded-full font-bold flex items-center justify-center transition-colors hover:bg-primary hover:text-white"
+								style={commonButtonStyles}>
 								{value}
 							</button>
 						))}
 					</div>
-					<div className="flex justify-between text-[13px] text-gray-500">
+					<div
+						className="flex justify-between text-sm"
+						style={{color: 'var(--text-secondary)'}}>
 						<span>Not at all likely</span>
 						<span>Extremely likely</span>
 					</div>
 				</div>
 			);
-
+		}
 		case 'likertScale':
 			const maxRatingScale = properties.scalePoints || 5;
 			return (
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}
 						htmlFor={id}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
 					<div className="flex space-x-2">
-						{Array.from({ length: maxRatingScale }, (_, i) => i + 1).map(
+						{Array.from({length: maxRatingScale}, (_, i) => i + 1).map(
 							(value) => (
 								<button
 									key={value}
-									type='button'
-									className="w-8 h-8 rounded-full font-semibold text-content-tertiary bg-surface-secondary flex items-center justify-center hover:bg-surface-quaternary hover:text-content hover:pressable-shadow">
-
+									type="button"
+									className="w-8 h-8 rounded-full font-bold text-content-tertiary bg-surface-secondary flex items-center justify-center hover:bg-surface-quaternary hover:text-content hover:pressable-shadow">
 									{value}
 								</button>
 							),
@@ -205,11 +232,11 @@ export function renderField(field: FormField) {
 				<div className="space-y-2">
 					<Paragraph
 						weight={'medium'}
-						color={'primary'}
+						style={commonLabelStyles}
 						as={'label'}
 						htmlFor={id}>
 						{label}
-						{required && '*'}
+						{required && <span style={{color: 'var(--primary)'}}>*</span>}
 					</Paragraph>
 					<Input
 						type="file"

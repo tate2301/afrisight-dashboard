@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import icons from '../icons';
 import Flex from '../design-sytem/flex';
-import { Caption, Paragraph } from '../design-sytem/typography';
+import {Caption, Paragraph} from '../design-sytem/typography';
 import Link from '../design-sytem/link';
 import Box from '../design-sytem/box';
-import { formatDate } from '@/utils/strings';
-import { Badge, Button, IconButton } from '@radix-ui/themes';
-import { ChevronRight } from '../icons/chevron.right';
-import { ArrowRight } from '../icons/arrow.right';
-import { Form } from '@/forms-builder/types';
+import {formatDate} from '@/utils/strings';
+import {Badge, Button, IconButton} from '@radix-ui/themes';
+import {ChevronRight} from '../icons/chevron.right';
+import {ArrowRight} from '../icons/arrow.right';
+import {Form} from '@/forms-builder/types';
 
 type GigStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'CLOSED' | 'COMPLETED';
 
@@ -20,7 +20,7 @@ interface GigProps {
 	status: GigStatus;
 	coverImage?: string;
 	form: string;
-	gig_submissions: any[]
+	gig_submissions: any[];
 }
 
 const GigCard = ({
@@ -31,14 +31,14 @@ const GigCard = ({
 	_id,
 	coverImage = '/gig-placeholder.png',
 	form,
-	gig_submissions
+	gig_submissions,
 }: GigProps) => {
 	const isPending = status === 'DRAFT';
 	const isPublished = status === 'ACTIVE';
 	const isArchived = status === 'PAUSED';
 	coverImage = coverImage === 'null' ? '/gig-placeholder.png' : coverImage;
-	const parsedForm: Form = JSON.parse(form ?? "{}")
-	console.log({ parsedForm })
+	const parsedForm: Form = JSON.parse(form ?? '{}');
+	console.log({parsedForm});
 	return (
 		<Link
 			href={`/gigs/${_id}`}
@@ -56,18 +56,19 @@ const GigCard = ({
 				<Flex
 					className="flex-1 ml-4"
 					alignItems={'start'}
-					css={{ borderBottom: '1px solid $gray2', height: '120px' }}>
+					css={{borderBottom: '1px solid $gray2', height: '120px'}}>
 					<div className="flex-1 flex flex-col h-[100px]">
 						<Box className="flex flex-col flex-1">
 							<Flex>
 								<Paragraph
 									color={'primary'}
-									weight={'semibold'}>
+									weight={'bold'}>
 									{title}
 								</Paragraph>
 							</Flex>
 							<div className="text-[13px] text-gray-500">
-								{parsedForm.fields?.length ?? 0} questions • {gig_submissions.length} responses • {views} views
+								{parsedForm.fields?.length ?? 0} questions •{' '}
+								{gig_submissions.length} responses • {views} views
 							</div>
 						</Box>
 						<Caption
@@ -85,7 +86,7 @@ const GigCard = ({
 	);
 };
 
-const GigStatus = ({ status }: { status: GigStatus }) => {
+const GigStatus = ({status}: {status: GigStatus}) => {
 	const statusIcons = {
 		DRAFT: icons.inProgress,
 		ACTIVE: icons.check_fill,

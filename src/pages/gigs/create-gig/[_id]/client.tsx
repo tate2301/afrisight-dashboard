@@ -100,6 +100,7 @@ const CreateGig = () => {
 								formik={formik}
 								openAddClientModal={openAddClientModal}
 							/>
+							<Separator />
 
 							<RewardPolicySelection
 								formik={formik}

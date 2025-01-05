@@ -1,6 +1,6 @@
-import { Flex, Text } from '@radix-ui/themes';
-import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
+import {Flex, Text} from '@radix-ui/themes';
+import {motion} from 'framer-motion';
+import {ReactNode} from 'react';
 
 type TableActionsProps = {
 	selectedItems: string[];
@@ -13,13 +13,13 @@ const variants = {
 		opacity: 0,
 		bottom: -100,
 		scale: 0.7,
-		transition: { duration: 0.2 },
+		transition: {duration: 0.2},
 	},
 	visible: {
 		opacity: 1,
 		bottom: 32,
 		scale: 1,
-		transition: { duration: 0.2 },
+		transition: {duration: 0.2},
 	},
 };
 
@@ -42,7 +42,7 @@ export default function TableActions(props: TableActionsProps) {
 				alignItems: 'center',
 			}}
 			className="inset-x-0 mx-auto min-w-[520px] max-w-3xl w-fit flex gap-8 pressable-shadow justify-between bg-surface">
-			<Text className="text-content-secondary flex-1 font-semibold">
+			<Text className="text-content-secondary flex-1 font-bold">
 				{props.selectedItems.length} rows selected
 			</Text>
 			<Flex

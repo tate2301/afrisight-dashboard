@@ -1,4 +1,4 @@
-import { Heading } from '@radix-ui/themes';
+import {Heading} from '@radix-ui/themes';
 import styled from './theme';
 
 const textVariants = {
@@ -25,9 +25,6 @@ const textVariants = {
 		},
 		medium: {
 			fontWeight: 500,
-		},
-		semibold: {
-			fontWeight: '500',
 		},
 		bold: {
 			fontWeight: '500',
@@ -69,9 +66,9 @@ const Paragraph = styled('p', {
 
 const Caption = styled('p', {
 	fontWeight: 400,
-	fontSize: 12,
+	fontSize: 13,
 	lineHeight: '16px',
 	variants: textVariants,
 });
 
-export { H1, H2, H3, Paragraph, Caption };
+export {H1, H2, H3, Paragraph, Caption};

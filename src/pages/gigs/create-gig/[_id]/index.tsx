@@ -31,25 +31,25 @@ const CreateGig = () => {
 	};
 
 	return (
-		<MultistageFormContainer
-			documentTitle="Create a gig"
-			title="Basic gig information"
-			status="In progress"
-			stages={stages.map((stage) => ({
-				...stage,
-				href: `${_id}/${stage.href}`,
-			}))}
-			currentIndex={0}
-			cancel={cancel}>
-			{data && (
-				<FormikWrapper
-					initialValues={_initialValues.basicInformation(data)}
-					validationSchema={validationSchemas.basicInformation}
-					onSubmit={async (values: TBaseGig) => {
-						return onSubmit(createCustomFormData(values));
-					}}>
-					{(formik) => {
-						return (
+		data && (
+			<FormikWrapper
+				initialValues={_initialValues.basicInformation(data)}
+				validationSchema={validationSchemas.basicInformation}
+				onSubmit={async (values: TBaseGig) => {
+					return onSubmit(createCustomFormData(values));
+				}}>
+				{(formik) => {
+					return (
+						<MultistageFormContainer
+							documentTitle="Create a gig"
+							title="Basic gig information"
+							status="In progress"
+							stages={stages.map((stage) => ({
+								...stage,
+								href: `${_id}/${stage.href}`,
+							}))}
+							currentIndex={0}
+							cancel={cancel}>
 							<form
 								className="flex flex-col space-y-8 px-4"
 								onSubmit={formik.handleSubmit}>
@@ -61,11 +61,11 @@ const CreateGig = () => {
 									error={mutation.error?.message}
 								/>
 							</form>
-						);
-					}}
-				</FormikWrapper>
-			)}
-		</MultistageFormContainer>
+						</MultistageFormContainer>
+					);
+				}}
+			</FormikWrapper>
+		)
 	);
 };
 

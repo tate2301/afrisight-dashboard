@@ -1,10 +1,10 @@
-import { Paragraph, Caption } from '@/components/design-sytem/typography';
+import {Paragraph, Caption} from '@/components/design-sytem/typography';
 import AddRewardPolicy from '@/components/modals/create-reward-policy';
-import { Box, Flex } from '@radix-ui/themes';
-import { RewardPoliciesCombobox } from './RewardsCombobox';
-import { ErrorMessage } from './extras';
-import { PlusIcon } from 'lucide-react';
-import { Button } from '@/components/ui/aria-components/Button';
+import {Box, Flex} from '@radix-ui/themes';
+import {RewardPoliciesCombobox} from './RewardsCombobox';
+import {ErrorMessage} from './extras';
+import {PlusIcon} from 'lucide-react';
+import {Button} from '@/components/ui/aria-components/Button';
 import Symbol from '@/components/icons/symbol';
 
 type AdditionalInfoProps = {
@@ -18,11 +18,11 @@ export const RewardPolicySelection = ({
 	rewardPoliciesQuery,
 	openAddRewardPolicyModal,
 }: AdditionalInfoProps) => (
-	<Box className="space-y-4 flex gap-8 items-end">
+	<Box className="space-y-4 flex flex-col gap-4 items-start">
 		<label className="space-y-2">
-			<Paragraph weight="semibold">
+			<p>
 				Reward policy <span className="text-red-500">*</span>
-			</Paragraph>
+			</p>
 			{rewardPoliciesQuery.data && (
 				<RewardPoliciesCombobox
 					data={rewardPoliciesQuery.data}
@@ -40,12 +40,8 @@ export const RewardPolicySelection = ({
 					formik.setFieldValue('rewardPolicy', rewardPolicy)
 				}
 				trigger={
-					<Button
-						variant="outline"
-						onPress={openAddRewardPolicyModal}>
-						<Symbol>
-							add
-						</Symbol>
+					<Button onPress={openAddRewardPolicyModal}>
+						<Symbol>add</Symbol>
 						Add a new reward policy?
 					</Button>
 				}

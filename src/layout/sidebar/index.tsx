@@ -131,7 +131,7 @@ const Sidebar = () => {
 
 			<Box className="mt-4">
 				<div className="px-4 py-2 text-gray-500">
-					<p className="text-xs uppercase font-semibold">NAVIGATION</p>
+					<p className="text-xs uppercase font-bold">NAVIGATION</p>
 				</div>
 				<ul className="flex flex-col gap-1 p-1 flex-1">
 					{sidebarNavItems.map((item, index) => (

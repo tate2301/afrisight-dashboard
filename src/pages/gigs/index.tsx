@@ -18,6 +18,7 @@ import {CloudDownloadIcon} from 'lucide-react';
 import Separator from '@/components/design-sytem/separator';
 import {useRouter} from 'next/router';
 import {Gig as TGig} from '@/utils/types';
+import {createEmptyForm} from '@/forms-builder/utils/formUtils';
 
 const tabs = ['All', 'Pending', 'Running', 'Paused', 'Archived'];
 const tabToGigStatus = (status: string) => {
@@ -109,7 +110,9 @@ function Gig() {
 	const createGigMutation = useMutation({
 		mutationKey: ['gigs'],
 		mutationFn: async () => {
-			const {_id} = await axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY);
+			const {_id} = await axiosInstance.post(SURVEY_ROUTES.CREATE_SURVEY, {
+				form: createEmptyForm({}),
+			});
 			router.push(`/gigs/create-gig/${_id}`);
 		},
 	});

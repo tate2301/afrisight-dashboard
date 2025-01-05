@@ -21,6 +21,7 @@ export interface NumberFieldProps extends AriaNumberFieldProps {
 	label?: string;
 	description?: string;
 	errorMessage?: string | ((validation: ValidationResult) => string);
+	inputClassName?: string; // Add this prop
 }
 
 export function NumberField({

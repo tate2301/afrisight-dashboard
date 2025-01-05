@@ -56,7 +56,7 @@ export default function GigPageShell(props: GigPageShellProps) {
 	return (
 		<Suspense fallback={<GigSkeleton />}>
 			<FormProvider initialForm={survey?.form}>
-				<div className="mb-6 w-full">
+				<div className="mb-6 w-full flex-shrink-0">
 					<GigHeader
 						save={saveGigChanges}
 						publish={publishGig}
@@ -69,8 +69,8 @@ export default function GigPageShell(props: GigPageShellProps) {
 				<Separator className="mb-2" />
 				<Tabs
 					defaultSelectedKey="responses"
-					className={'w-full flex-1'}>
-					<TabList className="gap-2 sticky top-0 z-[2000] bg-white px-4">
+					className={'w-full flex-1 h-full'}>
+					<TabList className="gap-2 sticky top-0 z-[2000] bg-white px-4 text-sm">
 						<Tab id="responses">
 							<span className="material-symbols-rounded mr-1">table</span>
 							Pending Submissions
@@ -123,7 +123,7 @@ export default function GigPageShell(props: GigPageShellProps) {
 					</TabPanel>
 					<TabPanel
 						id="questions"
-						className={'border-t border-zinc-400/30'}>
+						className={'border-t border-zinc-400/30 overflow-y-auto w-full'}>
 						<GigFormBuilder
 							_id={id as string}
 							description={survey.description}

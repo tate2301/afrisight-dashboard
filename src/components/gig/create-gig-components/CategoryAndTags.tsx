@@ -78,7 +78,7 @@ export const CategoryAndTags = ({formik}: CategoryAndTagsProps) => {
 			<Paragraph weight="bold">Targeting and Requirements</Paragraph>
 
 			<Box className="space-y-2">
-				<Paragraph weight="semibold">Categories</Paragraph>
+				<Paragraph weight="bold">Categories</Paragraph>
 				<Select.Root
 					name="category"
 					defaultValue={categoriesQuery.data?.[0]?.value}
@@ -106,7 +106,7 @@ export const CategoryAndTags = ({formik}: CategoryAndTagsProps) => {
 			</Box>
 
 			<Box className="space-y-4">
-				<Paragraph weight="semibold">Tags</Paragraph>
+				<Paragraph weight="bold">Tags</Paragraph>
 
 				<Flex
 					wrap="wrap"

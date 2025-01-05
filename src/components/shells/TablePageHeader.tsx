@@ -72,43 +72,13 @@ export default function TablePageHeader({
 					<h1 className="font-bold">{title}</h1>
 				</div>
 				<Flex className="space-x-8 p-2">
-					<SearchBox
-						value={value}
-						onChange={setSearchQuery}
-					/>
 					<div className="w-px h-full bg-zinc-400/20" />
-					<Flex className="flex-1 justify-end items-center space-x-8">
-						<Caption
-							className="inline-flex gap-1 mr-4 font-medium"
-							color={'tertiary'}>
-							{(currentPage - 1) * pageSize + 1} -{' '}
-							{(currentPage - 1) * pageSize + pageSize} of {total}
-						</Caption>
-						<Flex style={{gap: 8}}>
-							<Button
-								onClick={previousPage}
-								disabled={!hasPreviousPage}
-								color={'gray'}
-								radius="full"
-								variant={'soft'}>
-								<ChevronLeft />
-								Previous
-							</Button>
-							<Button
-								onClick={nextPage}
-								disabled={!hasNextPage}
-								className="items-center flex"
-								color={'gray'}
-								radius="full"
-								variant={'soft'}>
-								Next
-								<ChevronRight />
-							</Button>
-						</Flex>
+					<Flex className="flex-1 justify-end h-full items-center px-4 space-x-2 py-2">
+						{actions}
 					</Flex>
 				</Flex>
 			</Flex>
-			<TabNav.Root className="flex-1 items-end px-2 borderb-0">
+			<TabNav.Root className="flex-1 items-end px-2 border-b-0">
 				{tabs.map((tab) => (
 					<TabNav.Link
 						active={activeTab === tab.toLowerCase().replaceAll(' ', '-')}
@@ -116,8 +86,39 @@ export default function TablePageHeader({
 						{tab}
 					</TabNav.Link>
 				))}
-				<Flex className="flex-1 justify-end h-full items-center px-4 space-x-2">
-					{actions}
+
+				<Flex className="flex-1 justify-end items-center space-x-8 py-2">
+					<SearchBox
+						value={value}
+						onChange={setSearchQuery}
+					/>
+					<Caption
+						className="inline-flex gap-1 mr-4 font-medium"
+						color={'tertiary'}>
+						{(currentPage - 1) * pageSize + 1} -{' '}
+						{(currentPage - 1) * pageSize + pageSize} of {total}
+					</Caption>
+					<Flex style={{gap: 8}}>
+						<Button
+							onClick={previousPage}
+							disabled={!hasPreviousPage}
+							color={'gray'}
+							radius="full"
+							variant={'soft'}>
+							<ChevronLeft />
+							Previous
+						</Button>
+						<Button
+							onClick={nextPage}
+							disabled={!hasNextPage}
+							className="items-center flex"
+							color={'gray'}
+							radius="full"
+							variant={'soft'}>
+							Next
+							<ChevronRight />
+						</Button>
+					</Flex>
 				</Flex>
 			</TabNav.Root>
 

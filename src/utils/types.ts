@@ -281,3 +281,18 @@ export type Gig = {
 	_id: string;
 	__v: number;
 };
+
+export interface Country {
+	id: string;
+	name: string;
+}
+
+export interface City {
+	id: string;
+	name: string;
+	country: Country;
+	admin1: string;
+	lat: string;
+	lon: string;
+	pop: string;
+}
