@@ -1,7 +1,7 @@
-import { Formik, FormikProps } from 'formik';
+import {Formik, FormikProps} from 'formik';
 import * as Yup from 'yup';
-import { Gig } from '@/utils/types';
-import { LocationTargetType } from './targeting/types';
+import {Gig} from '@/utils/types';
+import {LocationTargetType} from './targeting/types';
 
 // Define the location structure as it will be saved to the server
 export interface LocationData {
@@ -26,7 +26,7 @@ export type TBaseGig = Partial<
 		duration: number;
 		category: string;
 		tags: string[];
-		targetAgeRange: { min: number; max: number };
+		targetAgeRange: {min: number; max: number};
 		targetGender: 'Male' | 'Female' | 'Other' | 'All';
 		languageRequirements: string[];
 		educationLevel: 'highSchool' | 'bachelors' | 'masters' | 'phd';
@@ -49,9 +49,7 @@ export const validationSchemas = {
 		rewardPolicy: Yup.string().required('A reward policy is required'),
 	}),
 	category: Yup.object({
-		categories: Yup.array()
-			.of(Yup.string())
-			.min(1, 'At least one category is required'),
+		categories: Yup.string(),
 		tags: Yup.array().of(Yup.string()),
 	}),
 	targetting: Yup.object({
@@ -61,24 +59,31 @@ export const validationSchemas = {
 				.required('Location type is required'),
 			countries: Yup.array().when('type', {
 				is: (type: string) => type !== 'all',
-				then: (schema) => schema
-					.of(Yup.string())
-					.min(1, 'At least one country must be selected'),
-				otherwise: (schema) => schema.of(Yup.string())
+				then: (schema) =>
+					schema
+						.of(Yup.string())
+						.min(1, 'At least one country must be selected'),
+				otherwise: (schema) => schema.of(Yup.string()),
 			}),
 			cities: Yup.array().of(
 				Yup.object({
 					country: Yup.string().required('Country is required'),
-					_id: Yup.string().required('City ID is required')
-				})
-			)
-		}).test('location-validation', 'Invalid location configuration', function (value) {
-			if (value.type === 'all') return true;
-			if (!value.countries?.length) {
-				return this.createError({ message: 'Please select at least one country' });
-			}
-			return true;
-		}),
+					_id: Yup.string().required('City ID is required'),
+				}),
+			),
+		}).test(
+			'location-validation',
+			'Invalid location configuration',
+			function (value) {
+				if (value.type === 'all') return true;
+				if (!value.countries?.length) {
+					return this.createError({
+						message: 'Please select at least one country',
+					});
+				}
+				return true;
+			},
+		),
 		languageRequirements: Yup.array()
 			.of(Yup.string())
 			.min(1, 'At least one language is required'),
@@ -94,9 +99,12 @@ export const validationSchemas = {
 				.required('Minimum age is required'),
 			max: Yup.number()
 				.max(100, 'Maximum age must be 100 or less')
-				.moreThan(Yup.ref('min'), 'Maximum age must be greater than minimum age')
-				.required('Maximum age is required')
-		}).required('Age range is required')
+				.moreThan(
+					Yup.ref('min'),
+					'Maximum age must be greater than minimum age',
+				)
+				.required('Maximum age is required'),
+		}).required('Age range is required'),
 	}),
 };
 
@@ -116,7 +124,7 @@ export const _initialValues = {
 		const defaultLocation: LocationData = {
 			type: 'all',
 			countries: [],
-			cities: []
+			cities: [],
 		};
 
 		// Ensure we're working with LocationData type
@@ -125,7 +133,7 @@ export const _initialValues = {
 		return {
 			location,
 			targetGender: gig.targetGender ?? 'All',
-			targetAgeRange: gig.targetAgeRange ?? { min: 13, max: 100 },
+			targetAgeRange: gig.targetAgeRange ?? {min: 13, max: 100},
 			languageRequirements: gig.languageRequirements ?? [],
 			educationLevel: gig.educationLevel ?? 'highSchool',
 		};
@@ -145,7 +153,7 @@ export const FormikWrapper: React.FC<{
 	onSubmit: (values: Partial<TBaseGig>) => Promise<void>;
 	validationSchema: Yup.ObjectSchema<any>;
 	children: (formik: FormikProps<Partial<TBaseGig>>) => React.ReactNode;
-}> = ({ validationSchema, onSubmit, children, initialValues }) => {
+}> = ({validationSchema, onSubmit, children, initialValues}) => {
 	return (
 		<Formik
 			initialValues={initialValues}
