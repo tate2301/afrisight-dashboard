@@ -57,8 +57,8 @@ export const validationSchemas = {
 			type: Yup.string()
 				.oneOf(['all', 'country', 'city'], 'Invalid location type')
 				.required('Location type is required'),
-			countries: Yup.array().when('type', {
-				is: (type: string) => type !== 'all',
+			countries: Yup.array().when(['type', 'enabled'], {
+				is: (type: string, enabled: boolean) => type !== 'all' && enabled,
 				then: (schema) =>
 					schema
 						.of(Yup.string())
@@ -71,40 +71,45 @@ export const validationSchemas = {
 					_id: Yup.string().required('City ID is required'),
 				}),
 			),
-		}).test(
-			'location-validation',
-			'Invalid location configuration',
-			function (value) {
-				if (value.type === 'all') return true;
-				if (!value.countries?.length) {
-					return this.createError({
-						message: 'Please select at least one country',
-					});
-				}
-				return true;
-			},
-		),
-		languageRequirements: Yup.array()
-			.of(Yup.string())
-			.min(1, 'At least one language is required'),
-		educationLevel: Yup.string()
-			.oneOf(['highSchool', 'bachelors', 'masters', 'phd'])
-			.required('Education level is required'),
-		targetGender: Yup.string()
-			.oneOf(['Male', 'Female', 'Other', 'All'])
-			.required('Target gender is required'),
-		targetAgeRange: Yup.object({
-			min: Yup.number()
-				.min(13, 'Minimum age must be at least 13')
-				.required('Minimum age is required'),
-			max: Yup.number()
-				.max(100, 'Maximum age must be 100 or less')
-				.moreThan(
-					Yup.ref('min'),
-					'Maximum age must be greater than minimum age',
-				)
-				.required('Maximum age is required'),
-		}).required('Age range is required'),
+		}),
+		languageRequirements: Yup.array().when('requirementsEnabled', {
+			is: true,
+			then: (schema) => schema.min(1, 'At least one language is required'),
+			otherwise: (schema) => schema,
+		}),
+		educationLevel: Yup.string().when('requirementsEnabled', {
+			is: true,
+			then: (schema) =>
+				schema
+					.oneOf(['highSchool', 'bachelors', 'masters', 'phd'])
+					.required('Education level is required'),
+			otherwise: (schema) => schema,
+		}),
+		targetGender: Yup.string().when('demographicsEnabled', {
+			is: true,
+			then: (schema) =>
+				schema
+					.oneOf(['Male', 'Female', 'Other', 'All'])
+					.required('Target gender is required'),
+			otherwise: (schema) => schema,
+		}),
+		targetAgeRange: Yup.object().when('demographicsEnabled', {
+			is: true,
+			then: (schema) =>
+				schema.shape({
+					min: Yup.number()
+						.min(13, 'Minimum age must be at least 13')
+						.required('Minimum age is required'),
+					max: Yup.number()
+						.max(100, 'Maximum age must be 100 or less')
+						.moreThan(
+							Yup.ref('min'),
+							'Maximum age must be greater than minimum age',
+						)
+						.required('Maximum age is required'),
+				}),
+			otherwise: (schema) => schema,
+		}),
 	}),
 };
 

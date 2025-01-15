@@ -1,13 +1,13 @@
-import {Caption, H2} from '@/components/design-sytem/typography';
+import { Caption, H2 } from '@/components/design-sytem/typography';
 
-import {Paragraph} from '@/components/design-sytem/typography';
+import { Paragraph } from '@/components/design-sytem/typography';
 
-import {Flex} from '@radix-ui/themes';
+import { Flex } from '@radix-ui/themes';
 
-import {Section} from '@radix-ui/themes';
-import {useQuery} from '@tanstack/react-query';
-import {BasicInfoValues, TabProps} from '../types';
-import {ClientsCombobox} from '@/components/gig/create-gig-components/ClientsCombobox';
+import { Section } from '@radix-ui/themes';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { BasicInfoValues, TabProps, GigFormValues } from '../types';
+import { ClientsCombobox } from '@/components/gig/create-gig-components/ClientsCombobox';
 import {
 	ErrorMessage,
 	TextInput,
@@ -22,13 +22,17 @@ import {
 	TabPanel,
 } from '@/components/ui/aria-components/Tabs';
 import Symbol from '@/components/icons/symbol';
-import {Separator} from '@/components/ui/aria-components/Separator';
+import { Separator } from '@/components/ui/aria-components/Separator';
 import QuestionOrderingSection from './atoms/QuestionOrdering';
 import DifficultySection from './atoms/DifficultySection';
 import GigRewardPolicyConfig from './GigRewards';
 import GigClientConfig from './GigClient';
-import {Card} from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import FormIslandCard from './atoms/FormIslandCard';
+import apiClient from '@/hooks/useApiFetcher';
+import { toast } from 'sonner';
+import TargetingAndRequirements from './atoms/TargetingAndRequirements';
+import * as Yup from 'yup';
 
 const GigConfig = ({
 	_id,
@@ -40,7 +44,32 @@ const GigConfig = ({
 	formik,
 	gig,
 }: TabProps & BasicInfoValues) => {
-	const {values, errors, touched, handleChange, handleBlur, setFieldValue} =
+	const queryClient = useQueryClient();
+
+	const updateGigMutation = useMutation<any, Error, Partial<GigFormValues>>({
+		mutationFn: async (values) => {
+			const response = await axiosClientInstance.patch(`/gigs/${_id}`, values);
+			return response;
+		},
+		onSuccess: () => {
+			toast.success('Gig updated successfully');
+			queryClient.invalidateQueries({ queryKey: ['gig', _id] });
+		},
+		onError: (error) => {
+			toast.error('Failed to update gig');
+			console.error('Update error:', error);
+		},
+	});
+
+	const handleSubmit = async (values: Partial<GigFormValues>) => {
+		try {
+			await updateGigMutation.mutateAsync(values);
+		} catch (error) {
+			console.error('Submit error:', error);
+		}
+	};
+
+	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
 		formik;
 	const clientsQuery = useQuery({
 		queryKey: ['clients'],
@@ -60,13 +89,37 @@ const GigConfig = ({
 			return data;
 		},
 	});
+
+	const validationSchema = Yup.object({
+		targetGender: Yup.string().oneOf(['Male', 'Female', 'Other', 'All']).required(),
+		targetAgeRange: Yup.object({
+			min: Yup.number().min(13).required(),
+			max: Yup.number().max(100).required()
+		}),
+		location: Yup.object({
+			type: Yup.string().oneOf(['all', 'country', 'city']).required(),
+			countries: Yup.array().of(Yup.string()),
+			cities: Yup.array().of(
+				Yup.object({
+					country: Yup.string().required(),
+					_id: Yup.string().required()
+				})
+			)
+		}),
+		languageRequirements: Yup.array().of(Yup.string()),
+		educationLevel: Yup.string().oneOf(['highSchool', 'bachelors', 'masters', 'phd'])
+	});
+
 	return (
 		<>
 			<Separator />
 			<Tabs className={'h-full'}>
 				<form
 					className="flex space-x-4 w-full h-full relative "
-					onSubmit={formik.handleSubmit}>
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleSubmit(formik.values);
+					}}>
 					<TabList className="flex flex-col w-[280px] sticky top-0 p-4">
 						<Tab
 							id="basic-information"
@@ -143,31 +196,32 @@ const GigConfig = ({
 							id="targeting"
 							className={'max-w-2xl pb-40'}>
 							<Section className="max-w-3xl">
-								<form
-									className="space-y-8"
-									onSubmit={formik.handleSubmit}>
-									<div>
-										<h3
-											color={'primary'}
-											className="mb-4 text-lg font-bold tracking-tight">
-											Targeting and Options
-										</h3>
-									</div>
+								<div>
+									<h3
+										color={'primary'}
+										className="mb-4 text-lg font-bold tracking-tight">
+										Targeting and Options
+									</h3>
+								</div>
 
-									<FormIslandCard
-										title="Question Ordering"
-										description="Configure how questions are presented to participants of this gig."
-										formik={formik}>
-										<QuestionOrderingSection formik={formik} />
-									</FormIslandCard>
+								<TargetingAndRequirements
+									formik={formik}
+									gig={gig}
+								/>
 
-									<FormIslandCard
-										title="Gig Difficulty"
-										description="How difficult is it to complete this gig for an average person"
-										formik={formik}>
-										<DifficultySection formik={formik} />
-									</FormIslandCard>
-								</form>
+								<FormIslandCard
+									title="Question Ordering"
+									description="Configure how questions are presented to participants of this gig."
+									formik={formik}>
+									<QuestionOrderingSection formik={formik} />
+								</FormIslandCard>
+
+								<FormIslandCard
+									title="Gig Difficulty"
+									description="How difficult is it to complete this gig for an average person"
+									formik={formik}>
+									<DifficultySection formik={formik} />
+								</FormIslandCard>
 							</Section>
 						</TabPanel>
 						<TabPanel

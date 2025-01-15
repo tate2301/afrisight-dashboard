@@ -1,3 +1,6 @@
+import { Location } from "@/utils/types";
+import { LocationData } from "../FormikWrapper";
+
 export interface City {
     _id: string;
     name: string;
@@ -31,7 +34,7 @@ export interface GigFormValues {
         min: number;
         max: number;
     };
-    location: Location;
+    location: LocationData;
     languageRequirements: string[];
     educationLevel: string;
 } 
