@@ -1,24 +1,24 @@
 import { Button } from "@/components/ui/aria-components/Button";
-import { Separator } from "@/components/ui/aria-components/Separator";
-import { Flex, Spinner } from "@radix-ui/themes";
+import { Flex } from "@radix-ui/themes";
 
-const FormBottomBar = ({
-    dirty,
-    loading,
-}: {
+interface FormBottomBarProps {
     dirty: boolean;
     loading: boolean;
-}) => (
-    <>
-        <Flex style={{ marginTop: 20 }}>
-            <Button
-                type={'submit'}
-                isDisabled={!dirty || loading}
-                isPending={loading}>
-                {loading ? <Spinner /> : 'Save changes'}
-            </Button>
-        </Flex>
-    </>
-);
+    isDisabled?: boolean;
+}
 
-export default FormBottomBar
+const FormBottomBar = ({ dirty, loading, isDisabled }: FormBottomBarProps) => {
+    return (
+        <div className="flex justify-end gap-4">
+            <Button
+                type="submit"
+                isDisabled={isDisabled || loading}
+                isPending={loading}
+            >
+                Save Changes
+            </Button>
+        </div>
+    );
+};
+
+export default FormBottomBar;

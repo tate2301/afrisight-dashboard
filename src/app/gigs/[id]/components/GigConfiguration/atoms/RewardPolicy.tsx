@@ -1,5 +1,5 @@
 import { RewardPolicySelection } from "@/components/gig/create-gig-components/RewardPolicySelection";
-import apiClient from "@/hooks/useApiFetcher";
+import axiosClientInstance from '@/helpers/server/auth/axiosClientInstance';
 import useDisclosure from "@/hooks/useDisclosure";
 import { Gig } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
@@ -10,8 +10,8 @@ const RewardPolicyAtom = ({ formik, gig }: { formik: any; gig: Gig }) => {
     const rewardPoliciesQuery = useQuery({
         queryKey: ['reward-policies'],
         queryFn: async () => {
-            const res = await apiClient.get('/gamification/reward-policy');
-            return res.docs.map((policy: any) => ({
+            const res = await axiosClientInstance.get('/gamification/reward-policy');
+            return res.data.docs.map((policy: any) => ({
                 data: {
                     name: policy.name,
                     dollarValue: policy.dollarValue,
@@ -25,6 +25,7 @@ const RewardPolicyAtom = ({ formik, gig }: { formik: any; gig: Gig }) => {
             }));
         },
     });
+
     return (
         <RewardPolicySelection
             rewardPoliciesQuery={rewardPoliciesQuery}
@@ -34,4 +35,4 @@ const RewardPolicyAtom = ({ formik, gig }: { formik: any; gig: Gig }) => {
     );
 };
 
-export default RewardPolicyAtom
+export default RewardPolicyAtom;

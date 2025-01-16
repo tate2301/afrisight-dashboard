@@ -1,5 +1,5 @@
 import { ClientSelection } from "@/components/gig/create-gig-components/ClientSelection";
-import apiClient from "@/hooks/useApiFetcher";
+import axiosClientInstance from '@/helpers/server/auth/axiosClientInstance';
 import useDisclosure from "@/hooks/useDisclosure";
 import { Gig } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
@@ -10,8 +10,8 @@ const ClientAtom = ({ formik, gig }: { formik: any; gig: Gig }) => {
     const clientsQuery = useQuery({
         queryKey: ['clients'],
         queryFn: async () => {
-            const res = await apiClient.get('/admin/client');
-            return res.docs.map((doc: any) => ({
+            const res = await axiosClientInstance.get('/admin/client');
+            return res.data.docs.map((doc: any) => ({
                 data: {
                     name: doc.firstname,
                     email: doc.user.email,
@@ -23,6 +23,7 @@ const ClientAtom = ({ formik, gig }: { formik: any; gig: Gig }) => {
             }));
         },
     });
+
     return (
         <ClientSelection
             clientsQuery={clientsQuery}
@@ -32,4 +33,4 @@ const ClientAtom = ({ formik, gig }: { formik: any; gig: Gig }) => {
     );
 };
 
-export default ClientAtom
+export default ClientAtom;

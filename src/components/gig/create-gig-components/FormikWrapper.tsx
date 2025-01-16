@@ -1,7 +1,7 @@
-import {Formik, FormikProps} from 'formik';
+import { Formik, FormikProps } from 'formik';
 import * as Yup from 'yup';
-import {Gig} from '@/utils/types';
-import {LocationTargetType} from './targeting/types';
+import { Gig } from '@/utils/types';
+import { LocationTargetType } from './targeting/types';
 
 // Define the location structure as it will be saved to the server
 export interface LocationData {
@@ -26,10 +26,10 @@ export type TBaseGig = Partial<
 		duration: number;
 		category: string;
 		tags: string[];
-		targetAgeRange: {min: number; max: number};
+		targetAgeRange: { min: number; max: number };
 		targetGender: 'Male' | 'Female' | 'Other' | 'All';
 		languageRequirements: string[];
-		educationLevel: 'highSchool' | 'bachelors' | 'masters' | 'phd';
+		educationLevel: string
 	}
 >;
 
@@ -138,7 +138,7 @@ export const _initialValues = {
 		return {
 			location,
 			targetGender: gig.targetGender ?? 'All',
-			targetAgeRange: gig.targetAgeRange ?? {min: 13, max: 100},
+			targetAgeRange: gig.targetAgeRange ?? { min: 13, max: 100 },
 			languageRequirements: gig.languageRequirements ?? [],
 			educationLevel: gig.educationLevel ?? 'highSchool',
 		};
@@ -158,7 +158,7 @@ export const FormikWrapper: React.FC<{
 	onSubmit: (values: Partial<TBaseGig>) => Promise<void>;
 	validationSchema: Yup.ObjectSchema<any>;
 	children: (formik: FormikProps<Partial<TBaseGig>>) => React.ReactNode;
-}> = ({validationSchema, onSubmit, children, initialValues}) => {
+}> = ({ validationSchema, onSubmit, children, initialValues }) => {
 	return (
 		<Formik
 			initialValues={initialValues}

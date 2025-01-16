@@ -48,12 +48,17 @@ const GigConfig = ({
 
 	const updateGigMutation = useMutation<any, Error, Partial<GigFormValues>>({
 		mutationFn: async (values) => {
-			const response = await axiosClientInstance.patch(`/gigs/${_id}`, values);
-			return response;
+			const cleanedValues = Object.fromEntries(
+				Object.entries(values).filter(([_, v]) => v !== undefined)
+			);
+
+			const response = await axiosClientInstance.put(`/survey/${_id}`, cleanedValues);
+			return response.data;
 		},
 		onSuccess: () => {
 			toast.success('Gig updated successfully');
 			queryClient.invalidateQueries({ queryKey: ['gig', _id] });
+			formik.resetForm({ values: formik.values });
 		},
 		onError: (error) => {
 			toast.error('Failed to update gig');
@@ -61,11 +66,17 @@ const GigConfig = ({
 		},
 	});
 
-	const handleSubmit = async (values: Partial<GigFormValues>) => {
-		try {
-			await updateGigMutation.mutateAsync(values);
-		} catch (error) {
-			console.error('Submit error:', error);
+	const handleBasicInfoSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (formik.isValid) {
+			try {
+				await updateGigMutation.mutateAsync({
+					name: formik.values.name,
+					description: formik.values.description,
+				});
+			} catch (error) {
+				console.error('Submit error:', error);
+			}
 		}
 	};
 
@@ -114,12 +125,7 @@ const GigConfig = ({
 		<>
 			<Separator />
 			<Tabs className={'h-full'}>
-				<form
-					className="flex space-x-4 w-full h-full relative "
-					onSubmit={(e) => {
-						e.preventDefault();
-						handleSubmit(formik.values);
-					}}>
+				<div className="flex space-x-4 w-full h-full relative">
 					<TabList className="flex flex-col w-[280px] sticky top-0 p-4">
 						<Tab
 							id="basic-information"
@@ -146,13 +152,12 @@ const GigConfig = ({
 							Reward Policy
 						</Tab>
 					</TabList>
-					<div className="bg-white px-8 py-4 shadow h-full flex-1 ">
-						<TabPanel
-							id="basic-information"
-							className="max-w-2xl">
+					<div className="bg-white px-8 py-4 shadow h-full flex-1 overflow-y-auto pb-40">
+						<TabPanel id="basic-information" className="max-w-2xl">
 							<FormIslandCard
 								formik={formik}
-								title="Basic Information">
+								title="Basic Information"
+								onSubmit={handleBasicInfoSubmit}>
 								<div className="flex flex-col space-y-4">
 									<label className="mb-4">
 										<Paragraph weight={'bold'}>
@@ -192,37 +197,28 @@ const GigConfig = ({
 								</div>
 							</FormIslandCard>
 						</TabPanel>
-						<TabPanel
-							id="targeting"
-							className={'max-w-2xl pb-40'}>
-							<Section className="max-w-3xl">
-								<div>
-									<h3
-										color={'primary'}
-										className="mb-4 text-lg font-bold tracking-tight">
-										Targeting and Options
-									</h3>
-								</div>
-
+						<TabPanel id="targeting" className={'max-w-2xl pb-40'}>
+							<FormIslandCard
+								formik={formik}
+								title="Targeting and Requirements"
+								onSubmit={async (e) => {
+									e.preventDefault();
+									if (formik.isValid) {
+										await updateGigMutation.mutateAsync({
+											targetGender: formik.values.targetGender,
+											targetAgeRange: formik.values.targetAgeRange,
+											location: formik.values.location,
+											languageRequirements: formik.values.languageRequirements,
+											educationLevel: formik.values.educationLevel,
+										});
+									}
+								}}>
 								<TargetingAndRequirements
 									formik={formik}
 									gig={gig}
+									updateGigMutation={updateGigMutation}
 								/>
-
-								<FormIslandCard
-									title="Question Ordering"
-									description="Configure how questions are presented to participants of this gig."
-									formik={formik}>
-									<QuestionOrderingSection formik={formik} />
-								</FormIslandCard>
-
-								<FormIslandCard
-									title="Gig Difficulty"
-									description="How difficult is it to complete this gig for an average person"
-									formik={formik}>
-									<DifficultySection formik={formik} />
-								</FormIslandCard>
-							</Section>
+							</FormIslandCard>
 						</TabPanel>
 						<TabPanel
 							id="client"
@@ -234,6 +230,7 @@ const GigConfig = ({
 								mutate={mutate}
 								isPending={isPending}
 								rewardPolicy={gig.rewardPolicy?._id}
+								updateGigMutation={updateGigMutation}
 							/>
 						</TabPanel>
 						<TabPanel
@@ -246,10 +243,11 @@ const GigConfig = ({
 								mutate={mutate}
 								isPending={isPending}
 								rewardPolicy={gig.rewardPolicy?._id}
+								updateGigMutation={updateGigMutation}
 							/>
 						</TabPanel>
 					</div>
-				</form>
+				</div>
 			</Tabs>
 		</>
 	);

@@ -1,5 +1,5 @@
 import { Gig, Profile, User } from '@/utils/types';
-import { UseMutateFunction } from '@tanstack/react-query';
+import { UseMutateFunction, UseMutationResult } from '@tanstack/react-query';
 import { LocationData } from '@/components/gig/create-gig-components/FormikWrapper';
 import { FormikProps } from 'formik';
 import { Location } from '@/utils/types';
@@ -29,6 +29,7 @@ type TabProps = {
     isPending: boolean;
     formik: FormikProps<GigFormValues>;
     gig: Gig;
+    updateGigMutation: UseMutationResult<any, Error, Partial<GigFormValues>>;
 };
 
 type GigBasicInfoProps = {
@@ -69,7 +70,7 @@ export interface GigFormValues {
     };
     location: Location;
     languageRequirements: string[];
-    educationLevel: 'highSchool' | 'bachelors' | 'masters' | 'phd';
+    educationLevel: string;
     questionOrdering: 'preserve' | 'shuffle';
     difficulty: 'easy' | 'medium' | 'hard';
     client: string;

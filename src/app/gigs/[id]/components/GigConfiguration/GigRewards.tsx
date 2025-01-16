@@ -1,26 +1,38 @@
-import {H3} from '@/components/design-sytem/typography';
+import { H3 } from '@/components/design-sytem/typography';
 
-import {Section} from '@radix-ui/themes';
+import { Section } from '@radix-ui/themes';
 
-import {Tabs} from '@radix-ui/themes';
-import {RewardPolicyValues, TabProps} from '../types';
+import { Tabs } from '@radix-ui/themes';
+import { RewardPolicyValues, TabProps } from '../types';
 import RewardPolicyAtom from './atoms/RewardPolicy';
 import FormBottomBar from '../ui/FormBottomBar';
-import {TabPanel} from '@/components/ui/aria-components/Tabs';
-import {Separator} from '@/components/ui/aria-components/Separator';
+import { TabPanel } from '@/components/ui/aria-components/Tabs';
+import { Separator } from '@/components/ui/aria-components/Separator';
 import FormIslandCard from './atoms/FormIslandCard';
 import Symbol from '@/components/icons/symbol';
 
 const GigRewardPolicyConfig = ({
+	_id,
 	isPending,
 	formik,
 	gig,
+	updateGigMutation,
 }: TabProps & RewardPolicyValues) => {
-	console.log({gig: gig.rewardPolicy});
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (formik.isValid) {
+			try {
+				await updateGigMutation.mutateAsync({
+					rewardPolicy: formik.values.rewardPolicy,
+				});
+			} catch (error) {
+				console.error('Submit error:', error);
+			}
+		}
+	};
+
 	return (
-		<form
-			className="block"
-			onSubmit={formik.handleSubmit}>
+		<div className="block">
 			<div className="flex flex-col gap-2 mb-4">
 				<H3
 					weight={'bold'}
@@ -62,13 +74,15 @@ const GigRewardPolicyConfig = ({
 				title="Change reward policy"
 				description="Set a new reward policy for this gig"
 				comment="Changes will take effect immediately"
-				formik={formik}>
+				formik={formik}
+				onSubmit={handleSubmit}
+			>
 				<RewardPolicyAtom
 					gig={gig}
 					formik={formik}
 				/>
 			</FormIslandCard>
-		</form>
+		</div>
 	);
 };
 

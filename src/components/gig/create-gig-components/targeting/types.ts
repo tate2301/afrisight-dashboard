@@ -21,20 +21,8 @@ export interface Country {
 
 export type LocationTargetType = 'all' | 'country' | 'city';
 
-// For UI components
 export interface SelectedCity {
     id: string;
     name: string;
     country: string;
-}
-
-export interface GigFormValues {
-    targetGender: string;
-    targetAgeRange: {
-        min: number;
-        max: number;
-    };
-    location: LocationData;
-    languageRequirements: string[];
-    educationLevel: string;
 } 

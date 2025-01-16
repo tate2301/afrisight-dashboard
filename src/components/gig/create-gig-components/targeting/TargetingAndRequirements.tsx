@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box } from '@radix-ui/themes';
 import { LocationTarget } from './location/LocationTarget';
 import { DemographicsSection } from './demographics/DemographicsSection';
@@ -5,52 +6,55 @@ import { RequirementsSection } from './requirements/RequirementsSection';
 import { SectionHeader } from './common/SectionHeader';
 import FormDivider from '../FormDivider';
 import type { FormikProps } from 'formik';
-import { LocationTargetType, SelectedCity, GigFormValues } from './types';
-import type { TBaseGig } from '../FormikWrapper';
-import { useState } from 'react';
+import { LocationTargetType, SelectedCity } from './types';
+import { GigFormValues } from '@/app/gigs/[id]/components/types';
+import { useState, useCallback } from 'react';
 import { ToggleSection } from './common/ToggleSection';
+import { TBaseGig } from '../FormikWrapper';
 
 interface TargetingAndRequirementsProps {
-	formik: FormikProps<TBaseGig>;
+	formik: FormikProps<GigFormValues>;
 }
 
-export function TargetingAndRequirements({
+export const TargetingAndRequirements = React.memo(({
 	formik,
-}: TargetingAndRequirementsProps) {
+}: TargetingAndRequirementsProps) => {
 	const [enabledSections, setEnabledSections] = useState({
 		location: true,
 		demographics: false,
 		requirements: false,
 	});
 
-	const toggleSection = (section: keyof typeof enabledSections) => {
-		setEnabledSections((prev) => {
+	const toggleSection = useCallback((section: keyof typeof enabledSections) => {
+		setEnabledSections(prev => {
 			const newState = { ...prev, [section]: !prev[section] };
 			if (!newState[section]) {
 				// Clear section data when disabled
+				const resetValues: Partial<GigFormValues> = {};
 				switch (section) {
 					case 'location':
-						formik.setFieldValue('location', {
+						resetValues.location = {
 							type: 'all',
 							countries: [],
 							cities: [],
-						});
+						};
 						break;
 					case 'demographics':
-						formik.setFieldValue('targetGender', 'All');
-						formik.setFieldValue('targetAgeRange', { min: 13, max: 100 });
+						resetValues.targetGender = 'All';
+						resetValues.targetAgeRange = { min: 13, max: 100 };
 						break;
 					case 'requirements':
-						formik.setFieldValue('languageRequirements', []);
-						formik.setFieldValue('educationLevel', 'highSchool');
+						resetValues.languageRequirements = [];
+						resetValues.educationLevel = 'highSchool';
 						break;
 				}
+				formik.setValues({ ...formik.values, ...resetValues }, false);
 			}
 			return newState;
 		});
-	};
+	}, [formik]);
 
-	const handleLocationChange = (
+	const handleLocationChange = useCallback((
 		type: LocationTargetType,
 		countries: string[],
 		cities: SelectedCity[],
@@ -62,12 +66,11 @@ export function TargetingAndRequirements({
 				country: city.country,
 				_id: city.id,
 			})),
-		});
-	};
+		}, false);
+	}, [formik]);
 
 	return (
 		<Box className="max-w-2xl mx-auto space-y-12">
-			{/* Location Section */}
 			<section className="space-y-6">
 				<div className="flex justify-between items-center">
 					<SectionHeader
@@ -76,19 +79,12 @@ export function TargetingAndRequirements({
 					/>
 					<ToggleSection
 						isEnabled={enabledSections.location}
-						onChange={(enabled) => toggleSection('location')}
+						onChange={() => toggleSection('location')}
 					/>
 				</div>
 				{enabledSections.location && (
 					<LocationTarget
-						value={
-							typeof formik.values.location === 'string'
-								? JSON.parse(formik.values.location)
-								: (formik.values.location ?? {
-									cities: [],
-									countries: [],
-								})
-						}
+						value={formik.values.location}
 						onChange={handleLocationChange}
 					/>
 				)}
@@ -105,11 +101,11 @@ export function TargetingAndRequirements({
 					/>
 					<ToggleSection
 						isEnabled={enabledSections.demographics}
-						onChange={(enabled) => toggleSection('demographics')}
+						onChange={() => toggleSection('demographics')}
 					/>
 				</div>
 				{enabledSections.demographics && (
-					<DemographicsSection formik={formik} />
+					<DemographicsSection formik={formik as FormikProps<TBaseGig>} />
 				)}
 			</section>
 
@@ -124,13 +120,15 @@ export function TargetingAndRequirements({
 					/>
 					<ToggleSection
 						isEnabled={enabledSections.requirements}
-						onChange={(enabled) => toggleSection('requirements')}
+						onChange={() => toggleSection('requirements')}
 					/>
 				</div>
 				{enabledSections.requirements && (
-					<RequirementsSection formik={formik} />
+					<RequirementsSection formik={formik as FormikProps<TBaseGig>} />
 				)}
 			</section>
 		</Box>
 	);
-}
+});
+
+TargetingAndRequirements.displayName = 'TargetingAndRequirements';

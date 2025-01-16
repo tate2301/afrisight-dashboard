@@ -250,7 +250,7 @@ export interface FilterState {
 }
 
 export type Gig = {
-	name: string;
+	name?: string;
 	description: string;
 	coverImage: string;
 	difficulty: 'easy' | 'medium' | 'hard';
