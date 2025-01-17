@@ -1,12 +1,12 @@
 'use client';
 
-import {Gig} from '@/utils/types';
+import { Gig } from '@/utils/types';
 
-import {UseMutateFunction} from '@tanstack/react-query';
-import {FormState} from './types';
-import {useFormik} from 'formik';
-import {FormProvider} from '@/forms-builder/context';
-import {Suspense, useMemo} from 'react';
+import { UseMutateFunction } from '@tanstack/react-query';
+import { FormState } from './types';
+import { useFormik } from 'formik';
+import { FormProvider } from '@/forms-builder/context';
+import { Suspense, useMemo } from 'react';
 import GigSkeleton from './GigPageSkeleton';
 import GigHeader from './Header';
 import GigDataset from './GigDataset';
@@ -18,7 +18,7 @@ import {
 	TabPanel,
 	Tabs,
 } from '@/components/ui/aria-components/Tabs';
-import {Separator} from '@/components/ui/aria-components/Separator';
+import { Separator } from '@/components/ui/aria-components/Separator';
 import GigParticipants from './GigParticipants';
 import useSubmissions from '../hooks/useSubmissions';
 import GigPendingSubmissions from './GigPendingSubmissions';
@@ -33,17 +33,17 @@ type GigPageShellProps = {
 };
 
 export default function GigPageShell(props: GigPageShellProps) {
-	const {survey, mutate, isPending, saveGigChanges, publishGig} = props;
-	const {_id: id} = survey;
-	const {data: responses = []} = useSubmissions(id);
-	const {data: pendingResponses = []} = useSubmissions(id, 1, 10, true);
+	const { survey, mutate, isPending, saveGigChanges, publishGig } = props;
+	const { _id: id } = survey;
+	const { data: responses = [] } = useSubmissions(id);
+	const { data: pendingResponses = [] } = useSubmissions(id, 1, 10, true);
 
 	const formikConfig = useMemo(
 		() => ({
 			initialValues: {
 				...survey,
 				rewardPolicy: survey.rewardPolicy?._id,
-			} as Partial<Omit<Gig, 'rewardPolicy'>> & {rewardPolicy?: string},
+			} as Partial<Omit<Gig, 'rewardPolicy'>> & { rewardPolicy?: string },
 			onSubmit: (values: FormState) => mutate(values),
 		}),
 		[survey, mutate],
@@ -64,6 +64,8 @@ export default function GigPageShell(props: GigPageShellProps) {
 						isSaving={props.isPending}
 						status={survey?.status}
 						gig={survey}
+						responsesCount={responses?.length ?? 0}
+						pendingResponsesCount={pendingResponses?.length ?? 0}
 					/>
 				</div>
 				<Separator className="mb-2" />
@@ -137,6 +139,7 @@ export default function GigPageShell(props: GigPageShellProps) {
 						className="bg-[#FAF9F7] h-full">
 						{survey && (
 							<GigConfig
+								// @ts-ignore
 								formik={formik}
 								gig={survey}
 								{...survey}

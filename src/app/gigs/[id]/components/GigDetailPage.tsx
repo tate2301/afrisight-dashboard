@@ -1,27 +1,25 @@
 'use client';
 
-import apiClient from '@/hooks/useApiFetcher';
-import {Gig} from '@/utils/types';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {useRouter} from 'next/navigation';
-import {useCallback, useMemo} from 'react';
-import {FormState} from './types';
-import axiosServerInstance from '@/helpers/server/auth/axiosServerInstance';
+import { Gig } from '@/utils/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
+import { FormState } from './types';
 import GigPageShell from './GigPageShell';
-import {patchGig} from './utils';
+import { patchGig } from './utils';
 import axiosClientInstance from '@/helpers/server/auth/axiosClientInstance';
 
-export default function GigPage({gig}: {gig: Gig}) {
+export default function GigPage({ gig }: { gig: Gig }) {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const queryKey = `gig-${gig._id}`;
 
-	const {mutate, isPending} = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationFn: async (values: FormState) => {
 			await patchGig(gig._id as string, values);
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({queryKey: [queryKey]});
+			queryClient.invalidateQueries({ queryKey: [queryKey] });
 		},
 	});
 
@@ -32,7 +30,7 @@ export default function GigPage({gig}: {gig: Gig}) {
 			);
 		},
 		onSuccess: async () => {
-			await queryClient.invalidateQueries({queryKey: [queryKey]});
+			await queryClient.invalidateQueries({ queryKey: [queryKey] });
 			router.refresh(); // Revalidate the page after status change
 		},
 	});
@@ -42,7 +40,7 @@ export default function GigPage({gig}: {gig: Gig}) {
 			if (!gig) return;
 
 			if (gig) {
-				const values = {...(gig as Gig), form: form} as unknown as FormState;
+				const values = { ...(gig as Gig), form: form } as unknown as FormState;
 				mutate(values);
 			}
 		},

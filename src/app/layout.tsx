@@ -1,10 +1,11 @@
-import {GeneralLayoutProvider} from '@/layout/context';
-import {StoreProvider} from '@/context/Store';
-import {ReactNode} from 'react';
-import {Inter} from 'next/font/google';
+import { GeneralLayoutProvider } from '@/layout/context';
+import { StoreProvider } from '@/context/Store';
+import { ReactNode } from 'react';
+import { Inter } from 'next/font/google';
 import '../styles/globals.css';
+import { Toaster } from 'sonner';
 
-export default function Layout({children}: {children: ReactNode}) {
+export default function Layout({ children }: { children: ReactNode }) {
 	return (
 		<html>
 			<head>
@@ -30,6 +31,7 @@ export default function Layout({children}: {children: ReactNode}) {
 				<GeneralLayoutProvider mode="server">
 					<StoreProvider>{children}</StoreProvider>
 				</GeneralLayoutProvider>
+				<Toaster position="bottom-center" />
 			</body>
 		</html>
 	);

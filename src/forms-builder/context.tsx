@@ -6,9 +6,9 @@ import React, {
 	useEffect,
 	useCallback,
 } from 'react';
-import {Form, FormField} from './types';
-import {createEmptyForm, deserializeForm} from './utils/formUtils';
-import {DEFAULT_THEME} from './constants';
+import { Form, FormField } from './types';
+import { createEmptyForm, deserializeForm } from './utils/formUtils';
+import { DEFAULT_THEME } from './constants';
 
 interface FormContextType {
 	form: Form;
@@ -35,42 +35,43 @@ export function FormProvider({
 	initialForm,
 	onFormChange,
 }: FormProviderProps) {
+	const initialFormRef = React.useRef<Form | null>(null);
+
 	const [form, setForm] = useState<Form>(() => {
-		if (initialForm) {
+		if (initialForm && !initialFormRef.current) {
 			try {
-				const form = deserializeForm(initialForm);
-				return {
-					...form,
-					theme: form?.theme || DEFAULT_THEME,
+				const parsedForm = deserializeForm(initialForm);
+				const formWithTheme = {
+					...parsedForm,
+					theme: parsedForm?.theme || DEFAULT_THEME,
 				};
+				initialFormRef.current = formWithTheme;
+				return formWithTheme;
 			} catch (e) {
 				console.error('Failed to parse initial form:', e);
-				return createEmptyForm({});
+				const emptyForm = createEmptyForm({});
+				initialFormRef.current = emptyForm;
+				return emptyForm;
 			}
 		}
-		return createEmptyForm({});
+		return initialFormRef.current || createEmptyForm({});
 	});
 
-	// Initialize selectedFieldId only once on mount
 	const [selectedFieldId, setSelectedFieldId] = useState<string | null>(() => {
 		return form.fields && form.fields.length > 0 ? form.fields[0].id : null;
 	});
 
 	const updateForm = useCallback((updatedForm: Partial<Form>) => {
 		setForm((prevForm) => {
-			const newForm = {...prevForm};
-
-			if (updatedForm.theme) {
-				newForm.theme = {
-					...newForm.theme,
-					...updatedForm.theme,
-				};
-			}
-
-			return {
-				...newForm,
+			const newForm = {
+				...prevForm,
 				...updatedForm,
+				fields: updatedForm.fields ?? prevForm.fields,
+				theme: updatedForm.theme
+					? { ...prevForm.theme, ...updatedForm.theme }
+					: prevForm.theme,
 			};
+			return newForm;
 		});
 	}, []);
 
@@ -87,7 +88,7 @@ export function FormProvider({
 			setForm((prevForm) => ({
 				...(prevForm ?? []),
 				fields: prevForm.fields?.map((field) =>
-					field.id === fieldId ? {...field, ...updatedField} : field,
+					field.id === fieldId ? { ...field, ...updatedField } : field,
 				),
 			}));
 		},
@@ -122,7 +123,7 @@ export function FormProvider({
 			const newFields = Array.from(prevForm.fields);
 			const [reorderedItem] = newFields.splice(startIndex, 1);
 			newFields.splice(endIndex, 0, reorderedItem);
-			return {...prevForm, fields: newFields};
+			return { ...prevForm, fields: newFields };
 		});
 	}, []);
 
@@ -134,17 +135,6 @@ export function FormProvider({
 			onFormChange(form);
 		}
 	}, [onFormChange, form]);
-
-	// Clean up effect
-	useEffect(() => {
-		return () => {
-			// Cleanup any pending state updates
-			setForm(createEmptyForm({}));
-			setSelectedFieldId(null);
-		};
-	}, []);
-
-	console.log('Rerendered form provider', initialForm);
 
 	return (
 		<FormContext.Provider

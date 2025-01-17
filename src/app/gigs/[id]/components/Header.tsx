@@ -1,15 +1,17 @@
 'use client';
 
-import {useFormContext} from '@/forms-builder/context';
-import {Flex} from '@radix-ui/themes';
-import {Save} from 'lucide-react';
-import {FormBuilderHeaderProps} from './types';
-import {Button} from '@/components/ui/aria-components/Button';
-import {Badge} from '@/components/ui/badge';
-import {Separator} from '@/components/ui/aria-components/Separator';
-import {useRouter} from 'next/navigation';
-import {Caption} from '@/components/design-sytem/typography';
+import { useFormContext } from '@/forms-builder/context';
+import { Flex } from '@radix-ui/themes';
+import { Save } from 'lucide-react';
+import { FormBuilderHeaderProps } from './types';
+import { Button } from '@/components/ui/aria-components/Button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/aria-components/Separator';
+import { useRouter } from 'next/navigation';
+import { Caption } from '@/components/design-sytem/typography';
 import Symbol from '@/components/icons/symbol';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const GigHeader = ({
 	save,
@@ -18,11 +20,23 @@ const GigHeader = ({
 	isPublishing,
 	status,
 	gig,
+	responsesCount,
+	pendingResponsesCount,
 }: FormBuilderHeaderProps) => {
-	const {form, exportForm} = useFormContext();
-	const onSaveChanges = () => save(exportForm());
-	const onPublish = () => publish(form);
+	const { form, exportForm } = useFormContext();
 	const navigation = useRouter();
+	const [showSavingMessage, setShowSavingMessage] = useState(false);
+	const [showPublishedMessage, setShowPublishedMessage] = useState(false);
+
+	const onSaveChanges = async () => {
+		save(exportForm());
+	};
+
+	const onPublish = async () => {
+		publish(form);
+	};
+
+
 	return (
 		<div className="py-1.5 px-4 justify-between">
 			<div className="flex justify-between mb-2">
@@ -35,18 +49,15 @@ const GigHeader = ({
 				</div>
 				<div
 					className="flex items-center justify-between"
-					style={{gap: '8px'}}>
+					style={{ gap: '8px' }}>
 					<div className="flex gap-4">
 						<Button
 							variant="secondary"
 							isPending={isSaving}
 							onPress={onSaveChanges}>
-							Open in Radar
-							<span className="material-symbols-rounded text-xs">
-								north_east
-							</span>
+							<Symbol className='!text-base'>save</Symbol>
+							Save Form
 						</Button>
-						<Separator orientation="vertical" />
 						<Button
 							variant={
 								status === 'DRAFT'
@@ -64,12 +75,6 @@ const GigHeader = ({
 									? 'Resume submissions'
 									: 'Pause submissions'}
 						</Button>
-						<Button
-							variant="primary"
-							isPending={isSaving}
-							onPress={onSaveChanges}>
-							Publish
-						</Button>
 					</div>
 				</div>
 			</div>
@@ -80,7 +85,7 @@ const GigHeader = ({
 						{gig.name}
 					</p>
 					<Badge
-						style={{fontWeight: '500'}}
+						style={{ fontWeight: '500' }}
 						color={
 							status === 'DRAFT'
 								? 'blue'
@@ -94,15 +99,15 @@ const GigHeader = ({
 				<div className="flex gap-10">
 					<Stat
 						name="Participants"
-						value={gig.gig_submissions.length}
+						value={responsesCount}
 					/>
 					<Stat
 						name="Pending Submissions"
-						value={gig.gig_submissions.length}
+						value={pendingResponsesCount}
 					/>
 					<Stat
 						name="Total Rewarded"
-						value={`US $${Intl.NumberFormat().format((gig.rewardPolicy?.dollarValue ?? 0) * gig.gig_submissions.length)}`}
+						value={`US $${Intl.NumberFormat().format((gig.rewardPolicy?.dollarValue ?? 0) * responsesCount)}`}
 					/>
 				</div>
 			</div>
@@ -110,7 +115,7 @@ const GigHeader = ({
 	);
 };
 
-const Stat = ({name, value}: {name: string; value: string | number}) => (
+const Stat = ({ name, value }: { name: string; value: string | number }) => (
 	<div className="border-2 border-surface-secondary py-2 px-4 rounded-xl">
 		<Caption className="text-content-tertiary text-xs uppercase !font-medium">
 			{name}

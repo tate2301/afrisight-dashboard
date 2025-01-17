@@ -4,17 +4,18 @@ import {
 	Button as RACButton,
 	ButtonProps as RACButtonProps,
 } from 'react-aria-components';
-import {tv} from 'tailwind-variants';
-import {focusRing} from '@/lib/utils';
+import { tv } from 'tailwind-variants';
+import { cn, focusRing } from '@/lib/utils';
+import Spinner from '@/components/spinner/Spinner';
 
 export interface ButtonProps extends RACButtonProps {
 	variant?:
-		| 'primary'
-		| 'secondary'
-		| 'destructive'
-		| 'icon'
-		| 'ghost'
-		| 'outline';
+	| 'primary'
+	| 'secondary'
+	| 'destructive'
+	| 'icon'
+	| 'ghost'
+	| 'outline';
 }
 
 let button = tv({
@@ -44,9 +45,11 @@ export function Button(props: ButtonProps) {
 	return (
 		<RACButton
 			{...props}
-			className={composeRenderProps(props.className, (className, renderProps) =>
-				button({...renderProps, variant: props.variant, className}),
+			className={composeRenderProps(cn(props.className, "transition-all duration-100"), (className, renderProps) =>
+				button({ ...renderProps, variant: props.variant, className }),
 			)}
-		/>
+		>
+			{props.isPending ? <Spinner /> : props.children}
+		</RACButton>
 	);
 }

@@ -13,6 +13,8 @@ type FormBuilderHeaderProps = {
     isPublishing: boolean;
     isSaving: boolean;
     gig: Gig
+    responsesCount: number;
+    pendingResponsesCount: number;
 };
 
 type RewardPolicy = {

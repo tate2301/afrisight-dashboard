@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
-import {FormProvider, useFormContext} from '../context';
-import {FormPreview} from './FormPreview';
-import {FieldList} from './FieldList';
-import {FieldProperties} from './FieldProperties';
+import React, { useState } from 'react';
+import { FormProvider, useFormContext } from '../context';
+import { FormPreview } from './FormPreview';
+import { FieldList } from './FieldList';
+import { FieldProperties } from './FieldProperties';
 import Box from '@/components/design-sytem/box';
 import Flex from '@/components/design-sytem/flex';
 import Separator from '@/components/design-sytem/separator';
-import {FormBuilderHeader} from './FormBuilderHeader';
-import {FullscreenPreviewModal} from './FullscreenPreviewModal';
-import {FormSettings} from './FormSettings';
-import {Form} from '../types';
-import {Tabs} from '@radix-ui/themes'; // Add this import
+import { FormBuilderHeader } from './FormBuilderHeader';
+import { FullscreenPreviewModal } from './FullscreenPreviewModal';
+import { FormSettings } from './FormSettings';
+import { Form } from '../types';
+import { Tabs } from '@radix-ui/themes'; // Add this import
 import Symbol from '@/components/icons/symbol';
 
 interface FormBuilderProps {
@@ -25,7 +25,8 @@ export function FormBuilderPresenter({
 	formName,
 	formDescription,
 }: FormBuilderProps) {
-	const {form, updateForm, selectedFieldId} = useFormContext();
+	const { form, updateForm, selectedFieldId } = useFormContext();
+	console.log({ form });
 	const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 	const [activeTab, setActiveTab] = React.useState<'fields' | 'settings'>(
 		'fields',
@@ -34,9 +35,12 @@ export function FormBuilderPresenter({
 	// Add dependency check to prevent infinite updates
 	React.useEffect(() => {
 		if (form.title !== formName || form.description !== formDescription) {
-			updateForm({title: formName, description: formDescription});
+			updateForm({
+				title: formName,
+				description: formDescription,
+			});
 		}
-	}, [formName, formDescription]);
+	}, [formName, formDescription, form.title, form.description, updateForm]);
 
 	const handlePreviewClick = () => {
 		setIsPreviewModalOpen(true);
@@ -53,7 +57,7 @@ export function FormBuilderPresenter({
 			}}
 			className="overflow-hidden h-full">
 			<Flex
-				css={{gap: 0}}
+				css={{ gap: 0 }}
 				className="flex-1 divide-x divide-zinc-400/20 h-full">
 				<aside className="w-1/4 bg-white overflow-y-auto pb-40">
 					<Tabs.Root defaultValue="fields">
