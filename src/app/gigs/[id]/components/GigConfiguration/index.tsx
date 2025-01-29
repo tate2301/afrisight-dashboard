@@ -1,19 +1,13 @@
-import { Caption, H2 } from '@/components/design-sytem/typography';
+import { Caption } from '@/components/design-sytem/typography';
 
 import { Paragraph } from '@/components/design-sytem/typography';
 
-import { Flex } from '@radix-ui/themes';
-
-import { Section } from '@radix-ui/themes';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { BasicInfoValues, TabProps, GigFormValues } from '../types';
-import { ClientsCombobox } from '@/components/gig/create-gig-components/ClientsCombobox';
 import {
 	ErrorMessage,
 	TextInput,
 } from '@/components/gig/create-gig-components/extras';
-import FormBottomBar from '../ui/FormBottomBar';
-import axiosServerInstance from '@/helpers/server/auth/axiosServerInstance';
 import axiosClientInstance from '@/helpers/server/auth/axiosClientInstance';
 import {
 	Tabs,
@@ -23,22 +17,15 @@ import {
 } from '@/components/ui/aria-components/Tabs';
 import Symbol from '@/components/icons/symbol';
 import { Separator } from '@/components/ui/aria-components/Separator';
-import QuestionOrderingSection from './atoms/QuestionOrdering';
-import DifficultySection from './atoms/DifficultySection';
 import GigRewardPolicyConfig from './GigRewards';
 import GigClientConfig from './GigClient';
-import { Card } from '@/components/ui/card';
 import FormIslandCard from './atoms/FormIslandCard';
-import apiClient from '@/hooks/useApiFetcher';
 import { toast } from 'sonner';
 import TargetingAndRequirements from './atoms/TargetingAndRequirements';
 import * as Yup from 'yup';
 
 const GigConfig = ({
 	_id,
-	client,
-	description,
-	name,
 	mutate,
 	isPending,
 	formik,

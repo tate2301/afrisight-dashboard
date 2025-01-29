@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import axiosClientInstance from '@/helpers/server/auth/axiosClientInstance';
-import {LocationTargetType, SelectedCity, Country, City} from '../types';
+import {LocationTargetType, SelectedCity, Country} from '../types';
 import {LocationTargetingOptions} from './LocationTargetingOptions';
 import {LocationSelector} from './LocationSelector';
 import {LocationCard} from './LocationCard';
