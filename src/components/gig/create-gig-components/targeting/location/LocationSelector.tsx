@@ -3,7 +3,7 @@ import { MultiSelect } from '@/components/ui/multi-select';
 import type { Country } from '../types';
 
 interface LocationSelectorProps {
-    countries: Country[];
+    countries: (Country & { code: string })[];
     selectedCountries: string[];
     onSelectCountry: (countries: string[]) => void;
 }
@@ -28,7 +28,7 @@ export function LocationSelector({
                 value={selectedCountries}
                 onChange={onSelectCountry}
                 options={countries.map((country) => ({
-                    value: country.name,
+                    value: country.code,
                     label: country.name,
                 }))}
             />

@@ -9,17 +9,14 @@ import {TBaseGig} from '../../FormikWrapper';
 
 interface DemographicsSectionProps {
 	formik: FormikProps<TBaseGig>;
+	showHeader?: boolean
 }
 
-export function DemographicsSection({formik}: DemographicsSectionProps) {
+export function DemographicsSection({formik, showHeader = true}: DemographicsSectionProps) {
 	return (
 		<section
 			className="space-y-6"
 			aria-labelledby="demographics">
-			<SectionHeader
-				title="Demographics"
-				description="Define your target audience characteristics"
-			/>
 			<div className="grid grid-cols-1  gap-6">
 				{/* Gender */}
 				<div className="space-y-2">

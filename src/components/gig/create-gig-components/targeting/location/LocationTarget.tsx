@@ -7,6 +7,7 @@ import {LocationSelector} from './LocationSelector';
 import {LocationCard} from './LocationCard';
 import {ErrorMessage} from '../../extras';
 import {LocationData} from '../../FormikWrapper';
+import { countriesWithCodes } from '@/lib/data/countries';
 
 interface LocationTargetProps {
 	value: LocationData;
@@ -16,6 +17,12 @@ interface LocationTargetProps {
 		cities: SelectedCity[],
 	) => void;
 	error?: string | undefined;
+}
+
+
+const getCountryName = (code: string) => {
+    const country = countriesWithCodes.find((country) => country.code === code);
+    return country?.name;
 }
 
 export function LocationTarget({value, onChange, error}: LocationTargetProps) {
@@ -34,6 +41,16 @@ export function LocationTarget({value, onChange, error}: LocationTargetProps) {
 			return response.data;
 		},
 	});
+
+	const countriesWithNames = countriesQuery.data?.map(country => {
+		const name = getCountryName(country.name) ?? ""
+		if(!name) return null 
+		return ({
+			name,
+			_id: country._id,
+			code: country.name
+		})
+	}).filter(country => !!country)
 
 	if (countriesQuery.isLoading) {
 		return (
@@ -88,7 +105,7 @@ export function LocationTarget({value, onChange, error}: LocationTargetProps) {
 			{value.type !== 'all' && (
 				<div className="space-y-6">
 					<LocationSelector
-						countries={countriesQuery.data || []}
+						countries={countriesWithNames || []}
 						selectedCountries={value.countries}
 						onSelectCountry={handleCountrySelect}
 					/>

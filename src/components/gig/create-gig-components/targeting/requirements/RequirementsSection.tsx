@@ -16,15 +16,13 @@ const languageOptions = [
 
 interface RequirementsSectionProps {
     formik: FormikProps<TBaseGig>;
+    showHeader?: boolean
 }
 
-export function RequirementsSection({ formik }: RequirementsSectionProps) {
+export function RequirementsSection({ formik, showHeader = true }: RequirementsSectionProps) {
     return (
         <section className="space-y-6" aria-labelledby="requirements">
-            <SectionHeader
-                title="Additional Requirements"
-                description="Set specific criteria for participants"
-            />
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Language */}
                 <div className="space-y-2">

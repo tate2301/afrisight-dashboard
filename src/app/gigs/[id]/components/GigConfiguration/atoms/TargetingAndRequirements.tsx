@@ -50,13 +50,8 @@ const TargetingAndRequirements = ({ formik, gig, updateGigMutation }: TargetingA
 
     return (
         <div className="space-y-8 overflow-y-auto">
-            <FormIslandCard
-                title="Demographics"
-                description="Target specific demographics for this gig"
-                formik={formik}
-                onSubmit={handleSubmit}>
+          
                 <BaseTargeting formik={formik} />
-            </FormIslandCard>
         </div>
     );
 };

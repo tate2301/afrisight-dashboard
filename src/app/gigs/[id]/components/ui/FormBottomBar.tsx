@@ -9,7 +9,7 @@ interface FormBottomBarProps {
 
 const FormBottomBar = ({ dirty, loading, isDisabled }: FormBottomBarProps) => {
     return (
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-4 pt-4">
             <Button
                 type="submit"
                 isDisabled={isDisabled || loading}

@@ -72,15 +72,15 @@ export const TargetingAndRequirements = React.memo(({
 	return (
 		<Box className="max-w-2xl mx-auto space-y-12">
 			<section className="space-y-6">
-				<div className="flex justify-between items-center">
+				<div>
 					<SectionHeader
 						title="Location Targeting"
 						description="Choose where your gig will be available"
-					/>
-					<ToggleSection
 						isEnabled={enabledSections.location}
 						onChange={() => toggleSection('location')}
 					/>
+					
+					
 				</div>
 				{enabledSections.location && (
 					<LocationTarget
@@ -94,18 +94,18 @@ export const TargetingAndRequirements = React.memo(({
 
 			{/* Demographics Section */}
 			<section className="space-y-6">
-				<div className="flex justify-between items-center">
+				<div>
 					<SectionHeader
 						title="Demographics"
 						description="Define your target audience characteristics"
-					/>
-					<ToggleSection
 						isEnabled={enabledSections.demographics}
 						onChange={() => toggleSection('demographics')}
 					/>
+					
+						
 				</div>
 				{enabledSections.demographics && (
-					<DemographicsSection formik={formik as FormikProps<TBaseGig>} />
+					<DemographicsSection showHeader={false} formik={formik as FormikProps<TBaseGig>} />
 				)}
 			</section>
 
@@ -113,18 +113,17 @@ export const TargetingAndRequirements = React.memo(({
 
 			{/* Requirements Section */}
 			<section className="space-y-6">
-				<div className="flex justify-between items-center">
+				<div>
 					<SectionHeader
 						title="Additional Requirements"
 						description="Set specific criteria for participants"
-					/>
-					<ToggleSection
 						isEnabled={enabledSections.requirements}
 						onChange={() => toggleSection('requirements')}
 					/>
+					
 				</div>
 				{enabledSections.requirements && (
-					<RequirementsSection formik={formik as FormikProps<TBaseGig>} />
+					<RequirementsSection showHeader={false} formik={formik as FormikProps<TBaseGig>} />
 				)}
 			</section>
 		</Box>
