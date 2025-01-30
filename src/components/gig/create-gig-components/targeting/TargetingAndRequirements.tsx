@@ -9,7 +9,6 @@ import type { FormikProps } from 'formik';
 import { LocationTargetType, SelectedCity } from './types';
 import { GigFormValues } from '@/app/gigs/[id]/components/types';
 import { useState, useCallback } from 'react';
-import { ToggleSection } from './common/ToggleSection';
 import { TBaseGig } from '../FormikWrapper';
 
 interface TargetingAndRequirementsProps {

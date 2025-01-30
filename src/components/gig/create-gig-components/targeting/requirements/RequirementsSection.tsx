@@ -1,6 +1,5 @@
 import { Select } from '@radix-ui/themes';
 import { Label } from '@/components/ui/aria-components/Field';
-import { SectionHeader } from '../common/SectionHeader';
 import { MultiSelect } from '@/components/ui/multi-select';
 import type { FormikProps } from 'formik';
 import { ErrorMessage } from '../../extras';
