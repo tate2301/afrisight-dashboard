@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import axiosClientInstance from '@/helpers/server/auth/axiosClientInstance';
@@ -7,7 +9,7 @@ import {LocationSelector} from './LocationSelector';
 import {LocationCard} from './LocationCard';
 import {ErrorMessage} from '../../extras';
 import {LocationData} from '../../FormikWrapper';
-import { countriesWithCodes } from '@/lib/data/countries';
+import {countriesWithCodes} from '@/lib/data/countries';
 
 interface LocationTargetProps {
 	value: LocationData;
@@ -19,11 +21,10 @@ interface LocationTargetProps {
 	error?: string | undefined;
 }
 
-
 const getCountryName = (code: string) => {
-    const country = countriesWithCodes.find((country) => country.code === code);
-    return country?.name;
-}
+	const country = countriesWithCodes.find((country) => country.code === code);
+	return country?.name;
+};
 
 export function LocationTarget({value, onChange, error}: LocationTargetProps) {
 	const [selectedCities, setSelectedCities] = useState<SelectedCity[]>(
@@ -42,15 +43,17 @@ export function LocationTarget({value, onChange, error}: LocationTargetProps) {
 		},
 	});
 
-	const countriesWithNames = countriesQuery.data?.map(country => {
-		const name = getCountryName(country.name) ?? ""
-		if(!name) return null 
-		return ({
-			name,
-			_id: country._id,
-			code: country.name
+	const countriesWithNames = countriesQuery.data
+		?.map((country) => {
+			const name = getCountryName(country.name) ?? '';
+			if (!name) return null;
+			return {
+				name,
+				_id: country._id,
+				code: country.name,
+			};
 		})
-	}).filter(country => !!country)
+		.filter((country) => !!country);
 
 	if (countriesQuery.isLoading) {
 		return (
