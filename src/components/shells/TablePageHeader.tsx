@@ -69,7 +69,7 @@ export default function TablePageHeader({
 				alignItems={'center'}
 				className="px-4 pl-0 py-1 justify-between w-full h-[48px]">
 				<div className="flex-1 items-end p-2">
-					<h1 className="font-bold">{title}</h1>
+					<h1 className="font-medium text-lg">{title}</h1>
 				</div>
 				<Flex className="space-x-8 p-2">
 					<div className="w-px h-full bg-zinc-400/20" />

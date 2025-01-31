@@ -50,10 +50,10 @@ const WorkspaceCard = () => {
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
 	return (
 		<Flex
-			className="relative items-center py-2 pl-4 px-2 space-x-2 bg-white pressable-shadow m-2 rounded-xl"
+			className="relative items-center py-2 px-2 space-x-2 hover:bg-zinc-400/20 m-2 rounded-xl"
 			css={{height: NAVBAR_HEIGHT}}>
 			<DropdownMenu.Root>
-				<DropdownMenu.Trigger>
+				<DropdownMenu.Trigger className='px-0'>
 					<Flex className="items-center space-x-2 cursor-pointer w-full">
 						<Avatar
 							fallback={(userProfile?.user.email[0] ?? '').toUpperCase()}

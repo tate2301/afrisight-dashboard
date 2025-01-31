@@ -105,6 +105,7 @@ function Home() {
 							className="font-medium text-indigo-600">
 							<Button
 								variant="ghost"
+								type="button"
 								className="font-bold">
 								Forgot password?
 							</Button>
