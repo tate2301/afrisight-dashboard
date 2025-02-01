@@ -88,8 +88,8 @@ const AddUser = ({trigger, callback}: AddModalProp) => {
 				{trigger ? (
 					trigger
 				) : (
-					<Button radius="full">
-						<AddTeamMember className="size-5" /> Invite new administrator
+					<Button>
+						<AddTeamMember className="size-5" /> Add team member
 					</Button>
 				)}
 			</Dialog.Trigger>

@@ -6,6 +6,7 @@ import {useGetCurrentTabFromQuery} from '@/components/shells';
 import TablePageHeader from '@/components/shells/TablePageHeader';
 import {DataTable} from '@/components/ui/datatable';
 import TableLink from '@/components/ui/datatable/Link';
+import {Separator} from '@/components/ui/separator';
 import {usePagination} from '@/hooks/use-pagination';
 import axiosInstance from '@/hooks/useApiFetcher';
 import {useSetPageTitle} from '@/layout/context';
@@ -21,7 +22,7 @@ import {
 import {Avatar, Badge, Button, Checkbox, Flex, Text} from '@radix-ui/themes';
 import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {ColumnDef} from '@tanstack/react-table';
-import {LucideCloudDownload} from 'lucide-react';
+import {LucideCloudDownload, MoreHorizontal} from 'lucide-react';
 import {useEffect, useState, useMemo, useCallback} from 'react';
 
 const tabs = ['All'];
@@ -258,31 +259,96 @@ export default function Users() {
 
 	return (
 		<GeneralLayout>
-			{!isLoading && !error && (
-				<DataTable
-					columns={teamMembersColumns}
-					data={data.docs || []}
-					selectedItems={selectedUsers}
-					onSelect={handleSelectRows}
-					tableActions={tableActionsContent}
-					header={
-						<TablePageHeader
-							actions={pageActionsContent}
-							title="Administrators"
-							activeTab={currentTab}
-							tabs={tabs}
-							isLoading={isLoading}
-							currentPage={data.page}
-							hasNextPage={paginationNavParams.hasNextPage}
-							hasPreviousPage={paginationNavParams.hasPreviousPage}
-							nextPage={next}
-							previousPage={previous}
-							total={data.total}
-							pageSize={data.limit}
-							fetch={() => Promise.resolve()}></TablePageHeader>
-					}
-				/>
-			)}
+			<div className="max-w-5xl border-r border-zinc-400/30 min-h-full">
+				<div className="p-4 px-8 flex justify-between items-end">
+					<h1 className="font-semibold tracking-tight text-lg">
+						Administrators
+					</h1>
+					<div className="flex gap-4">
+						<Button
+							color="gray"
+							variant="soft">
+							<LucideCloudDownload className="size-5" /> Download team file
+						</Button>
+						<AddUser />
+					</div>
+				</div>
+				<Separator />
+
+				{!isLoading && !error && (
+					// <DataTable
+					// 	columns={teamMembersColumns}
+					// 	data={data.docs || []}
+					// 	selectedItems={selectedUsers}
+					// 	onSelect={handleSelectRows}
+					// 	tableActions={tableActionsContent}
+					// />
+					<div className="py-4 max-w-5xl  divide-y divide-zinc-400/10">
+						{data.docs.map((user: TeamMember) => (
+							<div className="p-4 key={user._id flex justify-between items-start hover:bg-zinc-400/10 transition-color duration-200 ease-out">
+								<div className="flex gap-4">
+									<Avatar
+										size={'1'}
+										radius="full"
+										fallback={user.email.substring(0, 1)}
+										src={user.profilePic}
+										alt={'client profile'}
+									/>
+									<div>
+										<h3 className="font-semibold mb-2">
+											{user.fullName}{' '}
+											<Badge
+												color={
+													user.status.toLowerCase() === 'active'
+														? 'green'
+														: 'red'
+												}
+												className="ml-2"
+												variant="soft">
+												{user.status.toLowerCase() === 'active' ? (
+													<CheckFill className="size-4" />
+												) : (
+													<XFill className="size-4" />
+												)}
+												{user.status.toLowerCase() === 'active'
+													? 'Active'
+													: 'Suspended'}
+											</Badge>
+										</h3>
+										<p className="text-gray-500">{user.email}</p>
+									</div>
+								</div>
+								<div className="flex gap-8 items-center">
+									<div>
+										<p className="text-zinc-600">
+											Last login: {user.lastLogin}
+										</p>
+									</div>
+									<div className="flex gap-4 items-center">
+										<Button
+											variant={'soft'}
+											color={'gray'}>
+											<ArchiveBoxIcon className="size-4" />
+											Archive
+										</Button>
+										<Button
+											variant={'soft'}
+											color={'gray'}>
+											<MoreHorizontal />
+										</Button>
+									</div>
+								</div>
+							</div>
+						))}
+						<div className="flex justify-center p-4 text-zinc-400">
+							<p>
+								You have reached the end of the list. Showing {data.docs.length}{' '}
+								Administrator(s)
+							</p>
+						</div>
+					</div>
+				)}
+			</div>
 		</GeneralLayout>
 	);
 }
