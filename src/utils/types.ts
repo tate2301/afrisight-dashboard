@@ -1,4 +1,11 @@
-import {RewardPolicy} from '@/pages/gigs';
+export type RewardPolicy = {
+	_id: string;
+	name: string;
+	description: string;
+	dollarValue: number;
+	pointsValue: number;
+	voucher: string | null;
+};
 
 export interface UserInfoTypes {
 	id: number;

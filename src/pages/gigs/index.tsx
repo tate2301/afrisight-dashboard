@@ -19,6 +19,7 @@ import Separator from '@/components/design-sytem/separator';
 import {useRouter} from 'next/router';
 import {Gig as TGig} from '@/utils/types';
 import {createEmptyForm} from '@/forms-builder/utils/formUtils';
+import TablePageFooter from '@/components/shells/TablePageFooter';
 
 const tabs = ['All', 'Pending', 'Running', 'Paused', 'Archived'];
 const tabToGigStatus = (status: string) => {
@@ -36,15 +37,6 @@ const tabToGigStatus = (status: string) => {
 		default:
 			return null;
 	}
-};
-
-export type RewardPolicy = {
-	_id: string;
-	name: string;
-	description: string;
-	dollarValue: number;
-	pointsValue: number;
-	voucher: string | null;
 };
 
 const filterConfig: FilterConfigMap = {
@@ -169,14 +161,16 @@ function Gig() {
 										size={'2'}
 										onClick={downloadExportedFile}
 										color="gray"
-										variant="soft"
-										radius={'full'}>
+										variant="outline"
+										radius={'large'}
+										className="pr-6 pressable-shadow">
 										<CloudDownloadIcon className="size-4" /> Export
 									</Button>
 									<Button
 										onClick={() => createGigMutation.mutate()}
 										loading={createGigMutation.isPending}
-										radius={'full'}>
+										radius={'large'}
+										className="pr-6">
 										<PlusIcon className="size-4" /> Create gig
 									</Button>
 								</>
@@ -193,11 +187,8 @@ function Gig() {
 							previousPage={previous}
 							fetch={refetch}
 						/>
-						<Separator />
 					</Box>
-					<Box
-						css={{padding: '20px 0'}}
-						className="py-2 space-y-[20px]">
+					<Box className="border-t border-zinc-400/10 divide-y divide-zinc-400/10 flex-1">
 						{surveys.docs.map((gig: TGig) => (
 							<GigCard
 								key={gig._id}
@@ -212,6 +203,19 @@ function Gig() {
 							/>
 						))}
 					</Box>
+					<TablePageFooter
+						title="Gigs"
+						activeTab={activeTab}
+						tabs={tabs}
+						total={surveys.total}
+						currentPage={+page}
+						pageSize={10}
+						hasNextPage={paginationNavParams.hasNextPage}
+						hasPreviousPage={paginationNavParams.hasPreviousPage}
+						nextPage={next}
+						previousPage={previous}
+						fetch={refetch}
+					/>
 				</>
 			)}
 		</GeneralLayout>

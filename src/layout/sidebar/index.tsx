@@ -16,6 +16,7 @@ import {
 	Square3Stack3DIcon,
 	UserCircleIcon,
 } from '@heroicons/react/24/solid';
+import {motion} from 'framer-motion';
 
 const sidebarNavItems: SidebarNavItemProps[] = [
 	// {
@@ -53,7 +54,7 @@ const WorkspaceCard = () => {
 			className="relative items-center py-2 px-2 space-x-2 hover:bg-zinc-400/20 m-2 rounded-xl"
 			css={{height: NAVBAR_HEIGHT}}>
 			<DropdownMenu.Root>
-				<DropdownMenu.Trigger className='px-0'>
+				<DropdownMenu.Trigger className="px-0">
 					<Flex className="items-center space-x-2 cursor-pointer w-full">
 						<Avatar
 							fallback={(userProfile?.user.email[0] ?? '').toUpperCase()}
@@ -113,10 +114,10 @@ const WorkspaceCard = () => {
 	);
 };
 
-const Sidebar = () => {
+const Sidebar = ({activeTab}: {activeTab?: string}) => {
 	const {userProfile, isAuthenticated, logout} = useAuth();
-	console.log({userProfile, isAuthenticated});
 	const fullName = `${userProfile?.firstname ?? ''} ${userProfile?.surname ?? ''}`;
+
 	return (
 		<Flex
 			direction={'column'}
@@ -137,6 +138,7 @@ const Sidebar = () => {
 					{sidebarNavItems.map((item, index) => (
 						<SidebarNavItem
 							key={index}
+							isActive={activeTab === item.href}
 							{...item}
 							Icon={item.Icon}
 						/>
@@ -165,17 +167,28 @@ type SidebarNavItemProps = {
 	Icon: React.ElementType;
 	text: string;
 	href: string;
+	isActive?: boolean;
 };
-const SidebarNavItem = ({Icon, text, href}: SidebarNavItemProps) => {
+const SidebarNavItem = ({Icon, text, href, isActive}: SidebarNavItemProps) => {
 	return (
 		<Link
 			href={href}
-			prefetch={false}>
+			prefetch={false}
+			className="relative">
 			<ListItem
-				className={cn('rounded-md hover:bg-zinc-400/20 p-2 text-zinc-800')}>
+				className={cn(
+					'rounded-md hover:bg-zinc-400/20 p-2 text-zinc-800 z-10',
+				)}>
 				<Icon className="w-4 h-4 mr-4" />
 				{text}
 			</ListItem>
+			{isActive && (
+				<motion.div
+					layout
+					layoutId="sidebar-nav-indicator"
+					className="h-full bg-zinc-400/30 z-0 absolute bottom-0 left-0 w-full rounded-lg"
+				/>
+			)}
 		</Link>
 	);
 };

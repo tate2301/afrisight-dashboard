@@ -38,47 +38,57 @@ const GigCard = ({
 	const isArchived = status === 'PAUSED';
 	coverImage = coverImage === 'null' ? '/gig-placeholder.png' : coverImage;
 	const parsedForm: Form = JSON.parse(form ?? '{}');
-	console.log({parsedForm});
+
 	return (
 		<Link
 			href={`/gigs/${_id}`}
-			className="mb-4 block">
-			<Flex className="items-start px-4 gap-8">
-				<div className="w-[100px] h-[100px] relative">
+			className="py-2 flex">
+			<Flex className="items-center px-4 gap-8 w-full">
+				<div className="w-[48px] h-[48px] relative">
 					<Image
 						src={coverImage ? coverImage : '/gig-placeholder.png'}
 						alt="Gig Image"
 						layout="fill"
 						objectFit="cover"
-						className="rounded-xl border border-zinc-400/30"
+						className="rounded-lg border border-zinc-400/30"
 					/>
 				</div>
 				<Flex
-					className="flex-1 ml-4"
-					alignItems={'start'}
-					css={{borderBottom: '1px solid $gray2', height: '120px'}}>
-					<div className="flex-1 flex flex-col h-[100px]">
-						<Box className="flex flex-col flex-1">
+					className="flex-1 ml-4 h-[48px]"
+					alignItems={'start'}>
+					<div className="flex-1 flex flex-col h-full">
+						<Box className="flex flex-col flex-1 items-start">
 							<Flex>
-								<Paragraph
-									color={'primary'}
-									weight={'bold'}>
-									{title}
-								</Paragraph>
+								{title && (
+									<Paragraph
+										color={'primary'}
+										weight={'bold'}>
+										{title}
+									</Paragraph>
+								)}
+								{!title && (
+									<Paragraph
+										color={'tertiary'}
+										weight={'medium'}
+										className="italic">
+										Missing title
+									</Paragraph>
+								)}
 							</Flex>
 							<div className="text-[13px] text-gray-500">
 								{parsedForm.fields?.length ?? 0} questions •{' '}
 								{gig_submissions.length} responses • {views} views
 							</div>
 						</Box>
+					</div>
+					<Flex className="ml-4 gap-4 flex items-center h-full">
+						<GigStatus status={status} />
 						<Caption
 							color={'secondary'}
-							weight={'medium'}>
+							weight={'medium'}
+							className="ml-4">
 							Created {formatDate(createdDate)}
 						</Caption>
-					</div>
-					<Flex className="ml-4 gap-4 flex items-center">
-						<GigStatus status={status} />
 					</Flex>
 				</Flex>
 			</Flex>
