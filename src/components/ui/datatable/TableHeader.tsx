@@ -1,14 +1,13 @@
-import { Table } from '@tanstack/react-table';
+import {Table} from '@tanstack/react-table';
 import {
 	TableHeader as UITableHeader,
 	TableRow,
 	TableHead,
 } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
-import { Flex } from '@radix-ui/themes';
+import {cn} from '@/lib/utils';
+import {Flex} from '@radix-ui/themes';
 import FilterSortDropdown from './filter-sort-dropdown';
-import { flexRender } from '@tanstack/react-table';
-import { TABLE_ACTIONS_HEIGHT } from '@/components/shells/TablePageHeader';
+import {flexRender} from '@tanstack/react-table';
 
 interface TableHeaderProps<TData> {
 	table: Table<TData>;
@@ -22,9 +21,11 @@ export default function TableHeader<TData>({
 	return (
 		<UITableHeader
 			className="w-full sticky overflow-x-hidden z-10 bg-zinc-50 group"
-			style={{ top: top ?? TABLE_ACTIONS_HEIGHT }}>
+			style={{top: top}}>
 			{table.getHeaderGroups().map((headerGroup) => (
-				<TableRow className='overflow-x-auto' key={headerGroup.id}>
+				<TableRow
+					className="overflow-x-auto"
+					key={headerGroup.id}>
 					{headerGroup.headers.map((header, index) => (
 						<TableHead
 							key={header.id}
@@ -40,7 +41,7 @@ export default function TableHeader<TData>({
 								height: '28px',
 							}}>
 							<Flex
-								style={{ display: 'flex' }}
+								style={{display: 'flex'}}
 								className={cn(
 									'w-full justify-between items-center line-clamp-1 text-wrap space-x-4',
 									index === 0 && 'justify-center',
@@ -48,9 +49,9 @@ export default function TableHeader<TData>({
 								{header.isPlaceholder
 									? null
 									: flexRender(
-										header.column.columnDef.header,
-										header.getContext(),
-									)}
+											header.column.columnDef.header,
+											header.getContext(),
+										)}
 								{header.column.columnDef.id !== 'actions' && index !== 0 && (
 									<FilterSortDropdown
 										columnName={header.column.columnDef.id!}

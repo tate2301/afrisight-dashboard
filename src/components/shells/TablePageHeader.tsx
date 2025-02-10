@@ -1,18 +1,15 @@
-import {Caption, Paragraph} from '../design-sytem/typography';
 import SearchBox from '../search/Search';
 import Flex from '../design-sytem/flex';
-import {ChevronRight} from '../icons/chevron.right';
-import {ChevronLeft} from '../icons/chevron.left';
 import {FilterColumnConfig, GigShellProps} from '.';
 import {useRouter} from 'next/router';
-import {useCallback, useState} from 'react';
+import {useCallback} from 'react';
 import Box from '../design-sytem/box';
 import {useSearch} from '../search/use-search';
-import {ColumnVisibilityToggle} from './ColumnToggle';
-import {FilterBuilder} from './FilterBuilder';
 import {NavTab, NavTabList} from '../ui/nav-tab';
 import Spinner from '../ui/spinner';
 import {TABLE_ACTIONS_HEIGHT} from '@/layout/constants';
+
+export {TABLE_ACTIONS_HEIGHT};
 
 const DEFAULT_COLUMNS: FilterColumnConfig[] = [
 	{label: 'Company', type: 'string', enabled: true},
