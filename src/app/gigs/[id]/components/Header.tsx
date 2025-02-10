@@ -102,7 +102,7 @@ const GigHeader = ({
 							color="gray"
 							loading={isSaving}
 							onClick={onSaveChanges}>
-							<Symbol className="!text-base">download</Symbol>
+							<Symbol className="!text-base">save</Symbol>
 							Save Form
 						</Button>
 						<Button
